@@ -1,4 +1,4 @@
-export type Lang = "en" | "hi";
+export type Lang = "en";
 export type DenomKind = "coin" | "note";
 export type DenomId = "c1" | "c2" | "c5" | "c10" | "n10" | "n20" | "n50" | "n100" | "n200" | "n500";
 
@@ -10,7 +10,7 @@ export interface Denomination {
 
 export interface Localized {
   en: string;
-  hi: string;
+  hi?: string;
 }
 
 export interface Customer {

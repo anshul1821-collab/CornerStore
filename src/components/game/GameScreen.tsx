@@ -19,6 +19,7 @@ import { HintPanel } from "./HintPanel";
 import { ShoppingBill } from "./ShoppingBill";
 import { SettingsBar, useSettings } from "./settings";
 import { KiranaStore3D } from "./3d/KiranaStore3D";
+import { voiceManager } from "@/lib/voice/voiceManager";
 
 export interface LevelStats {
   stars: number[];
@@ -48,6 +49,12 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   const required = requiredChange(scenario);
   const total = trayTotal(tray);
   const steps = useMemo(() => countUpSteps(scenario.payable, scenario.paid), [scenario]);
+
+  useEffect(() => {
+    return () => {
+      voiceManager.stop();
+    };
+  }, []);
 
   useEffect(() => {
     setTimeLeft(scenario.timeLimit);
@@ -112,74 +119,77 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   const busy = result !== null;
 
   return (
-    <div className="min-h-screen pb-6">
-      <div className="bg-awning h-4" aria-hidden />
-      <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-3 py-2">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-start overflow-x-hidden">
+      <div className="bg-awning h-3 sm:h-4 shrink-0" aria-hidden />
+
+      {/* Header */}
+      <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-3 py-1.5 shrink-0">
         <button
           onClick={onExit}
-          className="flex items-center gap-1 rounded-full bg-paper px-3 py-2 font-extrabold border-2 border-wood-light shadow-soft"
+          className="flex items-center gap-1 rounded-full bg-paper px-2.5 py-1 text-xs sm:text-sm font-extrabold border-2 border-wood-light shadow-soft cursor-pointer hover:bg-peach transition-colors"
           aria-label={tr("home")}
         >
-          <ArrowLeft className="h-5 w-5" /> <span className="hidden sm:inline">{tr("home")}</span>
+          <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">{tr("home")}</span>
         </button>
-        <div className="flex-1 min-w-40 px-2">
-          <p className="text-center font-display font-extrabold leading-tight">
-            {level.icon} {tr("level")} {level.number}: {level.title[lang]}
-          </p>
+
+        <div className="flex-1 min-w-40 px-2 flex flex-col items-center">
+          <div className="flex items-center gap-2">
+            <p className="text-center font-display font-extrabold text-xs sm:text-sm leading-tight text-wood-dark">
+              {level.icon} {tr("level")} {level.number}: {level.title[lang]}
+            </p>
+            {timeLeft !== null && (
+              <span className="rounded-full bg-paper px-2 py-0.2 text-[11px] font-extrabold border border-orange text-orange">
+                ⏱️ {timeLeft}s
+              </span>
+            )}
+          </div>
           <div
-            className="mx-auto mt-1 flex max-w-xs gap-1"
+            className="mt-0.5 flex w-full max-w-xs gap-1"
             aria-label={`${tr("customer")} ${index + 1} ${tr("of")} ${level.customers}`}
           >
             {Array.from({ length: level.customers }).map((_, i) => (
               <span
                 key={i}
-                className={`h-2.5 flex-1 rounded-full ${i < index ? "bg-leaf" : i === index ? "bg-sun" : "bg-border"}`}
+                className={`h-2 flex-1 rounded-full ${i < index ? "bg-leaf" : i === index ? "bg-sun" : "bg-border"}`}
               />
             ))}
           </div>
         </div>
+
         <SettingsBar />
       </header>
 
-      <main className="mx-auto grid max-w-6xl gap-4 px-3">
-        {timeLeft !== null && (
-          <div
-            className="mx-auto rounded-full bg-paper px-4 py-1 font-extrabold border-2 border-orange"
-            aria-live="polite"
-          >
-            ⏱️ {timeLeft} {tr("timeLeft")}
-          </div>
-        )}
-        {/* 3D Indian Kirana Shop Environment Stage */}
-        <section className="w-full">
-          <KiranaStore3D
-            scenario={scenario}
-            tray={tray}
-            mood={result?.kind === "correct" ? "happy" : result ? "thinking" : "speaking"}
-            isCorrect={result?.kind === "correct"}
-            result={result}
-            roundIndex={index}
-          />
-        </section>
-
-        {/* Countertop Operations: Customer Bill on Left, Change Tray & Actions on Right */}
-        <section className="grid items-start gap-4 lg:grid-cols-[1.1fr_1.3fr]">
-          <div className="flex flex-col gap-3">
+      {/* Main Game Stage - Centered with tight, cohesive spacing (no large empty gaps) */}
+      <main className="mx-auto flex flex-1 flex-col justify-start lg:justify-center w-full max-w-6xl px-3 py-1 sm:py-2 gap-2 sm:gap-2.5">
+        {/* Upper Main Section: 3D Shop & Dialogue on Left, Bill & Tray on Right */}
+        <section className="grid grid-cols-1 lg:grid-cols-[1fr_1.25fr] gap-2 sm:gap-2.5 items-stretch">
+          {/* Left Column: 3D Store View + Customer Bubble */}
+          <div className="flex flex-col justify-between gap-2">
+            <KiranaStore3D
+              scenario={scenario}
+              tray={tray}
+              mood={result?.kind === "correct" ? "happy" : result ? "thinking" : "speaking"}
+              isCorrect={result?.kind === "correct"}
+              result={result}
+              roundIndex={index}
+            />
             <CustomerBubble
               scenario={scenario}
               mood={result?.kind === "correct" ? "happy" : result ? "thinking" : "speaking"}
             />
-            <ShoppingBill
-              scenario={scenario}
-              calculatedTotal={calculatedTotal}
-              onChangeTotal={setCalculatedTotal}
-              disabled={busy}
-            />
           </div>
 
-          <div className="flex flex-col gap-3">
-            <section className="rounded-[2rem] border-4 border-wood-dark bg-wood-light/40 p-3 shadow-wood sm:p-4">
-              <div className="flex flex-col gap-3">
+          {/* Right Column: Countertop with Shopping Bill & Change Tray */}
+          <div className="rounded-2xl border-3 border-wood-dark bg-wood-light/40 p-2 sm:p-2.5 shadow-wood flex flex-col">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-2.5 items-stretch flex-1">
+              <ShoppingBill
+                scenario={scenario}
+                calculatedTotal={calculatedTotal}
+                onChangeTotal={setCalculatedTotal}
+                disabled={busy}
+              />
+
+              <div className="flex flex-col justify-between gap-2 h-full">
                 <ChangeTray
                   tray={tray}
                   denominations={DENOMINATIONS}
@@ -189,40 +199,43 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
                   disabled={busy}
                 />
                 <RunningTotal total={total} state={trayState(tray, required)} />
-                <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-2 items-center">
+                <div className="grid grid-cols-[1fr_auto] gap-2 items-stretch">
                   <button
                     onClick={submit}
                     disabled={busy || calculatedTotal !== scenario.payable}
-                    className="btn-press rounded-2xl bg-leaf py-3.5 px-4 font-display text-2xl font-extrabold text-primary-foreground shadow-chunky disabled:opacity-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sun text-center"
+                    className="btn-press rounded-xl bg-leaf py-2 px-3 font-display text-base sm:text-lg font-extrabold text-primary-foreground shadow-chunky disabled:opacity-50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sun text-center cursor-pointer flex items-center justify-center min-h-[44px]"
                   >
                     {total === 0 ? tr("noChange") : tr("give")}
                   </button>
                   <button
                     onClick={openHint}
                     disabled={busy}
-                    className="rounded-2xl border-2 border-sky bg-paper py-3 px-4 font-extrabold text-teal hover:bg-mint"
+                    className="rounded-xl border-2 border-sky bg-paper py-2 px-3.5 font-extrabold text-xs sm:text-sm text-teal hover:bg-mint cursor-pointer transition-colors text-center flex items-center justify-center gap-1.5 shadow-soft min-h-[44px]"
                   >
-                    💡 {tr("hint")}
+                    <span>💡</span>
+                    <span>{tr("hint")}</span>
                   </button>
                 </div>
               </div>
-            </section>
+            </div>
           </div>
         </section>
 
-        {showHint && (
-          <HintPanel
-            key={scenario.id}
-            price={scenario.payable}
-            paid={scenario.paid}
-            steps={steps}
-            onShowPieces={() => setTray(stepsToTray(steps))}
-            onClose={() => setShowHint(false)}
-          />
-        )}
-
+        {/* Lower Section: Cash Drawer (positioned directly beneath the counter with cohesive spacing) */}
         <CashDrawer denominations={DENOMINATIONS} onAdd={add} disabled={busy} />
       </main>
+
+      {/* Modal Dialogs */}
+      {showHint && (
+        <HintPanel
+          key={scenario.id}
+          price={scenario.payable}
+          paid={scenario.paid}
+          steps={steps}
+          onShowPieces={() => setTray(stepsToTray(steps))}
+          onClose={() => setShowHint(false)}
+        />
+      )}
 
       {result && <Feedback result={result} onContinue={next} onRetry={retry} />}
     </div>

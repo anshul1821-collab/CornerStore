@@ -52,7 +52,7 @@ function createStylizedEye(isLeft: boolean): THREE.Group {
 }
 
 /**
- * Friendly 3D Kirana Shopkeeper (Uncle-ji)
+ * Friendly 3D Kirana Shopkeeper
  * Features sculpted face, handlebar mustache, Nehru jacket with breast pocket & pen,
  * cotton gamcha on shoulder, and hands resting naturally on the counter.
  */
@@ -246,12 +246,18 @@ export function createShopkeeper(): CharacterController {
   const leftArmGroup = new THREE.Group();
   leftArmGroup.position.set(-0.5, 0.9, 0);
 
-  const leftUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(armRadius, armRadius, 0.35, 12), armMat);
+  const leftUpperArm = new THREE.Mesh(
+    new THREE.CylinderGeometry(armRadius, armRadius, 0.35, 12),
+    armMat,
+  );
   leftUpperArm.position.set(0, -0.15, 0.12);
   leftUpperArm.rotation.x = 0.7;
   leftArmGroup.add(leftUpperArm);
 
-  const leftForearm = new THREE.Mesh(new THREE.CylinderGeometry(armRadius * 0.9, armRadius * 0.85, 0.32, 12), armMat);
+  const leftForearm = new THREE.Mesh(
+    new THREE.CylinderGeometry(armRadius * 0.9, armRadius * 0.85, 0.32, 12),
+    armMat,
+  );
   leftForearm.position.set(0, -0.32, 0.32);
   leftForearm.rotation.x = 1.25;
   leftArmGroup.add(leftForearm);
@@ -268,12 +274,18 @@ export function createShopkeeper(): CharacterController {
   const rightArmGroup = new THREE.Group();
   rightArmGroup.position.set(0.5, 0.9, 0);
 
-  const rightUpperArm = new THREE.Mesh(new THREE.CylinderGeometry(armRadius, armRadius, 0.35, 12), armMat);
+  const rightUpperArm = new THREE.Mesh(
+    new THREE.CylinderGeometry(armRadius, armRadius, 0.35, 12),
+    armMat,
+  );
   rightUpperArm.position.set(0, -0.15, 0.12);
   rightUpperArm.rotation.x = 0.7;
   rightArmGroup.add(rightUpperArm);
 
-  const rightForearm = new THREE.Mesh(new THREE.CylinderGeometry(armRadius * 0.9, armRadius * 0.85, 0.32, 12), armMat);
+  const rightForearm = new THREE.Mesh(
+    new THREE.CylinderGeometry(armRadius * 0.9, armRadius * 0.85, 0.32, 12),
+    armMat,
+  );
   rightForearm.position.set(0, -0.32, 0.32);
   rightForearm.rotation.x = 1.25;
   rightArmGroup.add(rightForearm);
@@ -394,7 +406,10 @@ export function createCustomer(customer: Customer): CharacterController {
     char.add(palluMesh);
 
     // Gold zari embroidered border along pallu
-    const zariBorder = new THREE.Mesh(new THREE.TubeGeometry(palluCurve, 16, 0.025, 8, false), gold);
+    const zariBorder = new THREE.Mesh(
+      new THREE.TubeGeometry(palluCurve, 16, 0.025, 8, false),
+      gold,
+    );
     zariBorder.position.z += 0.06;
     char.add(zariBorder);
 
@@ -406,7 +421,10 @@ export function createCustomer(customer: Customer): CharacterController {
 
   // Delivery Boy Cap
   if (hasCap) {
-    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.15, 18), mat(0x212121, 0.6));
+    const cap = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.36, 0.36, 0.15, 18),
+      mat(0x212121, 0.6),
+    );
     cap.position.set(0, 1.75, -0.03);
     const visor = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.035, 0.24), mat(0x212121, 0.6));
     visor.position.set(0, 1.69, 0.22);
@@ -444,7 +462,10 @@ export function createCustomer(customer: Customer): CharacterController {
     headGroup.add(bun);
 
     // White Jasmine Flowers (Gajra toran around bun)
-    const gajraTorus = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.035, 8, 16), mat(0xffffff, 0.3));
+    const gajraTorus = new THREE.Mesh(
+      new THREE.TorusGeometry(0.16, 0.035, 8, 16),
+      mat(0xffffff, 0.3),
+    );
     gajraTorus.position.set(0, 0.05, -0.31);
     headGroup.add(gajraTorus);
 
@@ -503,7 +524,10 @@ export function createCustomer(customer: Customer): CharacterController {
 
   // Smiling Lips
   const lipsMat = mat(hasSari ? 0xc2185b : 0xa55238, 0.5);
-  const smile = new THREE.Mesh(new THREE.TorusGeometry(0.048, 0.014, 8, 12, Math.PI * 0.85), lipsMat);
+  const smile = new THREE.Mesh(
+    new THREE.TorusGeometry(0.048, 0.014, 8, 12, Math.PI * 0.85),
+    lipsMat,
+  );
   smile.rotation.set(0, 0, -Math.PI * 0.92);
   smile.position.set(0, -0.14, 0.29);
   headGroup.add(smile);
@@ -521,7 +545,10 @@ export function createCustomer(customer: Customer): CharacterController {
   const armRadius = 0.08;
   const leftArmGroup = new THREE.Group();
   leftArmGroup.position.set(-0.46, 0.85, 0);
-  const leftUpper = new THREE.Mesh(new THREE.CylinderGeometry(armRadius, armRadius, 0.34, 10), clothes);
+  const leftUpper = new THREE.Mesh(
+    new THREE.CylinderGeometry(armRadius, armRadius, 0.34, 10),
+    clothes,
+  );
   leftUpper.position.set(0, -0.15, 0.1);
   leftUpper.rotation.x = 0.55;
   leftArmGroup.add(leftUpper);
@@ -539,7 +566,10 @@ export function createCustomer(customer: Customer): CharacterController {
 
   const rightArmGroup = new THREE.Group();
   rightArmGroup.position.set(0.46, 0.85, 0);
-  const rightUpper = new THREE.Mesh(new THREE.CylinderGeometry(armRadius, armRadius, 0.34, 10), clothes);
+  const rightUpper = new THREE.Mesh(
+    new THREE.CylinderGeometry(armRadius, armRadius, 0.34, 10),
+    clothes,
+  );
   rightUpper.position.set(0, -0.15, 0.1);
   rightUpper.rotation.x = 0.55;
   rightArmGroup.add(rightUpper);
@@ -552,7 +582,10 @@ export function createCustomer(customer: Customer): CharacterController {
   const bagGeo = new THREE.BoxGeometry(0.24, 0.3, 0.12);
   const bagMesh = new THREE.Mesh(bagGeo, mat(0xe07a5f, 0.7));
   bagMesh.position.set(-0.48, 0.34, 0.24);
-  const bagHandle = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.012, 6, 10, Math.PI), mat(0x5d4037));
+  const bagHandle = new THREE.Mesh(
+    new THREE.TorusGeometry(0.08, 0.012, 6, 10, Math.PI),
+    mat(0x5d4037),
+  );
   bagHandle.position.set(-0.48, 0.52, 0.24);
   char.add(bagMesh, bagHandle);
 

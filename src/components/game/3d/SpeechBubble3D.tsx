@@ -2,23 +2,27 @@ import { motion } from "framer-motion";
 import { Volume2, X } from "lucide-react";
 import type { DialogueContent } from "./dialogue";
 import type { Lang } from "@/game/types";
+import { useVoice } from "@/lib/voice/useVoice";
 
 interface Props {
   dialogue: DialogueContent;
   lang: Lang;
+  customerId?: string;
   onDismiss?: () => void;
 }
 
-export function SpeechBubble3D({ dialogue, lang, onDismiss }: Props) {
+export function SpeechBubble3D({ dialogue, customerId, onDismiss }: Props) {
   const isShopkeeper = dialogue.speaker === "shopkeeper";
+  const { isSpeaking, activeCharacter, speak: speakVoice } = useVoice();
+  const speakingThis = isSpeaking && activeCharacter === dialogue.speaker;
 
-  const speak = (e: React.MouseEvent) => {
+  const handleSpeak = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!("speechSynthesis" in window)) return;
-    const u = new SpeechSynthesisUtterance(dialogue.text);
-    u.lang = lang === "hi" ? "hi-IN" : "en-IN";
-    speechSynthesis.cancel();
-    speechSynthesis.speak(u);
+    speakVoice({
+      text: dialogue.text,
+      character: dialogue.speaker,
+      customerId,
+    });
   };
 
   return (
@@ -36,7 +40,7 @@ export function SpeechBubble3D({ dialogue, lang, onDismiss }: Props) {
       }}
       onClick={onDismiss}
       className="pointer-events-auto absolute z-20 w-max max-w-[210px] sm:max-w-[260px] select-none cursor-pointer"
-      title={lang === "hi" ? "हटाने के लिए क्लिक करें" : "Click to dismiss"}
+      title="Click to dismiss"
     >
       {/* Speech Bubble Container */}
       <div className="relative rounded-2xl border border-[#8b5a2b]/30 bg-[#fffdf8]/95 px-3 py-2 sm:px-3.5 sm:py-2.5 text-[#3d200e] shadow-[0_8px_25px_rgba(45,20,5,0.18)] backdrop-blur-md transition-transform hover:scale-[1.02]">
@@ -45,15 +49,26 @@ export function SpeechBubble3D({ dialogue, lang, onDismiss }: Props) {
           <div className="flex items-center gap-1 rounded-full bg-[#f4ebd9]/90 px-2 py-0.5 text-[11px] font-extrabold text-[#5c3317] border border-[#dfceb4]">
             <span className="text-xs">{dialogue.avatarEmoji}</span>
             <span className="truncate max-w-[95px] sm:max-w-[130px]">{dialogue.speakerName}</span>
+            {speakingThis && (
+              <span className="flex items-center gap-0.5 ml-1" aria-label="Speaking">
+                <span className="h-2 w-0.5 rounded-full bg-emerald-600 animate-bounce [animation-delay:-0.3s]" />
+                <span className="h-3 w-0.5 rounded-full bg-emerald-600 animate-bounce [animation-delay:-0.15s]" />
+                <span className="h-2 w-0.5 rounded-full bg-emerald-600 animate-bounce" />
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-1">
-            {/* Audio TTS Button */}
+            {/* Audio Voice Replay Button */}
             <button
-              onClick={speak}
+              onClick={handleSpeak}
               type="button"
-              aria-label="Listen to dialogue"
-              className="grid h-5 w-5 place-items-center rounded-full bg-amber-100/90 text-[#5c3317] hover:bg-amber-200 transition-colors"
+              aria-label="Listen to voice dialogue"
+              className={`grid h-5 w-5 place-items-center rounded-full transition-colors cursor-pointer ${
+                speakingThis
+                  ? "bg-emerald-200 text-emerald-800 ring-2 ring-emerald-400"
+                  : "bg-amber-100/90 text-[#5c3317] hover:bg-amber-200"
+              }`}
             >
               <Volume2 className="h-3 w-3" />
             </button>
@@ -75,9 +90,9 @@ export function SpeechBubble3D({ dialogue, lang, onDismiss }: Props) {
           </div>
         </div>
 
-        {/* Dialogue Text */}
+        {/* Dialogue Text (visual tags stripped for clean display) */}
         <p className="mt-1 font-display text-xs sm:text-[13px] font-extrabold leading-snug tracking-tight text-[#3d200e]">
-          {dialogue.text}
+          {dialogue.text.replace(/\[[a-zA-Z\s_-]+\]/g, "").trim()}
         </p>
 
         {/* Directional Speech Pointer */}
@@ -98,4 +113,3 @@ export function SpeechBubble3D({ dialogue, lang, onDismiss }: Props) {
     </motion.div>
   );
 }
-

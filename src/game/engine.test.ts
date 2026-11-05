@@ -45,4 +45,26 @@ describe("engine", () => {
     p.stars[0] = 1;
     expect(isUnlocked(p, 1)).toBe(true);
   });
+
+  it("all levels, scenarios, and products are strictly English without Devanagari", () => {
+    const devanagariRegex = /[\u0900-\u097F]/;
+
+    // Check all levels
+    for (let l = 1; l <= 10; l++) {
+      for (let i = 0; i < 5; i++) {
+        const s = generateScenario(l, i);
+        expect(s.customer.name.en).toBeTruthy();
+        expect(devanagariRegex.test(s.customer.name.en)).toBe(false);
+        expect(devanagariRegex.test(s.customer.greeting.en)).toBe(false);
+
+        if (s.discount) {
+          expect(devanagariRegex.test(s.discount.label.en)).toBe(false);
+        }
+
+        for (const itm of s.items) {
+          expect(devanagariRegex.test(itm.name.en)).toBe(false);
+        }
+      }
+    }
+  });
 });

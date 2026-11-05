@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: "Nunito", "Baloo 2", "Noto Sans Devanagari", system-ui, sans-serif;
-  --font-display: "Baloo 2", "Nunito", "Noto Sans Devanagari", system-ui, sans-serif;
+  --font-sans: "Nunito", "Baloo 2", system-ui, sans-serif;
+  --font-display: "Baloo 2", "Nunito", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

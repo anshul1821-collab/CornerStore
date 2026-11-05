@@ -8,7 +8,11 @@ import * as THREE from "three";
 /** Cache so we don't recreate textures unnecessarily */
 const textureCache = new Map<string, THREE.CanvasTexture>();
 
-function getOrCreate(key: string, drawFn: (ctx: CanvasRenderingContext2D, size: number) => void, size = 512): THREE.CanvasTexture {
+function getOrCreate(
+  key: string,
+  drawFn: (ctx: CanvasRenderingContext2D, size: number) => void,
+  size = 512,
+): THREE.CanvasTexture {
   if (textureCache.has(key)) {
     return textureCache.get(key)!;
   }
@@ -175,160 +179,180 @@ export function getJuteTexture(): THREE.CanvasTexture {
 
 /** Parle-G style Indian biscuit packet label texture */
 export function getBiscuitPacketTexture(): THREE.CanvasTexture {
-  return getOrCreate("biscuit_label", (ctx, size) => {
-    // Yellow biscuit pack base
-    ctx.fillStyle = "#ffb300";
-    ctx.fillRect(0, 0, size, size);
+  return getOrCreate(
+    "biscuit_label",
+    (ctx, size) => {
+      // Yellow biscuit pack base
+      ctx.fillStyle = "#ffb300";
+      ctx.fillRect(0, 0, size, size);
 
-    // Red branded banner
-    ctx.fillStyle = "#d32f2f";
-    ctx.fillRect(0, size * 0.18, size, size * 0.38);
+      // Red branded banner
+      ctx.fillStyle = "#d32f2f";
+      ctx.fillRect(0, size * 0.18, size, size * 0.38);
 
-    // White brand text
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 64px 'Baloo 2', sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("GLUCO", size * 0.5, size * 0.32);
+      // White brand text
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 64px 'Baloo 2', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("GLUCO", size * 0.5, size * 0.32);
 
-    ctx.fillStyle = "#ffe082";
-    ctx.font = "bold 32px 'Baloo 2', sans-serif";
-    ctx.fillText("BISCUITS • ₹10", size * 0.5, size * 0.46);
+      ctx.fillStyle = "#ffe082";
+      ctx.font = "bold 32px 'Baloo 2', sans-serif";
+      ctx.fillText("BISCUITS • ₹10", size * 0.5, size * 0.46);
 
-    // Golden biscuit illustration
-    ctx.fillStyle = "#e67e22";
-    ctx.beginPath();
-    ctx.roundRect(size * 0.25, size * 0.62, size * 0.5, size * 0.26, 12);
-    ctx.fill();
-    ctx.strokeStyle = "#8e44ad";
-    ctx.lineWidth = 3;
+      // Golden biscuit illustration
+      ctx.fillStyle = "#e67e22";
+      ctx.beginPath();
+      ctx.roundRect(size * 0.25, size * 0.62, size * 0.5, size * 0.26, 12);
+      ctx.fill();
+      ctx.strokeStyle = "#8e44ad";
+      ctx.lineWidth = 3;
 
-    // Biscuit holes
-    ctx.fillStyle = "#b95c00";
-    for (let r = 0; r < 2; r++) {
-      for (let c = 0; c < 4; c++) {
-        ctx.beginPath();
-        ctx.arc(size * 0.32 + c * 42, size * 0.69 + r * 38, 4, 0, Math.PI * 2);
-        ctx.fill();
+      // Biscuit holes
+      ctx.fillStyle = "#b95c00";
+      for (let r = 0; r < 2; r++) {
+        for (let c = 0; c < 4; c++) {
+          ctx.beginPath();
+          ctx.arc(size * 0.32 + c * 42, size * 0.69 + r * 38, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
-    }
-  }, 256);
+    },
+    256,
+  );
 }
 
 /** Tata / Red Label style tea box label texture */
 export function getTeaBoxTexture(): THREE.CanvasTexture {
-  return getOrCreate("tea_label", (ctx, size) => {
-    // Deep emerald green box
-    ctx.fillStyle = "#1b5e20";
-    ctx.fillRect(0, 0, size, size);
+  return getOrCreate(
+    "tea_label",
+    (ctx, size) => {
+      // Deep emerald green box
+      ctx.fillStyle = "#1b5e20";
+      ctx.fillRect(0, 0, size, size);
 
-    // Golden border
-    ctx.strokeStyle = "#ffd54f";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(12, 12, size - 24, size - 24);
+      // Golden border
+      ctx.strokeStyle = "#ffd54f";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(12, 12, size - 24, size - 24);
 
-    // Crimson emblem
-    ctx.fillStyle = "#b71c1c";
-    ctx.beginPath();
-    ctx.arc(size * 0.5, size * 0.42, 65, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#ffd54f";
-    ctx.lineWidth = 4;
-    ctx.stroke();
+      // Crimson emblem
+      ctx.fillStyle = "#b71c1c";
+      ctx.beginPath();
+      ctx.arc(size * 0.5, size * 0.42, 65, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ffd54f";
+      ctx.lineWidth = 4;
+      ctx.stroke();
 
-    // Text
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 52px 'Baloo 2', sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("CHAI", size * 0.5, size * 0.44);
+      // Text
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 52px 'Baloo 2', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("CHAI", size * 0.5, size * 0.44);
 
-    ctx.fillStyle = "#ffe082";
-    ctx.font = "bold 30px 'Baloo 2', sans-serif";
-    ctx.fillText("GOLD LEAF TEA", size * 0.5, size * 0.76);
-  }, 256);
+      ctx.fillStyle = "#ffe082";
+      ctx.font = "bold 30px 'Baloo 2', sans-serif";
+      ctx.fillText("GOLD LEAF TEA", size * 0.5, size * 0.76);
+    },
+    256,
+  );
 }
 
 /** MDH / Everest style Indian spice box (Haldi / Mirch) */
 export function getSpiceBoxTexture(type: "haldi" | "mirch"): THREE.CanvasTexture {
-  return getOrCreate(`spice_${type}`, (ctx, size) => {
-    const isHaldi = type === "haldi";
-    ctx.fillStyle = isHaldi ? "#f57f17" : "#b71c1c";
-    ctx.fillRect(0, 0, size, size);
+  return getOrCreate(
+    `spice_${type}`,
+    (ctx, size) => {
+      const isHaldi = type === "haldi";
+      ctx.fillStyle = isHaldi ? "#f57f17" : "#b71c1c";
+      ctx.fillRect(0, 0, size, size);
 
-    // Ornate arch
-    ctx.strokeStyle = "#ffffff";
-    ctx.lineWidth = 6;
-    ctx.strokeRect(10, 10, size - 20, size - 20);
+      // Ornate arch
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 6;
+      ctx.strokeRect(10, 10, size - 20, size - 20);
 
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 44px 'Baloo 2', 'Noto Sans Devanagari', sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(isHaldi ? "हल्दी पाउडर" : "लाल मिर्च", size * 0.5, size * 0.35);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 44px 'Baloo 2', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText(isHaldi ? "TURMERIC" : "RED CHILLI", size * 0.5, size * 0.35);
 
-    ctx.font = "bold 28px sans-serif";
-    ctx.fillStyle = "#fff8e1";
-    ctx.fillText(isHaldi ? "PURE TURMERIC" : "CHILI POWDER", size * 0.5, size * 0.52);
+      ctx.font = "bold 28px sans-serif";
+      ctx.fillStyle = "#fff8e1";
+      ctx.fillText(isHaldi ? "PURE SPICE" : "CHILI POWDER", size * 0.5, size * 0.52);
 
-    // Indian spice bowl icon
-    ctx.fillStyle = isHaldi ? "#ffd600" : "#d50000";
-    ctx.beginPath();
-    ctx.arc(size * 0.5, size * 0.74, 38, 0, Math.PI);
-    ctx.fill();
-  }, 256);
+      // Indian spice bowl icon
+      ctx.fillStyle = isHaldi ? "#ffd600" : "#d50000";
+      ctx.beginPath();
+      ctx.arc(size * 0.5, size * 0.74, 38, 0, Math.PI);
+      ctx.fill();
+    },
+    256,
+  );
 }
 
 /** Maggi style 2-minute noodle packet label */
 export function getNoodlePacketTexture(): THREE.CanvasTexture {
-  return getOrCreate("noodle_label", (ctx, size) => {
-    // Bright yellow base
-    ctx.fillStyle = "#ffeb3b";
-    ctx.fillRect(0, 0, size, size);
+  return getOrCreate(
+    "noodle_label",
+    (ctx, size) => {
+      // Bright yellow base
+      ctx.fillStyle = "#ffeb3b";
+      ctx.fillRect(0, 0, size, size);
 
-    // Red crest
-    ctx.fillStyle = "#d32f2f";
-    ctx.beginPath();
-    ctx.moveTo(size * 0.1, size * 0.15);
-    ctx.lineTo(size * 0.9, size * 0.15);
-    ctx.lineTo(size * 0.82, size * 0.55);
-    ctx.lineTo(size * 0.18, size * 0.55);
-    ctx.closePath();
-    ctx.fill();
+      // Red crest
+      ctx.fillStyle = "#d32f2f";
+      ctx.beginPath();
+      ctx.moveTo(size * 0.1, size * 0.15);
+      ctx.lineTo(size * 0.9, size * 0.15);
+      ctx.lineTo(size * 0.82, size * 0.55);
+      ctx.lineTo(size * 0.18, size * 0.55);
+      ctx.closePath();
+      ctx.fill();
 
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 58px 'Baloo 2', sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("NOODLE", size * 0.5, size * 0.38);
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 58px 'Baloo 2', sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("NOODLE", size * 0.5, size * 0.38);
 
-    ctx.fillStyle = "#d32f2f";
-    ctx.font = "bold 32px 'Baloo 2', sans-serif";
-    ctx.fillText("MASALA • 2 MIN", size * 0.5, size * 0.75);
-  }, 256);
+      ctx.fillStyle = "#d32f2f";
+      ctx.font = "bold 32px 'Baloo 2', sans-serif";
+      ctx.fillText("MASALA • 2 MIN", size * 0.5, size * 0.75);
+    },
+    256,
+  );
 }
 
-/** Traditional red Bahi Khata (Accounts Ledger) cloth cover */
+/** Traditional red Accounts Ledger cloth cover */
 export function getLedgerCoverTexture(): THREE.CanvasTexture {
-  return getOrCreate("ledger_cover", (ctx, size) => {
-    // Deep crimson khadi cloth
-    ctx.fillStyle = "#8b0000";
-    ctx.fillRect(0, 0, size, size);
+  return getOrCreate(
+    "ledger_cover",
+    (ctx, size) => {
+      // Deep crimson khadi cloth
+      ctx.fillStyle = "#8b0000";
+      ctx.fillRect(0, 0, size, size);
 
-    // Golden foil auspicious border
-    ctx.strokeStyle = "#e5a93b";
-    ctx.lineWidth = 10;
-    ctx.strokeRect(16, 16, size - 32, size - 32);
+      // Golden foil auspicious border
+      ctx.strokeStyle = "#e5a93b";
+      ctx.lineWidth = 10;
+      ctx.strokeRect(16, 16, size - 32, size - 32);
 
-    ctx.strokeStyle = "#fff3cd";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(28, 28, size - 56, size - 56);
+      ctx.strokeStyle = "#fff3cd";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(28, 28, size - 56, size - 56);
 
-    // Auspicious symbol & lettering
-    ctx.fillStyle = "#ffdd53";
-    ctx.font = "bold 56px 'Noto Sans Devanagari', sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("॥ शुभ लाभ ॥", size * 0.5, size * 0.38);
+      // Auspicious symbol & lettering
+      ctx.fillStyle = "#ffdd53";
+      ctx.font = "bold 44px 'Baloo 2', sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("★ ACCOUNTS ★", size * 0.5, size * 0.38);
 
-    ctx.font = "bold 38px 'Noto Sans Devanagari', sans-serif";
-    ctx.fillText("बही खाता", size * 0.5, size * 0.58);
-  }, 256);
+      ctx.font = "bold 38px 'Baloo 2', sans-serif";
+      ctx.fillText("LEDGER BOOK", size * 0.5, size * 0.58);
+    },
+    256,
+  );
 }

@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
+import { Volume2 } from "lucide-react";
 import type { SubmissionResult } from "@/game/types";
 import { useSettings } from "./settings";
+import { useVoice } from "@/lib/voice/useVoice";
 
 export function Stars({ count, size = "text-4xl" }: { count: number; size?: string }) {
   return (
@@ -49,6 +51,7 @@ interface Props {
 
 export function Feedback({ result, onContinue, onRetry }: Props) {
   const { tr } = useSettings();
+  const { isSpeaking, replay } = useVoice();
   const correct = result.kind === "correct";
   return (
     <div
@@ -62,6 +65,19 @@ export function Feedback({ result, onContinue, onRetry }: Props) {
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className={`relative w-full max-w-md overflow-hidden rounded-3xl border-4 p-6 text-center shadow-soft ${correct ? "border-leaf bg-mint" : "border-orange bg-paper"}`}
       >
+        <button
+          onClick={() => replay()}
+          type="button"
+          aria-label="Replay voice dialogue"
+          title="Replay voice feedback"
+          className={`absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full transition-colors cursor-pointer ${
+            isSpeaking
+              ? "bg-leaf text-white ring-2 ring-sun"
+              : "bg-paper/80 text-wood-dark hover:bg-paper"
+          }`}
+        >
+          <Volume2 className="h-4 w-4" />
+        </button>
         {correct && <Confetti />}
         <div className="text-6xl" aria-hidden>
           {correct ? "🥳" : result.kind === "timeout" ? "⏰" : "🤗"}

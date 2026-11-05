@@ -32,99 +32,99 @@ export const LEVELS: LevelDef[] = [
   {
     number: 1,
     icon: "🏪",
-    title: { en: "First Day at the Shop", hi: "दुकान का पहला दिन" },
+    title: { en: "First Day at the Shop" },
     customers: 4,
   },
   {
     number: 2,
     icon: "🛍️",
-    title: { en: "Busy Little Shop", hi: "व्यस्त छोटी दुकान" },
+    title: { en: "Busy Little Shop" },
     customers: 5,
   },
-  { number: 3, icon: "🧮", title: { en: "Tricky Prices", hi: "मुश्किल दाम" }, customers: 5 },
-  { number: 4, icon: "📝", title: { en: "Shopping List", hi: "खरीदारी की सूची" }, customers: 5 },
+  { number: 3, icon: "🧮", title: { en: "Tricky Prices" }, customers: 5 },
+  { number: 4, icon: "📝", title: { en: "Shopping List" }, customers: 5 },
   {
     number: 5,
     icon: "📦",
-    title: { en: "Buy More, Save More", hi: "ज़्यादा लो, बचत करो" },
+    title: { en: "Buy More, Save More" },
     customers: 5,
   },
-  { number: 6, icon: "🏷️", title: { en: "Special Discounts", hi: "खास छूट" }, customers: 5 },
-  { number: 7, icon: "🎁", title: { en: "Combo Offers", hi: "कॉम्बो ऑफ़र" }, customers: 5 },
-  { number: 8, icon: "💯", title: { en: "Percentage Discounts", hi: "प्रतिशत छूट" }, customers: 5 },
-  { number: 9, icon: "🛒", title: { en: "Big Shopping Day", hi: "बड़ी खरीदारी" }, customers: 5 },
-  { number: 10, icon: "⏱️", title: { en: "Rush Hour", hi: "भीड़ का समय" }, customers: 6 },
+  { number: 6, icon: "🏷️", title: { en: "Special Discounts" }, customers: 5 },
+  { number: 7, icon: "🎁", title: { en: "Combo Offers" }, customers: 5 },
+  { number: 8, icon: "💯", title: { en: "Percentage Discounts" }, customers: 5 },
+  { number: 9, icon: "🛒", title: { en: "Big Shopping Day" }, customers: 5 },
+  { number: 10, icon: "⏱️", title: { en: "Rush Hour" }, customers: 6 },
 ];
 
-const PRODUCTS: { id: string; emoji: string; name: { en: string; hi: string }; price: number }[] = [
-  { id: "toffee", emoji: "🍬", name: { en: "Toffee", hi: "टॉफी" }, price: 1 },
-  { id: "matchbox", emoji: "🪔", name: { en: "Matchbox", hi: "माचिस" }, price: 2 },
-  { id: "pencil", emoji: "✏️", name: { en: "Pencil", hi: "पेंसिल" }, price: 5 },
-  { id: "eraser", emoji: "🧽", name: { en: "Eraser", hi: "रबर" }, price: 5 },
-  { id: "biscuits", emoji: "🍪", name: { en: "Biscuits", hi: "बिस्किट" }, price: 10 },
-  { id: "pen", emoji: "🖊️", name: { en: "Pen", hi: "पेन" }, price: 10 },
-  { id: "maggi", emoji: "🍜", name: { en: "Noodles", hi: "नूडल्स" }, price: 14 },
-  { id: "battery", emoji: "🔋", name: { en: "Battery", hi: "बैटरी" }, price: 15 },
-  { id: "chips", emoji: "🥔", name: { en: "Chips", hi: "चिप्स" }, price: 20 },
-  { id: "juice", emoji: "🧃", name: { en: "Juice Box", hi: "जूस" }, price: 20 },
-  { id: "salt", emoji: "🧂", name: { en: "Salt (1 kg)", hi: "नमक (1 किलो)" }, price: 22 },
-  { id: "potato", emoji: "🥔", name: { en: "Potato (1 kg)", hi: "आलू (1 किलो)" }, price: 25 },
-  { id: "chocolate", emoji: "🍫", name: { en: "Chocolate", hi: "चॉकलेट" }, price: 25 },
-  { id: "icecream", emoji: "🍦", name: { en: "Ice Cream", hi: "आइसक्रीम" }, price: 25 },
-  { id: "soap", emoji: "🧼", name: { en: "Soap", hi: "साबुन" }, price: 28 },
-  { id: "milk", emoji: "🥛", name: { en: "Milk Packet", hi: "दूध का पैकेट" }, price: 30 },
-  { id: "onion", emoji: "🧅", name: { en: "Onion (1 kg)", hi: "प्याज़ (1 किलो)" }, price: 35 },
-  { id: "bread", emoji: "🍞", name: { en: "Bread", hi: "ब्रेड" }, price: 35 },
-  { id: "bananas", emoji: "🍌", name: { en: "Bananas (1 Doz)", hi: "केले (1 दर्जन)" }, price: 40 },
-  { id: "tomato", emoji: "🍅", name: { en: "Tomato (1 kg)", hi: "टमाटर (1 किलो)" }, price: 40 },
-  { id: "colddrink", emoji: "🥤", name: { en: "Cold Drink", hi: "कोल्ड ड्रिंक" }, price: 40 },
-  { id: "notebook", emoji: "📒", name: { en: "Notebook", hi: "कॉपी" }, price: 40 },
-  { id: "eggs", emoji: "🥚", name: { en: "Eggs (6 pcs)", hi: "अंडे (6 पीस)" }, price: 42 },
-  { id: "sugar", emoji: "🧂", name: { en: "Sugar (1 kg)", hi: "चीनी (1 किलो)" }, price: 45 },
-  { id: "toothpaste", emoji: "🪥", name: { en: "Toothpaste", hi: "टूथपेस्ट" }, price: 55 },
-  { id: "rice", emoji: "🍚", name: { en: "Rice (1 kg)", hi: "चावल (1 किलो)" }, price: 65 },
-  { id: "dal", emoji: "🥣", name: { en: "Dal (500g)", hi: "दाल (500g)" }, price: 75 },
-  { id: "tea", emoji: "🍵", name: { en: "Tea Leaves (250g)", hi: "चाय पत्ती (250g)" }, price: 95 },
-  { id: "shampoo", emoji: "🧴", name: { en: "Shampoo Bottle", hi: "शैम्पू" }, price: 110 },
-  { id: "oil", emoji: "🛢️", name: { en: "Oil (1 Ltr)", hi: "तेल (1 लीटर)" }, price: 120 },
+const PRODUCTS: { id: string; emoji: string; name: { en: string }; price: number }[] = [
+  { id: "toffee", emoji: "🍬", name: { en: "Toffee" }, price: 1 },
+  { id: "matchbox", emoji: "🪔", name: { en: "Matchbox" }, price: 2 },
+  { id: "pencil", emoji: "✏️", name: { en: "Pencil" }, price: 5 },
+  { id: "eraser", emoji: "🧽", name: { en: "Eraser" }, price: 5 },
+  { id: "biscuits", emoji: "🍪", name: { en: "Biscuits" }, price: 10 },
+  { id: "pen", emoji: "🖊️", name: { en: "Pen" }, price: 10 },
+  { id: "maggi", emoji: "🍜", name: { en: "Noodles" }, price: 14 },
+  { id: "battery", emoji: "🔋", name: { en: "Battery" }, price: 15 },
+  { id: "chips", emoji: "🥔", name: { en: "Chips" }, price: 20 },
+  { id: "juice", emoji: "🧃", name: { en: "Juice Box" }, price: 20 },
+  { id: "salt", emoji: "🧂", name: { en: "Salt (1 kg)" }, price: 22 },
+  { id: "potato", emoji: "🥔", name: { en: "Potato (1 kg)" }, price: 25 },
+  { id: "chocolate", emoji: "🍫", name: { en: "Chocolate" }, price: 25 },
+  { id: "icecream", emoji: "🍦", name: { en: "Ice Cream" }, price: 25 },
+  { id: "soap", emoji: "🧼", name: { en: "Soap" }, price: 28 },
+  { id: "milk", emoji: "🥛", name: { en: "Milk Packet" }, price: 30 },
+  { id: "onion", emoji: "🧅", name: { en: "Onion (1 kg)" }, price: 35 },
+  { id: "bread", emoji: "🍞", name: { en: "Bread" }, price: 35 },
+  { id: "bananas", emoji: "🍌", name: { en: "Bananas (1 Doz)" }, price: 40 },
+  { id: "tomato", emoji: "🍅", name: { en: "Tomato (1 kg)" }, price: 40 },
+  { id: "colddrink", emoji: "🥤", name: { en: "Cold Drink" }, price: 40 },
+  { id: "notebook", emoji: "📒", name: { en: "Notebook" }, price: 40 },
+  { id: "eggs", emoji: "🥚", name: { en: "Eggs (6 pcs)" }, price: 42 },
+  { id: "sugar", emoji: "🧂", name: { en: "Sugar (1 kg)" }, price: 45 },
+  { id: "toothpaste", emoji: "🪥", name: { en: "Toothpaste" }, price: 55 },
+  { id: "rice", emoji: "🍚", name: { en: "Rice (1 kg)" }, price: 65 },
+  { id: "dal", emoji: "🥣", name: { en: "Lentils (500g)" }, price: 75 },
+  { id: "tea", emoji: "🍵", name: { en: "Tea Leaves (250g)" }, price: 95 },
+  { id: "shampoo", emoji: "🧴", name: { en: "Shampoo Bottle" }, price: 110 },
+  { id: "oil", emoji: "🛢️", name: { en: "Cooking Oil (1 Ltr)" }, price: 120 },
 ];
 
 export const CUSTOMERS: Customer[] = [
   {
     id: "uncle",
     emoji: "👨🏽‍🦳",
-    name: { en: "Sharma Uncle", hi: "शर्मा अंकल" },
-    greeting: { en: "Namaste, beta!", hi: "नमस्ते, बेटा!" },
+    name: { en: "Mr. Sharma" },
+    greeting: { en: "Hello there!" },
   },
   {
     id: "aunty",
     emoji: "👩🏽",
-    name: { en: "Priya Aunty", hi: "प्रिया आंटी" },
-    greeting: { en: "Hello, dear!", hi: "नमस्ते, बच्चे!" },
+    name: { en: "Mrs. Priya" },
+    greeting: { en: "Hello, dear!" },
   },
   {
     id: "student",
     emoji: "🧒🏽",
-    name: { en: "Rohan", hi: "रोहन" },
-    greeting: { en: "Hi bhaiya!", hi: "हाय भैया!" },
+    name: { en: "Rohan" },
+    greeting: { en: "Hi there!" },
   },
   {
     id: "parent",
     emoji: "👩🏽‍👧🏽",
-    name: { en: "Meera & Anu", hi: "मीरा और अनु" },
-    greeting: { en: "Good morning!", hi: "सुप्रभात!" },
+    name: { en: "Meera & Anu" },
+    greeting: { en: "Good morning!" },
   },
   {
     id: "delivery",
     emoji: "🧑🏽‍🔧",
-    name: { en: "Raju", hi: "राजू" },
-    greeting: { en: "Ram Ram ji!", hi: "राम राम जी!" },
+    name: { en: "Raju" },
+    greeting: { en: "Hello!" },
   },
   {
     id: "dadi",
     emoji: "👵🏽",
-    name: { en: "Dadi Ji", hi: "दादी जी" },
-    greeting: { en: "Jeete raho!", hi: "जीते रहो!" },
+    name: { en: "Grandma" },
+    greeting: { en: "Hello, dear!" },
   },
 ];
 
@@ -213,7 +213,7 @@ export function generateScenario(level: number, index: number, rng: Rng = Math.r
       const qty = randInt(rng, 3, 5);
       items = [item(ps1[0]!, ps1[0]!.price, qty), item(ps2[0]!, ps2[0]!.price, 1)];
       const off = qty >= 4 ? 10 : 5;
-      discount = { label: { en: `Buy 3+, save ₹${off}`, hi: `3+ लो, ₹${off} बचाओ` }, amount: off };
+      discount = { label: { en: `Buy 3+, save ₹${off}` }, amount: off };
       break;
     }
     case 6: {
@@ -223,7 +223,7 @@ export function generateScenario(level: number, index: number, rng: Rng = Math.r
       items = ps.map((p) => item(p, p.price));
       const off = pick(rng, [15, 20, 25]);
       discount = {
-        label: { en: `Special offer: ₹${off} off`, hi: `खास ऑफ़र: ₹${off} छूट` },
+        label: { en: `Special offer: ₹${off} off` },
         amount: off,
       };
       break;
@@ -235,7 +235,7 @@ export function generateScenario(level: number, index: number, rng: Rng = Math.r
       items = ps.map((p) => item(p, p.price));
       const off = pick(rng, [10, 15, 20]);
       discount = {
-        label: { en: `Combo deal: save ₹${off}`, hi: `कॉम्बो: ₹${off} बचत` },
+        label: { en: `Combo deal: save ₹${off}` },
         amount: off,
       };
       break;
@@ -260,7 +260,6 @@ export function generateScenario(level: number, index: number, rng: Rng = Math.r
       discount = {
         label: {
           en: `${pct}% off on ${discountP.name.en}`,
-          hi: `${discountP.name.hi} पर ${pct}% छूट`,
         },
         amount: (sub * pct) / 100,
       };
@@ -281,7 +280,7 @@ export function generateScenario(level: number, index: number, rng: Rng = Math.r
       if (rng() < 0.5) {
         const off = pick(rng, [10, 15, 20]);
         discount = {
-          label: { en: `Rush deal: ₹${off} off`, hi: `झटपट ऑफ़र: ₹${off} छूट` },
+          label: { en: `Rush deal: ₹${off} off` },
           amount: off,
         };
       }

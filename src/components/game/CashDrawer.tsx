@@ -25,30 +25,32 @@ export function CashDrawer({ denominations, onAdd, disabled }: Props) {
         ev.dataTransfer.effectAllowed = "copy";
       }}
       onClick={() => onAdd(d.id)}
-      whileHover={{ y: -4 }}
-      whileTap={{ scale: 0.9 }}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.92 }}
       aria-label={`Add ₹${d.value} ${d.kind}`}
-      className="grid min-h-20 shrink-0 cursor-grab place-items-center rounded-xl bg-wood-dark/60 px-2 py-2 shadow-[inset_0_3px_6px_color-mix(in_oklab,var(--wood-dark)_70%,transparent)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-sun disabled:opacity-50 active:cursor-grabbing"
+      className="grid min-h-13 sm:min-h-14 shrink-0 cursor-grab place-items-center rounded-xl bg-wood-dark/60 px-1.5 py-1 shadow-[inset_0_2px_4px_color-mix(in_oklab,var(--wood-dark)_70%,transparent)] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sun disabled:opacity-50 active:cursor-grabbing"
     >
-      <CurrencyPiece denom={d} />
+      <CurrencyPiece denom={d} size="sm" />
     </motion.button>
   );
   return (
     <section
       aria-label={tr("drawer")}
-      className="bg-wood-grain rounded-3xl border-4 border-wood-dark p-3 shadow-wood"
+      className="bg-wood-grain rounded-2xl border-3 border-wood-dark p-2 sm:p-2.5 shadow-wood shrink-0"
     >
-      <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2 px-1">
-        <h2 className="font-display text-xl font-extrabold text-sun">🗄️ {tr("drawer")}</h2>
-        <p className="text-sm font-bold text-cream">{tr("drawerHint")}</p>
+      <div className="mb-1 flex flex-wrap items-baseline justify-between gap-1.5 px-1">
+        <h2 className="font-display text-sm sm:text-base font-extrabold text-sun leading-none">
+          🗄️ {tr("drawer")}
+        </h2>
+        <p className="text-xs sm:text-sm font-bold text-cream leading-none">{tr("drawerHint")}</p>
       </div>
-      <div className="flex flex-col gap-2">
-        <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="flex flex-col gap-1.5">
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
           {notes.map((d) => (
             <Slot key={d.id} d={d} />
           ))}
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
           {coins.map((d) => (
             <Slot key={d.id} d={d} />
           ))}

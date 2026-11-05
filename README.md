@@ -6,13 +6,13 @@ Kirana Change is a fun, educational web application simulating an Indian neighbo
 
 ## Main Features
 
-- **Interactive 3D Kirana Store**: A rich, procedural 3D Indian neighborhood grocery shop built with Three.js. Features authentic red-and-white awning, traditional shop signboard ("🪔 गुप्ता किराना स्टोर 🪔"), marigold flower toran (garland), wooden shelving racks, glass candy jars, hanging snack packet strips, jute sacks filled with rice/dal, stainless steel dabbas, a digital electronic weighing scale, red bahi khata (account ledger), brass bell, and cutting chai glass.
-- **Dynamic 3D Characters**: Includes the warm neighborhood shopkeeper (Uncle-ji with curled handlebar mustache, kurta, Nehru vest, and gamcha) behind the counter and diverse animated 3D customers (Priya Aunty, Sharma Uncle, Rohan, Meera & Anu, Raju) with distinct outfits, accessories (bindi, spectacles, cap), and emotional reactions (celebratory jump/stars on correct change, thoughtful tilt on retry).
+- **Interactive 3D Kirana Store**: A rich, procedural 3D Indian neighborhood grocery shop built with Three.js. Features authentic red-and-white awning, traditional shop signboard ("🏪 CORNER GROCERY STORE 🏪"), marigold flower toran (garland), wooden shelving racks, glass candy jars, hanging snack packet strips, jute sacks filled with rice/lentils, stainless steel dabbas, a digital electronic weighing scale, red account ledger book, brass bell, and cutting chai glass.
+- **Dynamic 3D Characters**: Includes the warm neighborhood shopkeeper (with curled handlebar mustache, kurta, Nehru vest, and gamcha) behind the counter and diverse animated 3D customers (Mrs. Priya, Mr. Sharma, Rohan, Meera & Anu, Raju, Grandma) with distinct outfits, accessories (bindi, spectacles, cap), and emotional reactions (celebratory jump/stars on correct change, thoughtful tilt on retry).
 - **Synchronized Game State**: The 3D scene responds directly to the educational game state. When customers arrive, their 3D avatars appear at the counter with their payment on the desk. Selecting currency notes and coins instantly mirrors onto the 3D brass change tray on the counter in real time!
 - **Progressive Difficulty**: 10 levels ranging from simple coin combinations to complex shopping carts and discounts.
 - **Realistic Scenarios**: Encounter multiple customers, products, and dynamic scenarios where the given payment varies.
 - **Hint System**: An easy-to-understand count-up hint system to guide players on how to make correct change.
-- **Bilingual Support**: Fully playable in both English and Hindi.
+- **English Interface**: Clean, accessible English language interface optimized for desktop and mobile displays.
 - **Progression and Scoring**: Stars awarded based on accuracy and hint usage, with a persistent level map (saved to your browser's local storage).
 - **Audio-Visual Feedback**: Delightful sound effects and animations to celebrate correct answers.
 
@@ -86,7 +86,7 @@ The optimized files will be located in the `dist` directory.
 
 - **Procedural 3D Kirana Store**:
   - Engineered in `src/components/game/3d/` with Three.js.
-  - Implements a low-poly stylized Indian neighborhood grocery shop featuring checkered tiled floors, wooden racks, glass candy canisters, jute sacks, hanging snack packet strips, steel dabbas, traditional accounting ledger (Bahi Khata), and an electronic weighing scale.
+  - Implements a low-poly stylized Indian neighborhood grocery shop featuring checkered tiled floors, wooden racks, glass candy canisters, jute sacks, hanging snack packet strips, steel dabbas, traditional accounting ledger book, and an electronic weighing scale.
   - Features real-time state synchronization: customer payment on the counter and the player's active change tray mirrored in 3D.
-  - Evaluated candidate asset: *Indian Shop* by anandmohan662 on Sketchfab (CC BY 4.0; 2,028 faces, requires authenticated API token for downloads). To ensure zero bundle bloat, zero network latency, full mobile compatibility, and 100% reactive character animations tailored to game scenarios, a procedural Three.js architecture was constructed directly.
+  - Evaluated candidate asset: _Indian Shop_ by anandmohan662 on Sketchfab (CC BY 4.0; 2,028 faces, requires authenticated API token for downloads). To ensure zero bundle bloat, zero network latency, full mobile compatibility, and 100% reactive character animations tailored to game scenarios, a procedural Three.js architecture was constructed directly.
   - Includes full WebGL support detection and responsive canvas resizing.

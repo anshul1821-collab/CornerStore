@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { Volume2, VolumeX } from "lucide-react";
 import type { Lang } from "@/game/types";
 import { t, type StringKey } from "@/game/i18n";
+import { voiceManager } from "@/lib/voice/voiceManager";
 
 interface SettingsCtx {
   lang: Lang;
@@ -15,23 +16,26 @@ interface SettingsCtx {
 const Ctx = createContext<SettingsCtx | null>(null);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>("en");
+  const lang: Lang = "en";
   const [sound, setSoundState] = useState(true);
   const audio = useRef<AudioContext | null>(null);
 
   useEffect(() => {
-    const l = localStorage.getItem("kc-lang");
-    if (l === "en" || l === "hi") setLangState(l);
-    if (localStorage.getItem("kc-sound") === "off") setSoundState(false);
+    localStorage.removeItem("kc-lang");
+    if (localStorage.getItem("kc-sound") === "off") {
+      setSoundState(false);
+      voiceManager.setEnabled(false);
+    }
   }, []);
 
-  const setLang = (l: Lang) => {
-    setLangState(l);
-    localStorage.setItem("kc-lang", l);
+  const setLang = (_l: Lang) => {
+    // English-only application
   };
+
   const setSound = (s: boolean) => {
     setSoundState(s);
     localStorage.setItem("kc-sound", s ? "on" : "off");
+    voiceManager.setEnabled(s);
   };
 
   // Sounds only play in response to user actions.
@@ -74,32 +78,14 @@ export function useSettings() {
 }
 
 export function SettingsBar() {
-  const { lang, setLang, sound, setSound, tr } = useSettings();
+  const { sound, setSound, tr } = useSettings();
   return (
     <div className="flex items-center gap-2">
-      <div
-        role="group"
-        aria-label="Language"
-        className="flex rounded-full bg-paper p-1 shadow-soft border-2 border-wood-light"
-      >
-        {(["en", "hi"] as Lang[]).map((l) => (
-          <button
-            key={l}
-            onClick={() => setLang(l)}
-            aria-pressed={lang === l}
-            className={`rounded-full px-3 py-1 text-sm font-extrabold transition-colors ${
-              lang === l ? "bg-wood text-primary-foreground" : "text-wood-dark hover:bg-peach"
-            }`}
-          >
-            {l === "en" ? "EN" : "हिन्दी"}
-          </button>
-        ))}
-      </div>
       <button
         onClick={() => setSound(!sound)}
         aria-label={`${tr("sound")}: ${sound ? "on" : "off"}`}
         aria-pressed={sound}
-        className="grid h-10 w-10 place-items-center rounded-full bg-paper text-wood-dark shadow-soft border-2 border-wood-light hover:bg-peach"
+        className="grid h-10 w-10 place-items-center rounded-full bg-paper text-wood-dark shadow-soft border-2 border-wood-light hover:bg-peach cursor-pointer transition-colors"
       >
         {sound ? <Volume2 className="h-5 w-5" /> : <VolumeX className="h-5 w-5" />}
       </button>

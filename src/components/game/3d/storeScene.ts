@@ -204,13 +204,28 @@ export function setupKiranaStoreScene(
 
   for (let i = 0; i < stripes; i++) {
     const sMat = i % 2 === 0 ? redMat : creamMat;
-    const stripe = new THREE.Mesh(new THREE.BoxGeometry(stripeWidth - 0.01, 0.07, awningDepth), sMat);
+    const stripe = new THREE.Mesh(
+      new THREE.BoxGeometry(stripeWidth - 0.01, 0.07, awningDepth),
+      sMat,
+    );
     stripe.position.set(-awningWidth / 2 + (i + 0.5) * stripeWidth, 0, 0);
     stripe.castShadow = true;
     awningGroup.add(stripe);
 
     // Scalloped drop valance at front edge
-    const valance = new THREE.Mesh(new THREE.CylinderGeometry(stripeWidth * 0.45, stripeWidth * 0.45, 0.05, 12, 1, false, 0, Math.PI), sMat);
+    const valance = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        stripeWidth * 0.45,
+        stripeWidth * 0.45,
+        0.05,
+        12,
+        1,
+        false,
+        0,
+        Math.PI,
+      ),
+      sMat,
+    );
     valance.rotation.x = Math.PI / 2;
     valance.position.set(-awningWidth / 2 + (i + 0.5) * stripeWidth, -0.06, awningDepth / 2);
     awningGroup.add(valance);
@@ -231,7 +246,10 @@ export function setupKiranaStoreScene(
     const sag = Math.sin(t * Math.PI * 3) * 0.11;
 
     // Multi-faceted fluffy marigold flower
-    const flower = new THREE.Mesh(new THREE.DodecahedronGeometry(0.065, 1), i % 2 === 0 ? gendaOrange : gendaYellow);
+    const flower = new THREE.Mesh(
+      new THREE.DodecahedronGeometry(0.065, 1),
+      i % 2 === 0 ? gendaOrange : gendaYellow,
+    );
     flower.position.set(x, sag, 0);
     toranGroup.add(flower);
 
@@ -261,17 +279,17 @@ export function setupKiranaStoreScene(
     signCtx.lineWidth = 3;
     signCtx.strokeRect(20, 20, 984, 200);
 
-    // Hindi text
+    // Signboard header
     signCtx.fillStyle = "#ffe066";
-    signCtx.font = "bold 64px 'Baloo 2', 'Noto Sans Devanagari', sans-serif";
+    signCtx.font = "bold 64px 'Baloo 2', 'Nunito', sans-serif";
     signCtx.textAlign = "center";
     signCtx.textBaseline = "middle";
-    signCtx.fillText("🪔 गुप्ता किराना स्टोर 🪔", 512, 80);
+    signCtx.fillText("🏪 CORNER GROCERY STORE 🏪", 512, 80);
 
-    // English text
+    // Signboard subtitle
     signCtx.fillStyle = "#ffffff";
-    signCtx.font = "bold 40px 'Baloo 2', 'Nunito', sans-serif";
-    signCtx.fillText("GUPTA KIRANA STORE • APNA BAZAAR", 512, 156);
+    signCtx.font = "bold 38px 'Baloo 2', 'Nunito', sans-serif";
+    signCtx.fillText("NEIGHBORHOOD GROCERY • EVERY RUPEE COUNTS", 512, 156);
   }
   const signTexture = new THREE.CanvasTexture(signCanvas);
   signTexture.needsUpdate = true;
@@ -345,7 +363,7 @@ export function setupKiranaStoreScene(
 
     // Interior candies with twisted shiny wrappers
     const candyMat = new THREE.MeshStandardMaterial({
-      color: jarColors[idx],
+      color: jarColors[idx] ?? 0x2ecc71,
       metalness: 0.3,
       roughness: 0.2,
     });
@@ -398,7 +416,10 @@ export function setupKiranaStoreScene(
   for (let i = 2; i <= 6; i++) {
     const x = i * 0.28;
     const isHaldi = i % 2 === 0;
-    const spice = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.28, 0.24), isHaldi ? haldiMat : mirchMat);
+    const spice = new THREE.Mesh(
+      new THREE.BoxGeometry(0.22, 0.28, 0.24),
+      isHaldi ? haldiMat : mirchMat,
+    );
     spice.position.set(x, 2.03, 0.05);
     spice.castShadow = true;
     shelvesGroup.add(spice);
@@ -430,7 +451,10 @@ export function setupKiranaStoreScene(
 
     const bodyMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.26, 12), oilBottleMat);
     bodyMesh.position.y = 0.13;
-    const neckMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.065, 0.09, 12), oilBottleMat);
+    const neckMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.035, 0.065, 0.09, 12),
+      oilBottleMat,
+    );
     neckMesh.position.y = 0.28;
     const bottleCap = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.04, 10), capMat);
     bottleCap.position.y = 0.34;
@@ -443,7 +467,7 @@ export function setupKiranaStoreScene(
   const soapColors = [0xe91e63, 0x00acc1, 0xf4511e];
   [1.9, 2.3, 2.7].forEach((x, idx) => {
     for (let row = 0; row < 2; row++) {
-      const sMat = new THREE.MeshStandardMaterial({ color: soapColors[idx] });
+      const sMat = new THREE.MeshStandardMaterial({ color: soapColors[idx] ?? 0xe91e63 });
       const soap = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.08, 0.16), sMat);
       soap.position.set(x, 0.88 + row * 0.09, 0.05);
       soap.castShadow = true;
@@ -466,7 +490,7 @@ export function setupKiranaStoreScene(
     const colX = col * 0.36;
     for (let row = 0; row < 3; row++) {
       const pMat = new THREE.MeshStandardMaterial({
-        color: snackColors[(Math.abs(col) + row) % snackColors.length],
+        color: snackColors[(Math.abs(col) + row) % snackColors.length] ?? 0xe53935,
         roughness: 0.45,
         metalness: 0.15,
       });
@@ -594,7 +618,10 @@ export function setupKiranaStoreScene(
   });
 
   // Recessed kick-plate at base of counter
-  const kickPlate = new THREE.Mesh(new THREE.BoxGeometry(counterWidth, 0.08, counterDepth + 0.02), darkWoodMat);
+  const kickPlate = new THREE.Mesh(
+    new THREE.BoxGeometry(counterWidth, 0.08, counterDepth + 0.02),
+    darkWoodMat,
+  );
   kickPlate.position.set(0, 0.04, 0);
   counterGroup.add(kickPlate);
 
@@ -622,7 +649,7 @@ export function setupKiranaStoreScene(
   scaleGroup.add(screenMesh);
   counterGroup.add(scaleGroup);
 
-  // B. Traditional Bahi Khata (Account Ledger) with Gold Foil Cover
+  // B. Traditional Account Ledger with Gold Foil Cover
   const ledgerTex = getLedgerCoverTexture();
   const ledgerMat = new THREE.MeshStandardMaterial({ map: ledgerTex, roughness: 0.6 });
   const ledger = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.035, 0.42), ledgerMat);
@@ -641,7 +668,10 @@ export function setupKiranaStoreScene(
   bellGroup.position.set(0.58, counterHeight + 0.08, 0.22);
   const bellBase = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 0.04, 16), brassMat);
   bellBase.position.y = 0.02;
-  const bellDome = new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.5), brassMat);
+  const bellDome = new THREE.Mesh(
+    new THREE.SphereGeometry(0.07, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.5),
+    brassMat,
+  );
   bellDome.position.y = 0.04;
   const bellPlunger = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.06, 8), brassMat);
   bellPlunger.position.y = 0.12;
@@ -717,9 +747,7 @@ export function setupKiranaStoreScene(
 
   // Helper: Sync 3D Tray Pieces
   const updateTray3D = (tray: Tray) => {
-    while (dynamicTrayCoinsGroup.children.length > 0) {
-      dynamicTrayCoinsGroup.remove(dynamicTrayCoinsGroup.children[0]);
-    }
+    dynamicTrayCoinsGroup.clear();
 
     let itemIndex = 0;
     const entries = Object.entries(tray).filter(([_, count]) => (count ?? 0) > 0);
@@ -759,9 +787,7 @@ export function setupKiranaStoreScene(
   };
 
   const updateCustomerMoney3D = (paid: number, pieces: DenomId[]) => {
-    while (customerMoneyGroup.children.length > 0) {
-      customerMoneyGroup.remove(customerMoneyGroup.children[0]);
-    }
+    customerMoneyGroup.clear();
 
     const list = pieces && pieces.length > 0 ? pieces : ["n500"];
     list.slice(0, 4).forEach((id, idx) => {
@@ -794,7 +820,7 @@ export function setupKiranaStoreScene(
     for (let i = 0; i < 28; i++) {
       const star = new THREE.Mesh(
         starGeo,
-        new THREE.MeshBasicMaterial({ color: starColors[i % starColors.length] }),
+        new THREE.MeshBasicMaterial({ color: starColors[i % starColors.length] ?? 0xffd700 }),
       );
       star.position.set(
         (Math.random() - 0.5) * 2.2,

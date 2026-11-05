@@ -2,6 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
+import { synthesizeSpeech, type TTSRequest } from "./server/ttsService";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -47,6 +48,26 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      if (url.pathname === "/api/tts" && request.method === "POST") {
+        try {
+          const body = (await request.json()) as TTSRequest;
+          const apiKey = (env as Record<string, unknown>)?.ELEVENLABS_API_KEY as string | undefined;
+          const result = await synthesizeSpeech(body, apiKey);
+          return new Response(JSON.stringify(result), {
+            headers: { "Content-Type": "application/json" },
+          });
+        } catch {
+          return new Response(
+            JSON.stringify({ success: false, reason: "INVALID_REQUEST", fallback: "browser-tts" }),
+            {
+              status: 400,
+              headers: { "Content-Type": "application/json" },
+            },
+          );
+        }
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
