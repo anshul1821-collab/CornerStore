@@ -257,11 +257,25 @@ class VoiceManager {
             signal,
           })
             .then(async (res) => {
-              if (res.ok) return (await res.json()) as TTSResponse;
+              if (res.ok) {
+                const contentType = res.headers.get("content-type") || "";
+                if (contentType.includes("application/json")) {
+                  return (await res.json()) as TTSResponse;
+                }
+                console.warn(
+                  `[VoiceManager Diagnostic] /api/tts returned non-JSON content-type (${contentType}). Check server route deployment.`,
+                );
+                return null;
+              }
+              const errorText = await res.text().catch(() => "");
+              console.warn(
+                `[VoiceManager Diagnostic] /api/tts HTTP ${res.status}: ${errorText.slice(0, 150)}`,
+              );
               return null;
             })
             .catch((err) => {
               if (err?.name === "AbortError") return null;
+              console.warn("[VoiceManager Diagnostic] Network fetch error:", err);
               return null;
             });
 

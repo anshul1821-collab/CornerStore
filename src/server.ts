@@ -2,7 +2,7 @@ import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
-import { synthesizeSpeech, type TTSRequest } from "./server/ttsService";
+import { getDiagnosticStatus, synthesizeSpeech, type TTSRequest } from "./server/ttsService";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -49,23 +49,73 @@ export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
-      if (url.pathname === "/api/tts" && request.method === "POST") {
-        try {
-          const body = (await request.json()) as TTSRequest;
-          const apiKey = (env as Record<string, unknown>)?.ELEVENLABS_API_KEY as string | undefined;
-          const result = await synthesizeSpeech(body, apiKey);
-          return new Response(JSON.stringify(result), {
-            headers: { "Content-Type": "application/json" },
+
+      // Handle TTS API endpoint
+      if (url.pathname === "/api/tts") {
+        const corsHeaders = {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, xi-api-key",
+        };
+
+        if (request.method === "OPTIONS") {
+          return new Response(null, {
+            status: 204,
+            headers: corsHeaders,
           });
-        } catch {
-          return new Response(
-            JSON.stringify({ success: false, reason: "INVALID_REQUEST", fallback: "browser-tts" }),
-            {
-              status: 400,
-              headers: { "Content-Type": "application/json" },
-            },
-          );
         }
+
+        if (request.method === "GET") {
+          return new Response(JSON.stringify(getDiagnosticStatus()), {
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders,
+            },
+          });
+        }
+
+        if (request.method === "POST") {
+          try {
+            const body = (await request.json()) as TTSRequest;
+            const envRecord = (env as Record<string, unknown>) || {};
+            const apiKey =
+              (envRecord.ELEVENLABS_API_KEY as string | undefined) ||
+              (typeof process !== "undefined" ? process.env.ELEVENLABS_API_KEY : undefined);
+
+            const result = await synthesizeSpeech(body, apiKey);
+            return new Response(JSON.stringify(result), {
+              headers: {
+                "Content-Type": "application/json",
+                ...corsHeaders,
+                "Cache-Control": result.success
+                  ? "public, max-age=86400, stale-while-revalidate=604800"
+                  : "no-store",
+              },
+            });
+          } catch (err: unknown) {
+            console.error("[TTS Server Fetch Error]:", err);
+            return new Response(
+              JSON.stringify({
+                success: false,
+                reason: "INVALID_REQUEST",
+                fallback: "browser-tts",
+                error: (err as Error)?.message,
+              }),
+              {
+                status: 400,
+                headers: {
+                  "Content-Type": "application/json",
+                  ...corsHeaders,
+                },
+              },
+            );
+          }
+        }
+
+        return new Response("Method Not Allowed", {
+          status: 405,
+          headers: corsHeaders,
+        });
       }
 
       const handler = await getServerEntry();

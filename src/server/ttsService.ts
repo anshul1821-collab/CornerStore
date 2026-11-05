@@ -18,12 +18,13 @@ let lastEnvReadTime = 0;
 
 /**
  * Direct environment variable loader:
- * Reads process.env first, then falls back to reading the local .env file.
+ * Reads process.env first (handles trim and empty string checking), then falls back to reading the local .env file.
  * Caches parsed .env content with a short TTL to stay responsive to edits.
  */
-function loadKey(keyName: string): string | undefined {
-  if (typeof process !== "undefined" && process.env[keyName]) {
-    return process.env[keyName];
+export function loadKey(keyName: string): string | undefined {
+  if (typeof process !== "undefined" && process.env && process.env[keyName]) {
+    const val = process.env[keyName]?.trim();
+    if (val && val !== '""' && val !== "''") return val;
   }
 
   const now = Date.now();
@@ -56,7 +57,98 @@ function loadKey(keyName: string): string | undefined {
     } catch {}
   }
 
-  return envFileCache?.[keyName];
+  const cached = envFileCache?.[keyName]?.trim();
+  return cached && cached !== '""' && cached !== "''" ? cached : undefined;
+}
+
+export interface DiagnosticStatus {
+  status: "online" | "degraded";
+  service: string;
+  timestamp: string;
+  environment: string;
+  auth: {
+    configured: boolean;
+    keyLength: number;
+    maskedKey: string;
+  };
+  voices: {
+    shopkeeper: string;
+    girl: string;
+    boy: string;
+  };
+  models: {
+    default: string;
+    turbo: string;
+    fixed: string;
+  };
+  settings: {
+    stability: number;
+    similarity_boost: number;
+    style: number;
+    speed: number;
+    speaker_boost: boolean;
+  };
+  cache: {
+    cachedAudioEntries: number;
+  };
+}
+
+/**
+ * Returns safe diagnostic status without exposing private API keys
+ */
+export function getDiagnosticStatus(): DiagnosticStatus {
+  const apiKey = (loadKey("ELEVENLABS_API_KEY") || "").trim();
+  const isKeyConfigured = Boolean(apiKey && apiKey !== "your_elevenlabs_api_key_here");
+
+  const maskedKey = isKeyConfigured
+    ? `${apiKey.slice(0, 4)}...${apiKey.slice(-4)}`
+    : "not_set";
+
+  const boyVoice = loadKey("ELEVENLABS_BOY_VOICE_ID") || "ErXwobaYiN019PkySvjV";
+  const girlVoice = loadKey("ELEVENLABS_GIRL_VOICE_ID") || "EXAVITQu4vr4xnSDxMaL";
+  const shopkeeperVoice = loadKey("ELEVENLABS_SHOPKEEPER_VOICE_ID") || "JBFqnCBsd6RMkjVDRZzb";
+
+  const defaultModel = loadKey("ELEVENLABS_MODEL_ID") || "eleven_turbo_v2_5";
+  const turboModel = loadKey("ELEVENLABS_TURBO_MODEL_ID") || "eleven_turbo_v2_5";
+  const fixedModel = loadKey("ELEVENLABS_FIXED_MODEL_ID") || "eleven_multilingual_v2";
+
+  const stability = parseFloat(loadKey("ELEVENLABS_STABILITY") || "0.40");
+  const simBoost = parseFloat(loadKey("ELEVENLABS_SIMILARITY_BOOST") || "0.75");
+  const style = parseFloat(loadKey("ELEVENLABS_STYLE") || "0.15");
+  const speed = parseFloat(loadKey("ELEVENLABS_SPEED") || "1.0");
+  const speakerBoost = (loadKey("ELEVENLABS_SPEAKER_BOOST") || "true").toLowerCase() === "true";
+
+  return {
+    status: isKeyConfigured ? "online" : "degraded",
+    service: "Kirana Change ElevenLabs TTS Service",
+    timestamp: new Date().toISOString(),
+    environment: typeof process !== "undefined" && process.env.VERCEL ? "vercel-serverless" : "local-or-custom",
+    auth: {
+      configured: isKeyConfigured,
+      keyLength: apiKey.length,
+      maskedKey,
+    },
+    voices: {
+      shopkeeper: shopkeeperVoice,
+      girl: girlVoice,
+      boy: boyVoice,
+    },
+    models: {
+      default: defaultModel,
+      turbo: turboModel,
+      fixed: fixedModel,
+    },
+    settings: {
+      stability: isNaN(stability) ? 0.40 : stability,
+      similarity_boost: isNaN(simBoost) ? 0.75 : simBoost,
+      style: isNaN(style) ? 0.15 : style,
+      speed: isNaN(speed) ? 1.0 : speed,
+      speaker_boost: speakerBoost,
+    },
+    cache: {
+      cachedAudioEntries: audioCache.size,
+    },
+  };
 }
 
 /**
@@ -204,6 +296,10 @@ async function executeSynthesis(
   }
 
   const url = `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(voiceId)}?output_format=mp3_44100_128`;
+  const startTime = Date.now();
+  console.log(
+    `[ElevenLabs TTS Diagnostic] Request: role=${defaultVoice.role}, voiceId=${voiceId}, model=${modelId}, textLength=${speechText.length}, keyLength=${apiKey.trim().length}`,
+  );
 
   try {
     let response = await fetch(url, {
@@ -254,7 +350,7 @@ async function executeSynthesis(
             : "ErXwobaYiN019PkySvjV";
 
         if (voiceId !== fallbackVoiceId) {
-          console.warn(`[ElevenLabs TTS] Voice ${voiceId} unavailable, using verified free tier voice ${fallbackVoiceId}`);
+          console.warn(`[ElevenLabs TTS Diagnostic] Voice ${voiceId} unavailable (HTTP ${response.status}), falling back to verified voice ${fallbackVoiceId}`);
           const fallbackUrl = `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(fallbackVoiceId)}?output_format=mp3_44100_128`;
           response = await fetch(fallbackUrl, {
             method: "POST",
@@ -273,10 +369,12 @@ async function executeSynthesis(
       }
     }
 
+    const duration = Date.now() - startTime;
+
     if (!response.ok) {
       const errorText = await response.text().catch(() => "");
       console.warn(
-        `[ElevenLabs TTS] API returned status ${response.status}: ${errorText.slice(0, 150)}`,
+        `[ElevenLabs TTS Diagnostic] API returned status ${response.status} in ${duration}ms: ${errorText.slice(0, 150)}`,
       );
       return {
         success: false,
@@ -288,6 +386,9 @@ async function executeSynthesis(
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const audioBase64 = buffer.toString("base64");
+    console.log(
+      `[ElevenLabs TTS Diagnostic] Success: HTTP ${response.status} in ${duration}ms (${Math.round(buffer.length / 1024)} KB audio)`,
+    );
 
     // Store in cache (manage size)
     if (audioCache.size >= MAX_CACHE_ENTRIES) {

@@ -158,4 +158,55 @@ describe("Enhanced Realistic ElevenLabs Voice Integration", () => {
       expect(state.activeText).toBeNull();
     });
   });
+
+  describe("Vercel Serverless Function & Diagnostic Route", () => {
+    it("returns safe diagnostic status without exposing private API keys", async () => {
+      const { getDiagnosticStatus } = await import("../server/ttsService");
+      const diag = getDiagnosticStatus();
+
+      expect(diag.service).toContain("ElevenLabs TTS");
+      expect(diag.voices.shopkeeper).toBeDefined();
+      expect(diag.voices.girl).toBeDefined();
+      expect(diag.voices.boy).toBeDefined();
+      expect(diag.models.default).toBeDefined();
+
+      // Masked key must NEVER be the raw key
+      if (diag.auth.configured) {
+        expect(diag.auth.maskedKey).toContain("...");
+      } else {
+        expect(diag.auth.maskedKey).toBe("not_set");
+      }
+    });
+
+    it("handles Vercel serverless request via api/tts.ts", async () => {
+      const { default: handler } = await import("../../api/tts");
+
+      // Test GET diagnostic endpoint
+      let statusCode = 0;
+      const headers: Record<string, string> = {};
+      let responseBody = "";
+
+      const mockReq: any = {
+        method: "GET",
+        headers: {},
+      };
+      const mockRes: any = {
+        statusCode: 200,
+        setHeader: (k: string, v: string) => {
+          headers[k] = v;
+        },
+        end: (data: string) => {
+          responseBody = data;
+        },
+      };
+
+      await handler(mockReq, mockRes);
+      expect(headers["Access-Control-Allow-Origin"]).toBe("*");
+      expect(headers["Content-Type"]).toBe("application/json");
+
+      const parsed = JSON.parse(responseBody);
+      expect(parsed.service).toContain("ElevenLabs");
+      expect(parsed.auth).toBeDefined();
+    });
+  });
 });
