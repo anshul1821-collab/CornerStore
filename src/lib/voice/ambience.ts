@@ -99,7 +99,9 @@ class AmbienceEngine {
 
       osc.start(now);
       osc.stop(now + 0.15);
-    } catch {}
+    } catch {
+      // Ignored: audio context interrupted
+    }
   }
 
   /**

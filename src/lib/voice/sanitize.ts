@@ -17,27 +17,45 @@ export function formatItemForSpeech(itemName: string, qty: number = 1): string {
 
   // Handle unit notations in product names
   if (name.includes("(1 kg)")) {
-    const base = name.replace(/\(1 kg\)/i, "").trim().toLowerCase();
+    const base = name
+      .replace(/\(1 kg\)/i, "")
+      .trim()
+      .toLowerCase();
     return qty > 1 ? `${qty} kilos of ${base}` : `a kilo of ${base}`;
   }
   if (name.includes("(6 pcs)")) {
-    const base = name.replace(/\(6 pcs\)/i, "").trim().toLowerCase();
+    const base = name
+      .replace(/\(6 pcs\)/i, "")
+      .trim()
+      .toLowerCase();
     return qty > 1 ? `${qty * 6} ${base}` : `six ${base}`;
   }
   if (name.includes("(1 Doz)")) {
-    const base = name.replace(/\(1 Doz\)/i, "").trim().toLowerCase();
+    const base = name
+      .replace(/\(1 Doz\)/i, "")
+      .trim()
+      .toLowerCase();
     return qty > 1 ? `${qty} dozen ${base}` : `a dozen ${base}`;
   }
   if (name.includes("(1 Ltr)")) {
-    const base = name.replace(/\(1 Ltr\)/i, "").trim().toLowerCase();
+    const base = name
+      .replace(/\(1 Ltr\)/i, "")
+      .trim()
+      .toLowerCase();
     return qty > 1 ? `${qty} liters of ${base}` : `a bottle of ${base}`;
   }
   if (name.includes("(500g)")) {
-    const base = name.replace(/\(500g\)/i, "").trim().toLowerCase();
+    const base = name
+      .replace(/\(500g\)/i, "")
+      .trim()
+      .toLowerCase();
     return qty > 1 ? `${qty} packets of ${base}` : `a packet of ${base}`;
   }
   if (name.includes("(250g)")) {
-    const base = name.replace(/\(250g\)/i, "").trim().toLowerCase();
+    const base = name
+      .replace(/\(250g\)/i, "")
+      .trim()
+      .toLowerCase();
     return qty > 1 ? `${qty} packs of ${base}` : `tea leaves`;
   }
 
@@ -79,7 +97,12 @@ export function formatItemForSpeech(itemName: string, qty: number = 1): string {
     if (lower.endsWith("y") && !/[aeiou]y$/.test(lower)) {
       return `${qty} ${lower.slice(0, -1)}ies`;
     }
-    if (lower.endsWith("s") || lower.endsWith("x") || lower.endsWith("ch") || lower.endsWith("sh")) {
+    if (
+      lower.endsWith("s") ||
+      lower.endsWith("x") ||
+      lower.endsWith("ch") ||
+      lower.endsWith("sh")
+    ) {
       return `${qty} ${lower}es`;
     }
     return `${qty} ${lower}s`;

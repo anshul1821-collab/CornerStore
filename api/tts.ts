@@ -1,28 +1,48 @@
 import { synthesizeSpeech, getDiagnosticStatus, type TTSRequest } from "../src/server/ttsService";
 
+export interface UniversalRequest {
+  method?: string;
+  body?: unknown;
+  on?: (event: string, listener: (chunk: unknown) => void) => void;
+  json?: () => Promise<unknown>;
+}
+
+export interface UniversalResponse {
+  statusCode?: number;
+  setHeader: (name: string, value: string) => void;
+  end: (data?: string) => void;
+}
+
 // Vercel Serverless Function: handles /api/tts
-export default async function handler(req: any, res?: any) {
+export default async function handler(
+  req: Request | UniversalRequest,
+  res?: UniversalResponse,
+): Promise<Response | void> {
+  const isWebReq =
+    req instanceof Request || (req?.method && typeof req.json === "function" && !res);
+
   // 1. Web Standard Request/Response (Vercel Edge/Web Runtime)
-  if (req instanceof Request || (req?.method && typeof req.json === "function" && !res)) {
+  if (isWebReq) {
+    const webReq = req as Request;
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, xi-api-key",
     };
 
-    if (req.method === "OPTIONS") {
+    if (webReq.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
 
-    if (req.method === "GET") {
+    if (webReq.method === "GET") {
       return new Response(JSON.stringify(getDiagnosticStatus()), {
         headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 
-    if (req.method === "POST") {
+    if (webReq.method === "POST") {
       try {
-        const body = (await req.json()) as TTSRequest;
+        const body = (await webReq.json()) as TTSRequest;
         const result = await synthesizeSpeech(body);
         return new Response(JSON.stringify(result), {
           headers: {
@@ -50,49 +70,56 @@ export default async function handler(req: any, res?: any) {
   }
 
   // 2. Node.js IncomingMessage / ServerResponse (Vercel Node.js Serverless Function)
+  if (!res) {
+    return;
+  }
+
+  const nodeReq = req as UniversalRequest;
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, xi-api-key");
 
-  if (req.method === "OPTIONS") {
+  if (nodeReq.method === "OPTIONS") {
     res.statusCode = 204;
     res.end();
     return;
   }
 
-  if (req.method === "GET") {
+  if (nodeReq.method === "GET") {
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(getDiagnosticStatus()));
     return;
   }
 
-  if (req.method === "POST") {
+  if (nodeReq.method === "POST") {
     try {
-      let body = req.body;
+      let body = nodeReq.body;
       if (typeof body === "string") {
         try {
           body = JSON.parse(body);
         } catch {
           body = {};
         }
-      } else if (!body) {
+      } else if (!body && typeof nodeReq.on === "function") {
         // Read stream body if not pre-parsed
         body = await new Promise((resolve, reject) => {
           let str = "";
-          req.on("data", (chunk: any) => (str += chunk));
-          req.on("end", () => {
+          nodeReq.on?.("data", (chunk: unknown) => {
+            str += String(chunk);
+          });
+          nodeReq.on?.("end", () => {
             try {
               resolve(str ? JSON.parse(str) : {});
             } catch (e) {
               reject(e);
             }
           });
-          req.on("error", reject);
+          nodeReq.on?.("error", reject);
         });
       }
 
-      const result = await synthesizeSpeech(body as TTSRequest);
+      const result = await synthesizeSpeech((body as TTSRequest) || {});
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       if (result.success) {
@@ -117,4 +144,3 @@ export default async function handler(req: any, res?: any) {
   res.statusCode = 405;
   res.end("Method Not Allowed");
 }
-

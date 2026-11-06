@@ -50,9 +50,9 @@ const similarityBoost = parseFloat(env.ELEVENLABS_SIMILARITY_BOOST || "0.75");
 const style = parseFloat(env.ELEVENLABS_STYLE || "0.20");
 const speakerBoost = env.ELEVENLABS_SPEAKER_BOOST !== "false";
 
-const shopkeeperVoiceId = env.ELEVENLABS_SHOPKEEPER_VOICE_ID || "JBFqnCBsd6RMkjVDRZzb"; // George
-const boyVoiceId = env.ELEVENLABS_BOY_VOICE_ID || "ErXwobaYiN019PkySvjV"; // Antoni
-const girlVoiceId = env.ELEVENLABS_GIRL_VOICE_ID || "EXAVITQu4vr4xnSDxMaL"; // Sarah
+const shopkeeperVoiceId = env.ELEVENLABS_SHOPKEEPER_VOICE_ID || "bbGyqGAEIg7zLT7U2n9A"; // Shopkeeper
+const boyVoiceId = env.ELEVENLABS_BOY_VOICE_ID || "9gKJk2fZsPLQCuOnaVLS"; // Boy Customer
+const girlVoiceId = env.ELEVENLABS_GIRL_VOICE_ID || "7vLdoQUU3acmEiAVXlaN"; // Girl Customer
 
 console.log("\x1b[36m======================================================================\x1b[0m");
 console.log("\x1b[1m  KIRANA CHANGE - 3-VOICE QUALITY & MODEL BENCHMARK                   \x1b[0m");

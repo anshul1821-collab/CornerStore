@@ -46,7 +46,10 @@ function ttsDevServerPlugin(): Plugin {
               res.statusCode = 200;
               res.setHeader("Content-Type", "application/json");
               if (result.success) {
-                res.setHeader("Cache-Control", "public, max-age=86400, stale-while-revalidate=604800");
+                res.setHeader(
+                  "Cache-Control",
+                  "public, max-age=86400, stale-while-revalidate=604800",
+                );
               }
               res.end(JSON.stringify(result));
             } catch (err: unknown) {

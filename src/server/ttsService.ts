@@ -54,7 +54,9 @@ export function loadKey(keyName: string): string | undefined {
           }
         }
       }
-    } catch {}
+    } catch {
+      // Ignored: .env cannot be read or does not exist
+    }
   }
 
   const cached = envFileCache?.[keyName]?.trim();
@@ -100,29 +102,30 @@ export function getDiagnosticStatus(): DiagnosticStatus {
   const apiKey = (loadKey("ELEVENLABS_API_KEY") || "").trim();
   const isKeyConfigured = Boolean(apiKey && apiKey !== "your_elevenlabs_api_key_here");
 
-  const maskedKey = isKeyConfigured
-    ? `${apiKey.slice(0, 4)}...${apiKey.slice(-4)}`
-    : "not_set";
+  const maskedKey = isKeyConfigured ? `${apiKey.slice(0, 4)}...${apiKey.slice(-4)}` : "not_set";
 
-  const boyVoice = loadKey("ELEVENLABS_BOY_VOICE_ID") || "ErXwobaYiN019PkySvjV";
-  const girlVoice = loadKey("ELEVENLABS_GIRL_VOICE_ID") || "EXAVITQu4vr4xnSDxMaL";
-  const shopkeeperVoice = loadKey("ELEVENLABS_SHOPKEEPER_VOICE_ID") || "JBFqnCBsd6RMkjVDRZzb";
+  const boyVoice = loadKey("ELEVENLABS_BOY_VOICE_ID") || "9gKJk2fZsPLQCuOnaVLS";
+  const girlVoice = loadKey("ELEVENLABS_GIRL_VOICE_ID") || "7vLdoQUU3acmEiAVXlaN";
+  const shopkeeperVoice = loadKey("ELEVENLABS_SHOPKEEPER_VOICE_ID") || "bbGyqGAEIg7zLT7U2n9A";
 
-  const defaultModel = loadKey("ELEVENLABS_MODEL_ID") || "eleven_turbo_v2_5";
+  const defaultModel = loadKey("ELEVENLABS_MODEL_ID") || "eleven_multilingual_v2";
   const turboModel = loadKey("ELEVENLABS_TURBO_MODEL_ID") || "eleven_turbo_v2_5";
   const fixedModel = loadKey("ELEVENLABS_FIXED_MODEL_ID") || "eleven_multilingual_v2";
 
   const stability = parseFloat(loadKey("ELEVENLABS_STABILITY") || "0.40");
   const simBoost = parseFloat(loadKey("ELEVENLABS_SIMILARITY_BOOST") || "0.75");
-  const style = parseFloat(loadKey("ELEVENLABS_STYLE") || "0.15");
-  const speed = parseFloat(loadKey("ELEVENLABS_SPEED") || "1.0");
+  const style = parseFloat(loadKey("ELEVENLABS_STYLE") || "0.20");
+  const speed = parseFloat(loadKey("ELEVENLABS_SPEED") || "1.00");
   const speakerBoost = (loadKey("ELEVENLABS_SPEAKER_BOOST") || "true").toLowerCase() === "true";
 
   return {
     status: isKeyConfigured ? "online" : "degraded",
     service: "Kirana Change ElevenLabs TTS Service",
     timestamp: new Date().toISOString(),
-    environment: typeof process !== "undefined" && process.env.VERCEL ? "vercel-serverless" : "local-or-custom",
+    environment:
+      typeof process !== "undefined" && process.env.VERCEL
+        ? "vercel-serverless"
+        : "local-or-custom",
     auth: {
       configured: isKeyConfigured,
       keyLength: apiKey.length,
@@ -139,7 +142,7 @@ export function getDiagnosticStatus(): DiagnosticStatus {
       fixed: fixedModel,
     },
     settings: {
-      stability: isNaN(stability) ? 0.40 : stability,
+      stability: isNaN(stability) ? 0.4 : stability,
       similarity_boost: isNaN(simBoost) ? 0.75 : simBoost,
       style: isNaN(style) ? 0.15 : style,
       speed: isNaN(speed) ? 1.0 : speed,
@@ -197,7 +200,7 @@ export async function synthesizeSpeech(
       modelId =
         loadKey("ELEVENLABS_MODEL_ID") ||
         loadKey("ELEVENLABS_TURBO_MODEL_ID") ||
-        "eleven_turbo_v2_5";
+        "eleven_multilingual_v2";
     }
   }
 
@@ -271,18 +274,21 @@ async function executeSynthesis(
   const envSpeakerBoost = loadKey("ELEVENLABS_SPEAKER_BOOST");
 
   const stability = envStability ? parseFloat(envStability) : defaultVoice.settings.stability;
-  const similarityBoost = envSimBoost ? parseFloat(envSimBoost) : defaultVoice.settings.similarity_boost;
+  const similarityBoost = envSimBoost
+    ? parseFloat(envSimBoost)
+    : defaultVoice.settings.similarity_boost;
   const speed = envSpeed ? parseFloat(envSpeed) : defaultVoice.settings.speed;
-  const speakerBoost = envSpeakerBoost !== undefined
-    ? envSpeakerBoost.toLowerCase() === "true"
-    : defaultVoice.settings.use_speaker_boost;
+  const speakerBoost =
+    envSpeakerBoost !== undefined
+      ? envSpeakerBoost.toLowerCase() === "true"
+      : defaultVoice.settings.use_speaker_boost;
 
   // Style is best supported on v2 models (eleven_multilingual_v2, eleven_turbo_v2_5)
-  const defaultStyle = modelId.includes("multilingual") ? 0.20 : 0.15;
+  const defaultStyle = modelId.includes("multilingual") ? 0.2 : 0.15;
   const style = envStyle ? parseFloat(envStyle) : (defaultVoice.settings.style ?? defaultStyle);
 
   const voiceSettings: Record<string, unknown> = {
-    stability: isNaN(stability) ? 0.40 : stability,
+    stability: isNaN(stability) ? 0.4 : stability,
     similarity_boost: isNaN(similarityBoost) ? 0.75 : similarityBoost,
     use_speaker_boost: speakerBoost,
   };
@@ -317,7 +323,11 @@ async function executeSynthesis(
     });
 
     // If API rejected due to unsupported voice settings (e.g. style or speed), retry with basic settings
-    if (!response.ok && response.status === 400 && (voiceSettings.style !== undefined || voiceSettings.speed !== undefined)) {
+    if (
+      !response.ok &&
+      response.status === 400 &&
+      (voiceSettings.style !== undefined || voiceSettings.speed !== undefined)
+    ) {
       response = await fetch(url, {
         method: "POST",
         headers: {
@@ -340,17 +350,22 @@ async function executeSynthesis(
     // If API returned 402 (paid plan required) or 400 for a restricted voice,
     // automatically retry using the verified free-tier standard voice for this role
     if (!response.ok && (response.status === 402 || response.status === 400)) {
-      const errorText = await response.clone().text().catch(() => "");
+      const errorText = await response
+        .clone()
+        .text()
+        .catch(() => "");
       if (errorText.includes("paid_plan_required") || errorText.includes("voice_not_found")) {
         const fallbackVoiceId =
           defaultVoice.role === "girl"
             ? "EXAVITQu4vr4xnSDxMaL"
             : defaultVoice.role === "shopkeeper"
-            ? "JBFqnCBsd6RMkjVDRZzb"
-            : "ErXwobaYiN019PkySvjV";
+              ? "JBFqnCBsd6RMkjVDRZzb"
+              : "ErXwobaYiN019PkySvjV";
 
         if (voiceId !== fallbackVoiceId) {
-          console.warn(`[ElevenLabs TTS Diagnostic] Voice ${voiceId} unavailable (HTTP ${response.status}), falling back to verified voice ${fallbackVoiceId}`);
+          console.warn(
+            `[ElevenLabs TTS Diagnostic] Voice ${voiceId} unavailable (HTTP ${response.status}), falling back to verified voice ${fallbackVoiceId}`,
+          );
           const fallbackUrl = `https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(fallbackVoiceId)}?output_format=mp3_44100_128`;
           response = await fetch(fallbackUrl, {
             method: "POST",

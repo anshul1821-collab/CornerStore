@@ -54,9 +54,9 @@ describe("Enhanced Realistic ElevenLabs Voice Integration", () => {
     it("configures Shopkeeper with stability 0.40 and warm style exaggeration", () => {
       const voice = getVoiceForSpeaker("shopkeeper");
       expect(voice.voiceId).toBe(SHOPKEEPER_VOICE.voiceId);
-      expect(voice.settings.stability).toBe(0.40);
+      expect(voice.settings.stability).toBe(0.4);
       expect(voice.settings.similarity_boost).toBe(0.75);
-      expect(voice.settings.style).toBe(0.20);
+      expect(voice.settings.style).toBe(0.2);
       expect(voice.settings.use_speaker_boost).toBe(true);
     });
 
@@ -67,6 +67,11 @@ describe("Enhanced Realistic ElevenLabs Voice Integration", () => {
 
       const uniqueVoices = new Set([boyVoice.voiceId, girlVoice.voiceId, shopkeeperVoice.voiceId]);
       expect(uniqueVoices.size).toBe(3);
+
+      // Verify exact canonical IDs
+      expect(boyVoice.voiceId).toBe("9gKJk2fZsPLQCuOnaVLS");
+      expect(girlVoice.voiceId).toBe("7vLdoQUU3acmEiAVXlaN");
+      expect(shopkeeperVoice.voiceId).toBe("bbGyqGAEIg7zLT7U2n9A");
     });
 
     it("correctly maps all male customers to the Boy Voice and all female customers to the Girl Voice", () => {
@@ -182,21 +187,20 @@ describe("Enhanced Realistic ElevenLabs Voice Integration", () => {
       const { default: handler } = await import("../../api/tts");
 
       // Test GET diagnostic endpoint
-      let statusCode = 0;
       const headers: Record<string, string> = {};
       let responseBody = "";
 
-      const mockReq: any = {
+      const mockReq = {
         method: "GET",
         headers: {},
       };
-      const mockRes: any = {
+      const mockRes = {
         statusCode: 200,
         setHeader: (k: string, v: string) => {
           headers[k] = v;
         },
-        end: (data: string) => {
-          responseBody = data;
+        end: (data?: string) => {
+          if (data) responseBody = data;
         },
       };
 
@@ -207,6 +211,25 @@ describe("Enhanced Realistic ElevenLabs Voice Integration", () => {
       const parsed = JSON.parse(responseBody);
       expect(parsed.service).toContain("ElevenLabs");
       expect(parsed.auth).toBeDefined();
+
+      // Test Web Standard Request object
+      const webReq = new Request("http://localhost/api/tts", { method: "GET" });
+      const webRes = await handler(webReq);
+      expect(webRes).toBeInstanceOf(Response);
+      const webJson = await webRes.json();
+      expect(webJson.service).toContain("ElevenLabs");
+      expect(webJson.voices.boy).toBe("9gKJk2fZsPLQCuOnaVLS");
+      expect(webJson.voices.girl).toBe("7vLdoQUU3acmEiAVXlaN");
+      expect(webJson.voices.shopkeeper).toBe("bbGyqGAEIg7zLT7U2n9A");
+      expect(webJson.models.default).toBe("eleven_multilingual_v2");
+    });
+
+    it("supports TanStack Start native server functions for ElevenLabs", async () => {
+      const { synthesizeSpeechServerFn, getDiagnosticStatusServerFn } =
+        await import("../server/voiceServerFn");
+
+      expect(typeof synthesizeSpeechServerFn).toBe("function");
+      expect(typeof getDiagnosticStatusServerFn).toBe("function");
     });
   });
 });

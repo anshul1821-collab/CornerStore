@@ -28,43 +28,43 @@ export interface VoiceConfig {
 
 export const BOY_VOICE: VoiceConfig = {
   role: "boy",
-  voiceId: "ErXwobaYiN019PkySvjV", // Antoni: friendly, conversational young male
-  name: "Antoni (Boy Voice)",
+  voiceId: "9gKJk2fZsPLQCuOnaVLS", // Boy Voice: friendly, conversational young male
+  name: "Boy Voice",
   personality: "Natural, friendly, conversational male customer",
   settings: {
-    stability: 0.40,
+    stability: 0.4,
     similarity_boost: 0.75,
-    speed: 1.00,
+    speed: 1.0,
     use_speaker_boost: true,
-    style: 0.20,
+    style: 0.2,
   },
 };
 
 export const GIRL_VOICE: VoiceConfig = {
   role: "girl",
-  voiceId: "EXAVITQu4vr4xnSDxMaL", // Sarah: clear, friendly, conversational young female
-  name: "Sarah (Girl Voice)",
+  voiceId: "7vLdoQUU3acmEiAVXlaN", // Girl Voice: clear, friendly, conversational young female
+  name: "Girl Voice",
   personality: "Natural, clear, conversational female customer",
   settings: {
-    stability: 0.40,
+    stability: 0.4,
     similarity_boost: 0.75,
-    speed: 1.00,
+    speed: 1.0,
     use_speaker_boost: true,
-    style: 0.20,
+    style: 0.2,
   },
 };
 
 export const SHOPKEEPER_VOICE: VoiceConfig = {
   role: "shopkeeper",
-  voiceId: "JBFqnCBsd6RMkjVDRZzb", // George: warm, mature, experienced store owner
-  name: "George (Shopkeeper Voice)",
+  voiceId: "bbGyqGAEIg7zLT7U2n9A", // Shopkeeper Voice: warm, mature, experienced store owner
+  name: "Shopkeeper Voice",
   personality: "Warm, welcoming, experienced store owner",
   settings: {
-    stability: 0.40,
+    stability: 0.4,
     similarity_boost: 0.75,
-    speed: 1.00,
+    speed: 1.0,
     use_speaker_boost: true,
-    style: 0.20,
+    style: 0.2,
   },
 };
 
@@ -105,13 +105,18 @@ export const DEFAULT_CUSTOMER_VOICE: VoiceConfig = BOY_VOICE;
 
 function applySettingOverrides(settings: VoiceConfig["settings"]): VoiceConfig["settings"] {
   if (typeof process === "undefined") return settings;
-  const stab = process.env.ELEVENLABS_STABILITY ? parseFloat(process.env.ELEVENLABS_STABILITY) : undefined;
-  const sim = process.env.ELEVENLABS_SIMILARITY_BOOST ? parseFloat(process.env.ELEVENLABS_SIMILARITY_BOOST) : undefined;
+  const stab = process.env.ELEVENLABS_STABILITY
+    ? parseFloat(process.env.ELEVENLABS_STABILITY)
+    : undefined;
+  const sim = process.env.ELEVENLABS_SIMILARITY_BOOST
+    ? parseFloat(process.env.ELEVENLABS_SIMILARITY_BOOST)
+    : undefined;
   const style = process.env.ELEVENLABS_STYLE ? parseFloat(process.env.ELEVENLABS_STYLE) : undefined;
   const speed = process.env.ELEVENLABS_SPEED ? parseFloat(process.env.ELEVENLABS_SPEED) : undefined;
-  const boost = process.env.ELEVENLABS_SPEAKER_BOOST !== undefined
-    ? process.env.ELEVENLABS_SPEAKER_BOOST.toLowerCase() === "true"
-    : undefined;
+  const boost =
+    process.env.ELEVENLABS_SPEAKER_BOOST !== undefined
+      ? process.env.ELEVENLABS_SPEAKER_BOOST.toLowerCase() === "true"
+      : undefined;
 
   return {
     stability: stab !== undefined && !isNaN(stab) ? stab : settings.stability,

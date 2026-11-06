@@ -169,7 +169,9 @@ class VoiceManager {
     if (this.abortController) {
       try {
         this.abortController.abort();
-      } catch {}
+      } catch {
+        // Ignored: already aborted
+      }
       this.abortController = null;
     }
     this.speechCounter++;
@@ -178,14 +180,18 @@ class VoiceManager {
       try {
         this.currentAudio.pause();
         this.currentAudio.currentTime = 0;
-      } catch {}
+      } catch {
+        // Ignored: audio element cleanup
+      }
       this.currentAudio = null;
     }
 
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       try {
         window.speechSynthesis.cancel();
-      } catch {}
+      } catch {
+        // Ignored: synthesis cancel
+      }
     }
 
     this.isSpeaking = false;
