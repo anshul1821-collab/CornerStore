@@ -16,17 +16,26 @@ describe("GameScreen user submission flow", () => {
       </SettingsProvider>,
     );
 
-    // 1. Read the payable total from the hint strip
-    const hintText = screen.getByText(/Total to Pay \(\$(\d+(\.\d{2})?)\)/i).textContent || "";
-    const match = hintText.match(/Total to Pay \(\$(\d+(\.\d{2})?)\)/i);
-    const payable = Number(match?.[1]);
-    expect(payable).toBeGreaterThan(0);
-
-    // 2. Enter total in receipt input
+    // 1. Shopping basket displays item quantity and unit price without precalculating total
+    // Level 1 Customer 0: 2 Chocolate @ $25.00 -> Player calculates 2 × 25 = $50.00
     const input = screen.getByLabelText(/TOTAL TO PAY/i);
-    fireEvent.change(input, { target: { value: String(payable) } });
 
-    // 3. Click Hint button to auto-add pieces or see steps
+    // Test incorrect answer first: enters $40.00
+    fireEvent.change(input, { target: { value: "40" } });
+    const checkBtn = screen.getByRole("button", { name: /Check Bill Total/i });
+    fireEvent.click(checkBtn);
+
+    // Verify error hint appears and bill is NOT verified yet
+    expect(screen.getAllByText(/Multiply quantity/i).length).toBeGreaterThanOrEqual(1);
+
+    // Now enter the correct calculated payable: $50.00
+    fireEvent.change(input, { target: { value: "50" } });
+    fireEvent.click(screen.getByRole("button", { name: /Check Bill Total/i }));
+
+    // Verify bill is verified successfully
+    expect(screen.getAllByText(/Verified/i).length).toBeGreaterThanOrEqual(1);
+
+    // 2. Click Hint button to auto-add pieces or see steps
     const hintBtn = screen.getByRole("button", { name: /Hint/i });
     fireEvent.click(hintBtn);
 

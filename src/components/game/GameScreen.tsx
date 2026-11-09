@@ -48,6 +48,9 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   const [stats, setStats] = useState<LevelStats>({ stars: [], mistakes: 0, hints: 0 });
   const [timeLeft, setTimeLeft] = useState<number | null>(scenario.timeLimit);
   const [calculatedTotal, setCalculatedTotal] = useState<number | "">("");
+  const [isBillVerified, setIsBillVerified] = useState(false);
+  const [billError, setBillError] = useState<string | null>(null);
+  const [billMistakes, setBillMistakes] = useState(0);
   const [activeDialogue, setActiveDialogue] = useState<DialogueContent | null>(() =>
     getCustomerOrderDialogue(scenario, lang),
   );
@@ -64,6 +67,10 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
 
   useEffect(() => {
     setTimeLeft(scenario.timeLimit);
+    setIsBillVerified(false);
+    setBillError(null);
+    setBillMistakes(0);
+    setCalculatedTotal("");
   }, [scenario]);
 
   useEffect(() => {
@@ -77,12 +84,51 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   }, [timeLeft, result]);
 
   const add = (id: DenomId) => {
+    if (!isBillVerified) return;
     play("tap");
     setTray((t) => ({ ...t, [id]: (t[id] ?? 0) + 1 }));
   };
-  const remove = (id: DenomId) => setTray((t) => ({ ...t, [id]: Math.max(0, (t[id] ?? 0) - 1) }));
+  const remove = (id: DenomId) => {
+    if (!isBillVerified) return;
+    setTray((t) => ({ ...t, [id]: Math.max(0, (t[id] ?? 0) - 1) }));
+  };
+
+  const handleTotalChange = (val: number | "") => {
+    setCalculatedTotal(val);
+    if (billError) setBillError(null);
+  };
+
+  const handleCheckBillTotal = () => {
+    if (calculatedTotal === "") {
+      setBillError("Please enter your calculated Total to Pay first!");
+      return;
+    }
+    const entered = Number(calculatedTotal);
+    if (entered === scenario.payable) {
+      setIsBillVerified(true);
+      setBillError(null);
+      play("success");
+    } else {
+      setMistakes((m) => m + 1);
+      setBillMistakes((b) => b + 1);
+      play("oops");
+
+      if (scenario.discount && entered === scenario.subtotal) {
+        setBillError("Almost! Don't forget to subtract the discount from the subtotal.");
+      } else if (scenario.items.length > 1 && entered > scenario.payable) {
+        setBillError("A bit too high! Check your item multiplication or addition.");
+      } else if (scenario.items.length > 1 && entered < scenario.payable) {
+        setBillError("A bit too low! Multiply each item's quantity and add them up.");
+      } else if (scenario.items.length === 1 && entered !== scenario.payable) {
+        setBillError(`Multiply quantity (${scenario.items[0]!.qty}) by unit price (${formatUSD(scenario.items[0]!.unitPrice)}).`);
+      } else {
+        setBillError("Not quite. Recheck your multiplication and addition, then try again!");
+      }
+    }
+  };
 
   const submit = () => {
+    if (!isBillVerified) return;
     const r = evaluate(tray, scenario, mistakes, hintsUsed);
     if (r.kind !== "correct") setMistakes((m) => m + 1);
     play(r.kind === "correct" ? "success" : "oops");
@@ -99,6 +145,9 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
     setResult(null);
     setTray({});
     setCalculatedTotal("");
+    setIsBillVerified(false);
+    setBillError(null);
+    setBillMistakes(0);
     setShowHint(false);
     setMistakes(0);
     setHintsUsed(0);
@@ -124,7 +173,7 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
 
   const busy = result !== null;
 
-  // Helpful contextual guidance message for children
+  // Helpful contextual guidance message for children (never reveals the answer prematurely)
   const getContextualHint = () => {
     if (result) {
       if (result.kind === "correct") {
@@ -139,23 +188,32 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
       return "Take your time! Tap 💡 Hint if you need help.";
     }
 
-    if (calculatedTotal !== scenario.payable) {
-      return `Check items on receipt and enter the Total to Pay (${formatUSD(scenario.payable)})!`;
+    if (!isBillVerified) {
+      if (billError) {
+        return billError;
+      }
+      if (scenario.items.length === 1) {
+        return "Step 1: Calculate the item total (Quantity × Unit Price) and enter Total to Pay!";
+      }
+      if (scenario.discount) {
+        return "Step 1: Multiply items, subtract the discount, and enter the Total to Pay!";
+      }
+      return "Step 1: Multiply item quantities, add them together, and enter the Total to Pay!";
     }
 
     if (total === 0) {
       if (required === 0) {
-        return "The customer paid exact money! Tap the green NO CHANGE button.";
+        return "Bill verified! Customer paid exact money. Tap the green NO CHANGE button.";
       }
-      return `Customer gave ${formatUSD(scenario.paid)}. Tap the money in the drawer to get started!`;
+      return `Bill verified! Customer gave ${formatUSD(scenario.paid)}. Calculate change and tap coins/notes from drawer!`;
     }
 
     if (total < required) {
-      return `You have ${formatUSD(total)} in the tray. Try adding a little more money (${formatUSD(required - total)} needed)!`;
+      return `You have ${formatUSD(total)} in the tray. Keep counting to reach ${formatUSD(required)}!`;
     }
 
     if (total === required) {
-      return `Awesome! That's the correct amount (${formatUSD(total)})! Tap GIVE CHANGE!`;
+      return `Awesome! That's the exact change (${formatUSD(total)})! Tap GIVE CHANGE!`;
     }
 
     if (total > required) {
@@ -254,7 +312,10 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
               <ShoppingBill
                 scenario={scenario}
                 calculatedTotal={calculatedTotal}
-                onChangeTotal={setCalculatedTotal}
+                onChangeTotal={handleTotalChange}
+                onCheckTotal={handleCheckBillTotal}
+                isTotalVerified={isBillVerified}
+                totalError={billError}
                 disabled={busy}
               />
 
@@ -265,20 +326,26 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
                   onDrop={add}
                   onRemove={remove}
                   onClear={() => setTray({})}
-                  disabled={busy}
+                  disabled={busy || !isBillVerified}
                 />
                 <RunningTotal total={total} state={trayState(tray, required)} />
                 <div className="grid grid-cols-[1fr_auto] gap-2 items-stretch">
                   <button
                     onClick={submit}
-                    disabled={busy || calculatedTotal !== scenario.payable}
+                    disabled={busy || !isBillVerified}
                     className={`btn-press rounded-xl py-2 px-3 font-display text-base sm:text-lg font-black text-primary-foreground shadow-chunky disabled:opacity-50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sun text-center cursor-pointer flex items-center justify-center min-h-[46px] transition-all ${
-                      trayState(tray, required) === "exact" && calculatedTotal === scenario.payable
-                        ? "bg-emerald-600 hover:bg-emerald-500 ring-4 ring-emerald-300"
-                        : "bg-leaf hover:bg-leaf-dark"
+                      !isBillVerified
+                        ? "bg-wood-dark/40 text-cream/70"
+                        : trayState(tray, required) === "exact"
+                          ? "bg-emerald-600 hover:bg-emerald-500 ring-4 ring-emerald-300"
+                          : "bg-leaf hover:bg-leaf-dark"
                     }`}
                   >
-                    {total === 0 ? tr("noChange") : `${tr("give")} (${formatUSD(total)})`}
+                    {!isBillVerified
+                      ? tr("confirmBillFirst")
+                      : total === 0
+                        ? tr("noChange")
+                        : `${tr("give")} (${formatUSD(total)})`}
                   </button>
                   <button
                     onClick={openHint}
@@ -319,15 +386,23 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
           </button>
         </div>
 
-        {/* Lower Section: Cash Drawer (positioned directly beneath the counter with cohesive spacing) */}
-        <CashDrawer denominations={DENOMINATIONS} onAdd={add} disabled={busy} tray={tray} />
+        {/* Lower Section: Cash Drawer (unlocked after bill total is calculated and verified) */}
+        <CashDrawer
+          denominations={DENOMINATIONS}
+          onAdd={add}
+          disabled={busy || !isBillVerified}
+          tray={tray}
+        />
       </main>
 
       {/* Modal Dialogs */}
       <AnimatePresence>
         {showHint && (
           <HintPanel
-            key={scenario.id}
+            key={scenario.id + (isBillVerified ? "-change" : "-bill")}
+            mode={isBillVerified ? "change" : "bill"}
+            items={scenario.items}
+            discount={scenario.discount}
             price={scenario.payable}
             paid={scenario.paid}
             steps={steps}

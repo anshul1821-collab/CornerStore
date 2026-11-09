@@ -80,6 +80,11 @@ const STRINGS = {
   checkBillInstruction: {
     en: "Please check the price on the bill before you count the change!",
   },
+  checkBill: { en: "Check" },
+  billVerified: { en: "Verified" },
+  checkBillPrompt: { en: "Calculate the items on the receipt and enter the Total to Pay!" },
+  confirmBillFirst: { en: "Check Bill First" },
+  billHintTitle: { en: "How to Calculate the Bill" },
   and: { en: "and" },
 } as const;
 
