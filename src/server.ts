@@ -50,7 +50,6 @@ export default {
     try {
       const url = new URL(request.url);
 
-      // Handle TTS API endpoint
       if (url.pathname === "/api/tts") {
         const corsHeaders = {
           "Access-Control-Allow-Origin": "*",
@@ -59,18 +58,12 @@ export default {
         };
 
         if (request.method === "OPTIONS") {
-          return new Response(null, {
-            status: 204,
-            headers: corsHeaders,
-          });
+          return new Response(null, { status: 204, headers: corsHeaders });
         }
 
         if (request.method === "GET") {
           return new Response(JSON.stringify(getDiagnosticStatus()), {
-            headers: {
-              "Content-Type": "application/json",
-              ...corsHeaders,
-            },
+            headers: { "Content-Type": "application/json", ...corsHeaders },
           });
         }
 
@@ -79,8 +72,8 @@ export default {
             const body = (await request.json()) as TTSRequest;
             const envRecord = (env as Record<string, unknown>) || {};
             const apiKey =
-              (envRecord.ELEVENLABS_API_KEY as string | undefined) ||
-              (typeof process !== "undefined" ? process.env.ELEVENLABS_API_KEY : undefined);
+              (envRecord["ELEVENLABS_API_KEY"] as string | undefined) ||
+              (typeof process !== "undefined" ? process.env["ELEVENLABS_API_KEY"] : undefined);
 
             const result = await synthesizeSpeech(body, apiKey);
             return new Response(JSON.stringify(result), {
@@ -93,7 +86,6 @@ export default {
               },
             });
           } catch (err: unknown) {
-            console.error("[TTS Server Fetch Error]:", err);
             return new Response(
               JSON.stringify({
                 success: false,
@@ -101,21 +93,12 @@ export default {
                 fallback: "browser-tts",
                 error: (err as Error)?.message,
               }),
-              {
-                status: 400,
-                headers: {
-                  "Content-Type": "application/json",
-                  ...corsHeaders,
-                },
-              },
+              { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
             );
           }
         }
 
-        return new Response("Method Not Allowed", {
-          status: 405,
-          headers: corsHeaders,
-        });
+        return new Response("Method Not Allowed", { status: 405, headers: corsHeaders });
       }
 
       const handler = await getServerEntry();

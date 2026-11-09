@@ -78,10 +78,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kirana Change" },
+      { title: "Corner Store Simulator" },
       {
         name: "description",
-        content: "Learn to give change in a friendly Indian kirana shop game.",
+        content: "Learn to give change in a friendly neighborhood store simulator game.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

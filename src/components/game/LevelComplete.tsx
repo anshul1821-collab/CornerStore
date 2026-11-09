@@ -1,9 +1,6 @@
-import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Volume2 } from "lucide-react";
 import { Stars } from "./Feedback";
 import { useSettings } from "./settings";
-import { useVoice } from "@/lib/voice/useVoice";
 
 interface Props {
   levelNumber: number;
@@ -20,24 +17,7 @@ interface Props {
 
 export function LevelComplete(p: Props) {
   const { tr } = useSettings();
-  const { isSpeaking, activeCharacter, speak, stop } = useVoice();
-  const speakingShopkeeper = isSpeaking && activeCharacter === "shopkeeper";
   const headline = p.stars === 3 ? tr("done3") : p.stars === 2 ? tr("done1") : tr("done2");
-
-  const handleSpeakComplete = () => {
-    speak({
-      text: `Woohoo! Fantastic job! Level ${p.levelNumber}, ${p.levelTitle} complete! ${headline}! You served ${p.served} customers like a real pro!`,
-      character: "shopkeeper",
-      dialogueType: "fixed",
-    });
-  };
-
-  useEffect(() => {
-    handleSpeakComplete();
-    return () => {
-      stop();
-    };
-  }, [p.levelNumber]);
 
   return (
     <div className="grid min-h-screen place-items-center p-3 sm:p-4">
@@ -58,19 +38,6 @@ export function LevelComplete(p: Props) {
             <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-wood-dark">
               {headline}
             </h1>
-            <button
-              onClick={handleSpeakComplete}
-              type="button"
-              aria-label="Hear celebration voice"
-              title="Hear Shopkeeper celebration"
-              className={`grid h-7 w-7 place-items-center rounded-full transition-colors cursor-pointer ${
-                speakingShopkeeper
-                  ? "bg-leaf text-white ring-2 ring-sun"
-                  : "bg-sun/60 text-wood-dark hover:bg-sun"
-              }`}
-            >
-              <Volume2 className="h-4 w-4" />
-            </button>
           </div>
           <div className="my-2.5">
             <Stars count={p.stars} size="text-4xl sm:text-5xl" />
@@ -109,9 +76,9 @@ export function LevelComplete(p: Props) {
           </div>
           <button
             onClick={p.onHome}
-            className="mt-2.5 text-sm font-bold text-wood underline cursor-pointer"
+            className="mt-2 text-xs sm:text-sm font-bold text-wood hover:underline cursor-pointer"
           >
-            {tr("home")}
+            ← {tr("home")}
           </button>
         </div>
       </motion.div>

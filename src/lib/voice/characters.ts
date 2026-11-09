@@ -1,164 +1,244 @@
-/**
- * ElevenLabs 3-Voice Architecture for Kirana Change:
- *
- * Exactly 3 voices used throughout the entire game:
- * 1. Boy Voice: One consistent, natural male voice used by ALL male customers (uncle, student, delivery).
- *    Default: "Antoni" (ErXwobaYiN019PkySvjV) - tested & verified on Free tier.
- * 2. Girl Voice: One consistent, natural female voice used by ALL female customers (aunty, parent, dadi).
- *    Default: "Sarah" (EXAVITQu4vr4xnSDxMaL) - tested & verified on Free tier.
- * 3. Shopkeeper Voice: One consistent, mature male voice used exclusively by the shopkeeper.
- *    Default: "George" (JBFqnCBsd6RMkjVDRZzb) - tested & verified on Free tier.
- */
-
-export type VoiceRole = "boy" | "girl" | "shopkeeper";
+export type SpeakerRole = "shopkeeper" | "customer";
+export type CharacterVoice = "shopkeeper" | "boy" | "girl";
 
 export interface VoiceConfig {
-  role: VoiceRole;
+  role: CharacterVoice;
   voiceId: string;
   name: string;
-  personality: string;
+  gender: "male" | "female";
   settings: {
     stability: number;
     similarity_boost: number;
+    style: number;
     speed: number;
     use_speaker_boost: boolean;
-    style?: number;
   };
-}
-
-export const BOY_VOICE: VoiceConfig = {
-  role: "boy",
-  voiceId: "9gKJk2fZsPLQCuOnaVLS", // Boy Voice: friendly, conversational young male
-  name: "Boy Voice",
-  personality: "Natural, friendly, conversational male customer",
-  settings: {
-    stability: 0.4,
-    similarity_boost: 0.75,
-    speed: 1.0,
-    use_speaker_boost: true,
-    style: 0.2,
-  },
-};
-
-export const GIRL_VOICE: VoiceConfig = {
-  role: "girl",
-  voiceId: "7vLdoQUU3acmEiAVXlaN", // Girl Voice: clear, friendly, conversational young female
-  name: "Girl Voice",
-  personality: "Natural, clear, conversational female customer",
-  settings: {
-    stability: 0.4,
-    similarity_boost: 0.75,
-    speed: 1.0,
-    use_speaker_boost: true,
-    style: 0.2,
-  },
-};
-
-export const SHOPKEEPER_VOICE: VoiceConfig = {
-  role: "shopkeeper",
-  voiceId: "bbGyqGAEIg7zLT7U2n9A", // Shopkeeper Voice: warm, mature, experienced store owner
-  name: "Shopkeeper Voice",
-  personality: "Warm, welcoming, experienced store owner",
-  settings: {
-    stability: 0.4,
-    similarity_boost: 0.75,
-    speed: 1.0,
-    use_speaker_boost: true,
-    style: 0.2,
-  },
-};
-
-// Customer gender mappings:
-// All male customers -> Boy Voice
-// All female customers -> Girl Voice
-export const MALE_CUSTOMERS = new Set(["uncle", "student", "delivery"]);
-export const FEMALE_CUSTOMERS = new Set(["aunty", "parent", "dadi"]);
-
-export function isMaleCustomer(customerId?: string): boolean {
-  if (!customerId) return true;
-  return MALE_CUSTOMERS.has(customerId);
-}
-
-export function isFemaleCustomer(customerId?: string): boolean {
-  if (!customerId) return false;
-  return FEMALE_CUSTOMERS.has(customerId);
-}
-
-// Backward-compatible exports for any tests or helpers
-export const CUSTOMER_ARCHETYPES = {
-  customer1: BOY_VOICE,
-  customer2: GIRL_VOICE,
-  customer3: BOY_VOICE,
-  customer4: GIRL_VOICE,
-} as const;
-
-export const CUSTOMER_VOICES: Record<string, VoiceConfig> = {
-  uncle: BOY_VOICE,
-  aunty: GIRL_VOICE,
-  student: BOY_VOICE,
-  parent: GIRL_VOICE,
-  delivery: BOY_VOICE,
-  dadi: GIRL_VOICE,
-};
-
-export const DEFAULT_CUSTOMER_VOICE: VoiceConfig = BOY_VOICE;
-
-function applySettingOverrides(settings: VoiceConfig["settings"]): VoiceConfig["settings"] {
-  if (typeof process === "undefined") return settings;
-  const stab = process.env.ELEVENLABS_STABILITY
-    ? parseFloat(process.env.ELEVENLABS_STABILITY)
-    : undefined;
-  const sim = process.env.ELEVENLABS_SIMILARITY_BOOST
-    ? parseFloat(process.env.ELEVENLABS_SIMILARITY_BOOST)
-    : undefined;
-  const style = process.env.ELEVENLABS_STYLE ? parseFloat(process.env.ELEVENLABS_STYLE) : undefined;
-  const speed = process.env.ELEVENLABS_SPEED ? parseFloat(process.env.ELEVENLABS_SPEED) : undefined;
-  const boost =
-    process.env.ELEVENLABS_SPEAKER_BOOST !== undefined
-      ? process.env.ELEVENLABS_SPEAKER_BOOST.toLowerCase() === "true"
-      : undefined;
-
-  return {
-    stability: stab !== undefined && !isNaN(stab) ? stab : settings.stability,
-    similarity_boost: sim !== undefined && !isNaN(sim) ? sim : settings.similarity_boost,
-    speed: speed !== undefined && !isNaN(speed) ? speed : settings.speed,
-    use_speaker_boost: boost !== undefined ? boost : settings.use_speaker_boost,
-    style: style !== undefined && !isNaN(style) ? style : settings.style,
+  browserFallback?: {
+    pitch: number;
+    rate: number;
+    gender: "male" | "female";
   };
 }
 
 /**
- * Determine the active voice config for a speaker based strictly on:
- * - Shopkeeper -> Shopkeeper Voice (ELEVENLABS_SHOPKEEPER_VOICE_ID)
- * - Male Customer -> Boy Voice (ELEVENLABS_BOY_VOICE_ID)
- * - Female Customer -> Girl Voice (ELEVENLABS_GIRL_VOICE_ID)
+ * Premium ElevenLabs voice profiles tuned for natural human acting with eleven_multilingual_v2
+ * High style (0.35-0.45) provides rich emotional cadence and conversational prosody.
  */
-export function getVoiceForSpeaker(
-  speaker: "shopkeeper" | "customer",
-  customerId?: string,
-): VoiceConfig {
-  let baseConfig: VoiceConfig;
+export const CHARACTER_VOICE_CONFIGS: Record<CharacterVoice, VoiceConfig> = {
+  shopkeeper: {
+    role: "shopkeeper",
+    name: "Eric (Warm Shopkeeper)",
+    voiceId: "cjVigY5qzO86Huf0OWal", // Eric: warm, trustworthy, conversational adult male
+    gender: "male",
+    settings: {
+      stability: 0.4,
+      similarity_boost: 0.75,
+      style: 0.4,
+      speed: 0.98,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 0.92,
+      rate: 0.96,
+      gender: "male",
+    },
+  },
+  boy: {
+    role: "boy",
+    name: "Will (Cheerful Boy)",
+    voiceId: "bIHbv24MWmeRgasZH58o", // Will: relaxed, playful, friendly young male
+    gender: "male",
+    settings: {
+      stability: 0.38,
+      similarity_boost: 0.75,
+      style: 0.42,
+      speed: 1.0,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 1.15,
+      rate: 1.02,
+      gender: "male",
+    },
+  },
+  girl: {
+    role: "girl",
+    name: "Jessica (Sweet & Lively Girl)",
+    voiceId: "cgSgspJ2msm6clMCkdW9", // Jessica: playful, bright, warm young female
+    gender: "female",
+    settings: {
+      stability: 0.4,
+      similarity_boost: 0.75,
+      style: 0.45,
+      speed: 0.98,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 1.08,
+      rate: 1.0,
+      gender: "female",
+    },
+  },
+};
 
-  if (speaker === "shopkeeper") {
-    const override =
-      typeof process !== "undefined" ? process.env.ELEVENLABS_SHOPKEEPER_VOICE_ID : undefined;
-    baseConfig = override ? { ...SHOPKEEPER_VOICE, voiceId: override } : SHOPKEEPER_VOICE;
-  } else {
-    // All female customers share exactly the Girl Voice
-    if (isFemaleCustomer(customerId)) {
-      const override =
-        typeof process !== "undefined" ? process.env.ELEVENLABS_GIRL_VOICE_ID : undefined;
-      baseConfig = override ? { ...GIRL_VOICE, voiceId: override } : GIRL_VOICE;
-    } else {
-      // All male customers share exactly the Boy Voice
-      const override =
-        typeof process !== "undefined" ? process.env.ELEVENLABS_BOY_VOICE_ID : undefined;
-      baseConfig = override ? { ...BOY_VOICE, voiceId: override } : BOY_VOICE;
-    }
+/**
+ * Distinct customer voice identities giving each character their own recognizable voice.
+ * Every customer has a unique voice ID that stays strictly consistent.
+ */
+export const CUSTOMER_VOICE_PROFILES: Record<string, VoiceConfig> = {
+  uncle: {
+    role: "boy",
+    name: "Roger (Mr. Sharma)",
+    voiceId: "CwhRBWXzGAHq8TQ4Fs17", // Roger: laid-back, classy, resonant mature gentleman
+    gender: "male",
+    settings: {
+      stability: 0.45,
+      similarity_boost: 0.75,
+      style: 0.35,
+      speed: 0.96,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 0.88,
+      rate: 0.94,
+      gender: "male",
+    },
+  },
+  aunty: {
+    role: "girl",
+    name: "Sarah (Mrs. Priya)",
+    voiceId: "EXAVITQu4vr4xnSDxMaL", // Sarah: mature, reassuring, warm confident woman
+    gender: "female",
+    settings: {
+      stability: 0.42,
+      similarity_boost: 0.75,
+      style: 0.4,
+      speed: 0.98,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 1.05,
+      rate: 0.98,
+      gender: "female",
+    },
+  },
+  student: {
+    role: "boy",
+    name: "Will (Rohan)",
+    voiceId: "bIHbv24MWmeRgasZH58o", // Will: relaxed optimist, cheerful young male
+    gender: "male",
+    settings: {
+      stability: 0.38,
+      similarity_boost: 0.75,
+      style: 0.45,
+      speed: 1.0,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 1.2,
+      rate: 1.04,
+      gender: "male",
+    },
+  },
+  parent: {
+    role: "girl",
+    name: "Laura (Meera & Anu)",
+    voiceId: "FGY2WhTYpPnrIDTdsKH5", // Laura: enthusiast, quirky, upbeat friendly mom
+    gender: "female",
+    settings: {
+      stability: 0.4,
+      similarity_boost: 0.75,
+      style: 0.4,
+      speed: 0.98,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 1.1,
+      rate: 1.0,
+      gender: "female",
+    },
+  },
+  delivery: {
+    role: "boy",
+    name: "Callum (Raju)",
+    voiceId: "N2lVS1w4EtoT3dr4eOWO", // Callum: husky, energetic young delivery specialist
+    gender: "male",
+    settings: {
+      stability: 0.38,
+      similarity_boost: 0.75,
+      style: 0.42,
+      speed: 1.02,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 0.98,
+      rate: 1.05,
+      gender: "male",
+    },
+  },
+  dadi: {
+    role: "girl",
+    name: "Alice (Grandma)",
+    voiceId: "Xb7hH8MSUJpSbSDYk0k2", // Alice: clear, warm, gentle mature lady
+    gender: "female",
+    settings: {
+      stability: 0.45,
+      similarity_boost: 0.8,
+      style: 0.35,
+      speed: 0.94,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 0.92,
+      rate: 0.92,
+      gender: "female",
+    },
+  },
+  girl: {
+    role: "girl",
+    name: "Jessica (Jessica)",
+    voiceId: "cgSgspJ2msm6clMCkdW9", // Jessica: playful, bright, warm young female
+    gender: "female",
+    settings: {
+      stability: 0.4,
+      similarity_boost: 0.75,
+      style: 0.45,
+      speed: 0.98,
+      use_speaker_boost: true,
+    },
+    browserFallback: {
+      pitch: 1.08,
+      rate: 1.0,
+      gender: "female",
+    },
+  },
+};
+
+/**
+ * Returns the character voice type ("boy" or "girl") for high-level grouping.
+ */
+export function getCustomerVoiceType(customerId: string): CharacterVoice {
+  if (
+    customerId === "aunty" ||
+    customerId === "parent" ||
+    customerId === "dadi" ||
+    customerId === "girl"
+  ) {
+    return "girl";
   }
+  return "boy";
+}
 
-  return {
-    ...baseConfig,
-    settings: applySettingOverrides(baseConfig.settings),
-  };
+/**
+ * Resolves the precise VoiceConfig for any character or customer ID.
+ */
+export function getVoiceForCharacter(character: CharacterVoice, customerId?: string): VoiceConfig {
+  if (customerId && CUSTOMER_VOICE_PROFILES[customerId]) {
+    return CUSTOMER_VOICE_PROFILES[customerId]!;
+  }
+  return CHARACTER_VOICE_CONFIGS[character] || CHARACTER_VOICE_CONFIGS.shopkeeper;
+}
+
+export function isFemaleCustomer(customerId: string): boolean {
+  return getCustomerVoiceType(customerId) === "girl";
 }

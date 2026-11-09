@@ -1,0 +1,1655 @@
+{
+  "meta": {
+    "version": "2.0.0",
+    "generatedAt": "2026-11-09T17:56:38.939Z",
+    "totalDialogueEntries": 83,
+    "totalPhysicalAudioFiles": 91,
+    "charactersCount": 8,
+    "modelId": "eleven_multilingual_v2",
+    "coverage": "100% pre-generated gameplay offline coverage"
+  },
+  "characters": {
+    "shopkeeper": {
+      "name": "Eric",
+      "displayName": "Shopkeeper",
+      "role": "shopkeeper",
+      "voiceId": "cjVigY5qzO86Huf0OWal",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.4,
+        "similarity_boost": 0.75,
+        "style": 0.4,
+        "use_speaker_boost": true
+      }
+    },
+    "aunty": {
+      "name": "Sarah",
+      "displayName": "Mrs. Priya",
+      "role": "customer",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.42,
+        "similarity_boost": 0.75,
+        "style": 0.4,
+        "use_speaker_boost": true
+      }
+    },
+    "uncle": {
+      "name": "Roger",
+      "displayName": "Mr. Sharma",
+      "role": "customer",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.35,
+        "use_speaker_boost": true
+      }
+    },
+    "student": {
+      "name": "Will",
+      "displayName": "Rohan",
+      "role": "customer",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.38,
+        "similarity_boost": 0.75,
+        "style": 0.45,
+        "use_speaker_boost": true
+      }
+    },
+    "parent": {
+      "name": "Laura",
+      "displayName": "Meera & Anu",
+      "role": "customer",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.42,
+        "similarity_boost": 0.75,
+        "style": 0.38,
+        "use_speaker_boost": true
+      }
+    },
+    "delivery": {
+      "name": "Callum",
+      "displayName": "Raju",
+      "role": "customer",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.4,
+        "similarity_boost": 0.75,
+        "style": 0.35,
+        "use_speaker_boost": true
+      }
+    },
+    "dadi": {
+      "name": "Alice",
+      "displayName": "Grandma",
+      "role": "customer",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.8,
+        "style": 0.35,
+        "use_speaker_boost": true
+      }
+    },
+    "girl": {
+      "name": "Jessica",
+      "displayName": "Jessica",
+      "role": "customer",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.4,
+        "similarity_boost": 0.75,
+        "style": 0.45,
+        "use_speaker_boost": true
+      }
+    }
+  },
+  "dialogues": [
+    {
+      "id": "shopkeeper_9756face6b3ff410afb733eef033cc62",
+      "characterId": "shopkeeper",
+      "characterName": "Shopkeeper",
+      "voiceName": "Eric",
+      "voiceId": "cjVigY5qzO86Huf0OWal",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "greeting",
+      "text": "Welcome to the shop! Great to see you today. What can I get for you?",
+      "audioUrl": "/audio/characters/shopkeeper/9756face6b3ff410afb733eef033cc62.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "shopkeeper_3a8be5f7c5284849218c6ccd2ded7a7b",
+      "characterId": "shopkeeper",
+      "characterName": "Shopkeeper",
+      "voiceName": "Eric",
+      "voiceId": "cjVigY5qzO86Huf0OWal",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Spot on! That's the exact change. Brilliant calculation!",
+      "audioUrl": "/audio/characters/shopkeeper/3a8be5f7c5284849218c6ccd2ded7a7b.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "shopkeeper_check_bill_instruction",
+      "characterId": "shopkeeper",
+      "characterName": "Shopkeeper",
+      "voiceName": "Eric",
+      "voiceId": "cjVigY5qzO86Huf0OWal",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "instruction",
+      "text": "Please check the price on the bill before you count the change!",
+      "audioUrl": "/audio/characters/shopkeeper/check_bill_instruction.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "shopkeeper_check_price_in_bill",
+      "characterId": "shopkeeper",
+      "characterName": "Shopkeeper",
+      "voiceName": "Eric",
+      "voiceId": "cjVigY5qzO86Huf0OWal",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "instruction",
+      "text": "Please check the price in the bill!",
+      "audioUrl": "/audio/characters/shopkeeper/check_price_in_bill.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_004e9c8faf553351ab558f58883c5c29",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Chocolate. Here's $200.00!",
+      "audioUrl": "/audio/characters/aunty/004e9c8faf553351ab558f58883c5c29.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_77781fa32d38bdbe1960271800d0bdb7",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Juice Box. Here's $50.00!",
+      "audioUrl": "/audio/characters/aunty/77781fa32d38bdbe1960271800d0bdb7.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_228c93d3aabb9891ec64bcb4d787e7bd",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Milk Packet. Here's $100.00!",
+      "audioUrl": "/audio/characters/aunty/228c93d3aabb9891ec64bcb4d787e7bd.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_2619064bbe7c4ff06b12e912a37daf55",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Pen. Here's $50.00!",
+      "audioUrl": "/audio/characters/aunty/2619064bbe7c4ff06b12e912a37daf55.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_8d280d7bc70e9e5f6f53a40b88780aa6",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Potato (1 kg). Here's $100.00!",
+      "audioUrl": "/audio/characters/aunty/8d280d7bc70e9e5f6f53a40b88780aa6.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_8f3356b89e7a6b2a7c7ab8f13bdb1f3f",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Pencil. Here's $20.00!",
+      "audioUrl": "/audio/characters/aunty/8f3356b89e7a6b2a7c7ab8f13bdb1f3f.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_bae6e7182ca1814ce900f9e3cde58af2",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Biscuits. Here's $20.00!",
+      "audioUrl": "/audio/characters/aunty/bae6e7182ca1814ce900f9e3cde58af2.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_9a9f5c4af144162f96ef1411b05d928c",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Battery. Here's $100.00!",
+      "audioUrl": "/audio/characters/aunty/9a9f5c4af144162f96ef1411b05d928c.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_d421208a67bf66b53565b495a3527d06",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Thank you so much! That's the exact change. Have a wonderful day!",
+      "audioUrl": "/audio/characters/aunty/d421208a67bf66b53565b495a3527d06.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_short_feedback",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hmm, wait a second... looks like this is a bit short. Could you please check?",
+      "audioUrl": "/audio/characters/aunty/short_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "aunty_extra_feedback",
+      "characterId": "aunty",
+      "characterName": "Mrs. Priya",
+      "voiceName": "Sarah",
+      "voiceId": "EXAVITQu4vr4xnSDxMaL",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on — you gave me a bit too much extra! Take a quick look.",
+      "audioUrl": "/audio/characters/aunty/extra_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_7a7447887a0606bd7c1e9f0191ebc594",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello there! I'd like 2 Chocolate. Here's $200.00!",
+      "audioUrl": "/audio/characters/uncle/7a7447887a0606bd7c1e9f0191ebc594.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_1711f437a9e9f302b4cb8f2ccb4c16af",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello there! I'd like Soap. Here's exactly $10.00!",
+      "audioUrl": "/audio/characters/uncle/1711f437a9e9f302b4cb8f2ccb4c16af.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_order_bread_50",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello there! I'd like Bread. Here's $50.00!",
+      "audioUrl": "/audio/characters/uncle/order_bread_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_order_tea_100",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello there! I'd like Tea Leaves (250g). Here's $100.00!",
+      "audioUrl": "/audio/characters/uncle/order_tea_100.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_order_soap_100",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello there! I'd like 2 Soap. Here's $100.00!",
+      "audioUrl": "/audio/characters/uncle/order_soap_100.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_order_milk_50",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello there! I'd like Milk Packet. Here's $50.00!",
+      "audioUrl": "/audio/characters/uncle/order_milk_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_c2170b6f6a00da0029d714b8f54ed3b2",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Wonderful! That is spot on. Thank you!",
+      "audioUrl": "/audio/characters/uncle/c2170b6f6a00da0029d714b8f54ed3b2.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_0623f7cbc9a1ae5a317b446facc0e87a",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hmm, wait a second... looks like this is $5.00 short. Could you please check?",
+      "audioUrl": "/audio/characters/uncle/0623f7cbc9a1ae5a317b446facc0e87a.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_short_feedback",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hmm, wait a second... looks like this is a bit short. Could you please check?",
+      "audioUrl": "/audio/characters/uncle/short_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "uncle_extra_feedback",
+      "characterId": "uncle",
+      "characterName": "Mr. Sharma",
+      "voiceName": "Roger",
+      "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on — you gave me a bit too much extra! Take a quick look.",
+      "audioUrl": "/audio/characters/uncle/extra_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_54cd930f008d7f60c45bacfe78d38c11",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like Chips. Here's $20.00!",
+      "audioUrl": "/audio/characters/student/54cd930f008d7f60c45bacfe78d38c11.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_chips_20_exact",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like Chips. Here's exactly $20.00!",
+      "audioUrl": "/audio/characters/student/order_chips_20_exact.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_6c478cb6ccbe77b53065432e1265e59d",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like 2 Pencil and Eraser. Here's $20.00!",
+      "audioUrl": "/audio/characters/student/6c478cb6ccbe77b53065432e1265e59d.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_notebook_50",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like Notebook. Here's $50.00!",
+      "audioUrl": "/audio/characters/student/order_notebook_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_chocolate_50",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like 2 Chocolate. Here's $50.00!",
+      "audioUrl": "/audio/characters/student/order_chocolate_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_chocolate_50_exact",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like 2 Chocolate. Here's exactly $50.00!",
+      "audioUrl": "/audio/characters/student/order_chocolate_50_exact.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_pen_20",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like 2 Pen. Here's $20.00!",
+      "audioUrl": "/audio/characters/student/order_pen_20.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_pen_20_exact",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like 2 Pen. Here's exactly $20.00!",
+      "audioUrl": "/audio/characters/student/order_pen_20_exact.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_order_icecream_50",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hi there! I'd like Ice Cream. Here's $50.00!",
+      "audioUrl": "/audio/characters/student/order_icecream_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_7c49ff4e495a109e08aa694ca6f350c7",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Awesome, perfect change! Thanks a lot!",
+      "audioUrl": "/audio/characters/student/7c49ff4e495a109e08aa694ca6f350c7.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_e0e3f67bb780492e7db7df76c07b7217",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on — you gave me $10.50 extra! Take a quick look.",
+      "audioUrl": "/audio/characters/student/e0e3f67bb780492e7db7df76c07b7217.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_e0e3f67bb780492e7db7df76c07b7217",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on - you gave me $10.50 extra! Take a quick look.",
+      "audioUrl": "/audio/characters/student/e0e3f67bb780492e7db7df76c07b7217.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_short_feedback",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hmm, wait a second... looks like this is a bit short. Could you please check?",
+      "audioUrl": "/audio/characters/student/short_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "student_extra_feedback",
+      "characterId": "student",
+      "characterName": "Rohan",
+      "voiceName": "Will",
+      "voiceId": "bIHbv24MWmeRgasZH58o",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on — you gave me a bit too much extra! Take a quick look.",
+      "audioUrl": "/audio/characters/student/extra_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_ab713783d86d08cb1024d03be596f96e",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Bread. Here's $100.00!",
+      "audioUrl": "/audio/characters/dadi/ab713783d86d08cb1024d03be596f96e.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_order_milk_50",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Milk Packet. Here's $50.00!",
+      "audioUrl": "/audio/characters/dadi/order_milk_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_order_tea_100",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Tea Leaves (250g). Here's $100.00!",
+      "audioUrl": "/audio/characters/dadi/order_tea_100.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_order_biscuits_50",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Biscuits. Here's $50.00!",
+      "audioUrl": "/audio/characters/dadi/order_biscuits_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_order_sugar_50",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Sugar (1 kg). Here's $50.00!",
+      "audioUrl": "/audio/characters/dadi/order_sugar_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_order_bread_100",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Bread. Here's $100.00!",
+      "audioUrl": "/audio/characters/dadi/order_bread_100.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_order_lentils_100",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Lentils (500g). Here's $100.00!",
+      "audioUrl": "/audio/characters/dadi/order_lentils_100.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_e7c6c0618854e7f4fd1db3e15b46f650",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Thank you so much, dear. You counted that beautifully!",
+      "audioUrl": "/audio/characters/dadi/e7c6c0618854e7f4fd1db3e15b46f650.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_08b9c67dffeca45549399a28960bc1b8",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "No rush at all, dear! Take your time to count the notes, you're doing wonderfully.",
+      "audioUrl": "/audio/characters/dadi/08b9c67dffeca45549399a28960bc1b8.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "dadi_0b9e110b10b86fa2b20770a536f63ecf",
+      "characterId": "dadi",
+      "characterName": "Grandma",
+      "voiceName": "Alice",
+      "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "No rush at all! Take your time to count the notes.",
+      "audioUrl": "/audio/characters/dadi/0b9e110b10b86fa2b20770a536f63ecf.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_d35801d023442bc0fef0187e603c7836",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! I'd like Milk Packet. Here's $50.00!",
+      "audioUrl": "/audio/characters/parent/d35801d023442bc0fef0187e603c7836.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_40de7834c058f5b6363688d3a95c272f",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! I'd like 2 Chocolate and Bread. Here's $100.00!",
+      "audioUrl": "/audio/characters/parent/40de7834c058f5b6363688d3a95c272f.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_b447fcb93f0238ededc196be094685e5",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! We'd like 2 Chocolate and Bread. Here's $100.00!",
+      "audioUrl": "/audio/characters/parent/b447fcb93f0238ededc196be094685e5.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_order_bread_50",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! I'd like Bread. Here's $50.00!",
+      "audioUrl": "/audio/characters/parent/order_bread_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_order_juice_50",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! I'd like 2 Juice Box. Here's $50.00!",
+      "audioUrl": "/audio/characters/parent/order_juice_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_order_bananas_50",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! I'd like Bananas (1 Doz). Here's $50.00!",
+      "audioUrl": "/audio/characters/parent/order_bananas_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_order_eggs_50",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Good morning! I'd like Eggs (6 pcs). Here's $50.00!",
+      "audioUrl": "/audio/characters/parent/order_eggs_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_gratitude",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Thank you so much! That's the exact change. Have a wonderful day!",
+      "audioUrl": "/audio/characters/parent/gratitude.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_short_feedback",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hmm, wait a second... looks like this is a bit short. Could you please check?",
+      "audioUrl": "/audio/characters/parent/short_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "parent_extra_feedback",
+      "characterId": "parent",
+      "characterName": "Meera & Anu",
+      "voiceName": "Laura",
+      "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on — you gave me a bit too much extra! Take a quick look.",
+      "audioUrl": "/audio/characters/parent/extra_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_fd977d9e003712f9d84dc6eb2098fb5d",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! I'd like Cold Drink. Here's $50.00!",
+      "audioUrl": "/audio/characters/delivery/fd977d9e003712f9d84dc6eb2098fb5d.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_6c67efe4f0d7c79836c1bf050d5902da",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! I'd like 2 Battery. Here's $50.00!",
+      "audioUrl": "/audio/characters/delivery/6c67efe4f0d7c79836c1bf050d5902da.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_cb8c65bf4d37cd4420b64ababc4235a5",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! Need these items quickly. Here's $50.00!",
+      "audioUrl": "/audio/characters/delivery/cb8c65bf4d37cd4420b64ababc4235a5.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_order_colddrink_100",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! I'd like 2 Cold Drink. Here's $100.00!",
+      "audioUrl": "/audio/characters/delivery/order_colddrink_100.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_order_chips_50",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! I'd like Chips. Here's $50.00!",
+      "audioUrl": "/audio/characters/delivery/order_chips_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_order_oil_200",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! I'd like Cooking Oil (1 Ltr). Here's $200.00!",
+      "audioUrl": "/audio/characters/delivery/order_oil_200.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_order_matchbox_10",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hey there! I'd like Matchbox. Here's $10.00!",
+      "audioUrl": "/audio/characters/delivery/order_matchbox_10.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_gratitude",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Awesome, perfect change! Thanks a lot!",
+      "audioUrl": "/audio/characters/delivery/gratitude.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_short_feedback",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hey, wait a second... looks like this is a bit short. Could you please check?",
+      "audioUrl": "/audio/characters/delivery/short_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "delivery_extra_feedback",
+      "characterId": "delivery",
+      "characterName": "Raju",
+      "voiceName": "Callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hey, hold on — you gave me a bit too much extra! Take a quick look.",
+      "audioUrl": "/audio/characters/delivery/extra_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_77781fa32d38bdbe1960271800d0bdb7",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Juice Box. Here's $50.00!",
+      "audioUrl": "/audio/characters/aunty/77781fa32d38bdbe1960271800d0bdb7.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_toffee_5",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Toffee. Here's $5.00!",
+      "audioUrl": "/audio/characters/girl/order_toffee_5.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_chocolate_50",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Chocolate. Here's $50.00!",
+      "audioUrl": "/audio/characters/girl/order_chocolate_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_icecream_50",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Ice Cream. Here's $50.00!",
+      "audioUrl": "/audio/characters/girl/order_icecream_50.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_icecream_50_exact",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Ice Cream. Here's exactly $50.00!",
+      "audioUrl": "/audio/characters/girl/order_icecream_50_exact.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_pen_20",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Pen. Here's $20.00!",
+      "audioUrl": "/audio/characters/girl/order_pen_20.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_pen_20_exact",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like 2 Pen. Here's exactly $20.00!",
+      "audioUrl": "/audio/characters/girl/order_pen_20_exact.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_chips_20",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Chips. Here's $20.00!",
+      "audioUrl": "/audio/characters/girl/order_chips_20.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_order_chips_20_exact",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "order",
+      "text": "Hello, dear! I'd like Chips. Here's exactly $20.00!",
+      "audioUrl": "/audio/characters/girl/order_chips_20_exact.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_29e5f23d2143f55b01f41bc9d1f75d1c",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Thank you so much! That's the exact change. Have a wonderful day!",
+      "audioUrl": "/audio/characters/girl/29e5f23d2143f55b01f41bc9d1f75d1c.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_short_feedback",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Hmm, wait a second... looks like this is a bit short. Could you please check?",
+      "audioUrl": "/audio/characters/girl/short_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_extra_feedback",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "feedback",
+      "text": "Oh, hold on — you gave me a bit too much extra! Take a quick look.",
+      "audioUrl": "/audio/characters/girl/extra_feedback.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "boy_7c49ff4e495a109e08aa694ca6f350c7",
+      "characterId": "boy",
+      "characterName": "boy",
+      "voiceName": "boy",
+      "voiceId": "unknown",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Awesome, perfect change! Thanks a lot!",
+      "audioUrl": "/audio/characters/student/7c49ff4e495a109e08aa694ca6f350c7.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    },
+    {
+      "id": "girl_e7c6c0618854e7f4fd1db3e15b46f650",
+      "characterId": "girl",
+      "characterName": "Jessica",
+      "voiceName": "Jessica",
+      "voiceId": "cgSgspJ2msm6clMCkdW9",
+      "modelId": "eleven_multilingual_v2",
+      "dialogueType": "gratitude",
+      "text": "Thank you so much, dear. You counted that beautifully!",
+      "audioUrl": "/audio/characters/dadi/e7c6c0618854e7f4fd1db3e15b46f650.mp3",
+      "fileSizeExists": true,
+      "pregenerated": true
+    }
+  ],
+  "physicalInventory": [
+    {
+      "folder": "aunty",
+      "file": "004e9c8faf553351ab558f58883c5c29.mp3",
+      "url": "/audio/characters/aunty/004e9c8faf553351ab558f58883c5c29.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "228c93d3aabb9891ec64bcb4d787e7bd.mp3",
+      "url": "/audio/characters/aunty/228c93d3aabb9891ec64bcb4d787e7bd.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "2619064bbe7c4ff06b12e912a37daf55.mp3",
+      "url": "/audio/characters/aunty/2619064bbe7c4ff06b12e912a37daf55.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "2_normal_conversations.mp3",
+      "url": "/audio/characters/aunty/2_normal_conversations.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "77781fa32d38bdbe1960271800d0bdb7.mp3",
+      "url": "/audio/characters/aunty/77781fa32d38bdbe1960271800d0bdb7.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "8d280d7bc70e9e5f6f53a40b88780aa6.mp3",
+      "url": "/audio/characters/aunty/8d280d7bc70e9e5f6f53a40b88780aa6.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "8f3356b89e7a6b2a7c7ab8f13bdb1f3f.mp3",
+      "url": "/audio/characters/aunty/8f3356b89e7a6b2a7c7ab8f13bdb1f3f.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "9a9f5c4af144162f96ef1411b05d928c.mp3",
+      "url": "/audio/characters/aunty/9a9f5c4af144162f96ef1411b05d928c.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "bae6e7182ca1814ce900f9e3cde58af2.mp3",
+      "url": "/audio/characters/aunty/bae6e7182ca1814ce900f9e3cde58af2.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "d421208a67bf66b53565b495a3527d06.mp3",
+      "url": "/audio/characters/aunty/d421208a67bf66b53565b495a3527d06.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "d6148f383aa1981822337bb0a007b0e4.mp3",
+      "url": "/audio/characters/aunty/d6148f383aa1981822337bb0a007b0e4.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "extra_feedback.mp3",
+      "url": "/audio/characters/aunty/extra_feedback.mp3"
+    },
+    {
+      "folder": "aunty",
+      "file": "short_feedback.mp3",
+      "url": "/audio/characters/aunty/short_feedback.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "08b9c67dffeca45549399a28960bc1b8.mp3",
+      "url": "/audio/characters/dadi/08b9c67dffeca45549399a28960bc1b8.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "0b9e110b10b86fa2b20770a536f63ecf.mp3",
+      "url": "/audio/characters/dadi/0b9e110b10b86fa2b20770a536f63ecf.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "6_longer_sentences.mp3",
+      "url": "/audio/characters/dadi/6_longer_sentences.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "ab713783d86d08cb1024d03be596f96e.mp3",
+      "url": "/audio/characters/dadi/ab713783d86d08cb1024d03be596f96e.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "e7c6c0618854e7f4fd1db3e15b46f650.mp3",
+      "url": "/audio/characters/dadi/e7c6c0618854e7f4fd1db3e15b46f650.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "order_biscuits_50.mp3",
+      "url": "/audio/characters/dadi/order_biscuits_50.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "order_bread_100.mp3",
+      "url": "/audio/characters/dadi/order_bread_100.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "order_lentils_100.mp3",
+      "url": "/audio/characters/dadi/order_lentils_100.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "order_milk_50.mp3",
+      "url": "/audio/characters/dadi/order_milk_50.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "order_sugar_50.mp3",
+      "url": "/audio/characters/dadi/order_sugar_50.mp3"
+    },
+    {
+      "folder": "dadi",
+      "file": "order_tea_100.mp3",
+      "url": "/audio/characters/dadi/order_tea_100.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "6c67efe4f0d7c79836c1bf050d5902da.mp3",
+      "url": "/audio/characters/delivery/6c67efe4f0d7c79836c1bf050d5902da.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "cb8c65bf4d37cd4420b64ababc4235a5.mp3",
+      "url": "/audio/characters/delivery/cb8c65bf4d37cd4420b64ababc4235a5.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "extra_feedback.mp3",
+      "url": "/audio/characters/delivery/extra_feedback.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "fd977d9e003712f9d84dc6eb2098fb5d.mp3",
+      "url": "/audio/characters/delivery/fd977d9e003712f9d84dc6eb2098fb5d.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "gratitude.mp3",
+      "url": "/audio/characters/delivery/gratitude.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "order_chips_50.mp3",
+      "url": "/audio/characters/delivery/order_chips_50.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "order_colddrink_100.mp3",
+      "url": "/audio/characters/delivery/order_colddrink_100.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "order_matchbox_10.mp3",
+      "url": "/audio/characters/delivery/order_matchbox_10.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "order_oil_200.mp3",
+      "url": "/audio/characters/delivery/order_oil_200.mp3"
+    },
+    {
+      "folder": "delivery",
+      "file": "short_feedback.mp3",
+      "url": "/audio/characters/delivery/short_feedback.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "29e5f23d2143f55b01f41bc9d1f75d1c.mp3",
+      "url": "/audio/characters/girl/29e5f23d2143f55b01f41bc9d1f75d1c.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "5_thank_you_messages.mp3",
+      "url": "/audio/characters/girl/5_thank_you_messages.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "77781fa32d38bdbe1960271800d0bdb7.mp3",
+      "url": "/audio/characters/girl/77781fa32d38bdbe1960271800d0bdb7.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "extra_feedback.mp3",
+      "url": "/audio/characters/girl/extra_feedback.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_chips_20.mp3",
+      "url": "/audio/characters/girl/order_chips_20.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_chips_20_exact.mp3",
+      "url": "/audio/characters/girl/order_chips_20_exact.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_chocolate_50.mp3",
+      "url": "/audio/characters/girl/order_chocolate_50.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_icecream_50.mp3",
+      "url": "/audio/characters/girl/order_icecream_50.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_icecream_50_exact.mp3",
+      "url": "/audio/characters/girl/order_icecream_50_exact.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_pen_20.mp3",
+      "url": "/audio/characters/girl/order_pen_20.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_pen_20_exact.mp3",
+      "url": "/audio/characters/girl/order_pen_20_exact.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "order_toffee_5.mp3",
+      "url": "/audio/characters/girl/order_toffee_5.mp3"
+    },
+    {
+      "folder": "girl",
+      "file": "short_feedback.mp3",
+      "url": "/audio/characters/girl/short_feedback.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "40de7834c058f5b6363688d3a95c272f.mp3",
+      "url": "/audio/characters/parent/40de7834c058f5b6363688d3a95c272f.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "b447fcb93f0238ededc196be094685e5.mp3",
+      "url": "/audio/characters/parent/b447fcb93f0238ededc196be094685e5.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "d35801d023442bc0fef0187e603c7836.mp3",
+      "url": "/audio/characters/parent/d35801d023442bc0fef0187e603c7836.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "extra_feedback.mp3",
+      "url": "/audio/characters/parent/extra_feedback.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "gratitude.mp3",
+      "url": "/audio/characters/parent/gratitude.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "order_bananas_50.mp3",
+      "url": "/audio/characters/parent/order_bananas_50.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "order_bread_50.mp3",
+      "url": "/audio/characters/parent/order_bread_50.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "order_eggs_50.mp3",
+      "url": "/audio/characters/parent/order_eggs_50.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "order_juice_50.mp3",
+      "url": "/audio/characters/parent/order_juice_50.mp3"
+    },
+    {
+      "folder": "parent",
+      "file": "short_feedback.mp3",
+      "url": "/audio/characters/parent/short_feedback.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "1_greetings.mp3",
+      "url": "/audio/characters/shopkeeper/1_greetings.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "3a8be5f7c5284849218c6ccd2ded7a7b.mp3",
+      "url": "/audio/characters/shopkeeper/3a8be5f7c5284849218c6ccd2ded7a7b.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "4_excited_expressions.mp3",
+      "url": "/audio/characters/shopkeeper/4_excited_expressions.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "9756face6b3ff410afb733eef033cc62.mp3",
+      "url": "/audio/characters/shopkeeper/9756face6b3ff410afb733eef033cc62.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "acce0ef7231f0b9706ae61d1334e8e82.mp3",
+      "url": "/audio/characters/shopkeeper/acce0ef7231f0b9706ae61d1334e8e82.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "check_bill_instruction.mp3",
+      "url": "/audio/characters/shopkeeper/check_bill_instruction.mp3"
+    },
+    {
+      "folder": "shopkeeper",
+      "file": "check_price_in_bill.mp3",
+      "url": "/audio/characters/shopkeeper/check_price_in_bill.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "54cd930f008d7f60c45bacfe78d38c11.mp3",
+      "url": "/audio/characters/student/54cd930f008d7f60c45bacfe78d38c11.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "6c478cb6ccbe77b53065432e1265e59d.mp3",
+      "url": "/audio/characters/student/6c478cb6ccbe77b53065432e1265e59d.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "7c49ff4e495a109e08aa694ca6f350c7.mp3",
+      "url": "/audio/characters/student/7c49ff4e495a109e08aa694ca6f350c7.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "7_sentences_containing_dollar_amounts.mp3",
+      "url": "/audio/characters/student/7_sentences_containing_dollar_amounts.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "a6a5e56400ddfc4cb8deded6aba66574.mp3",
+      "url": "/audio/characters/student/a6a5e56400ddfc4cb8deded6aba66574.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "e0e3f67bb780492e7db7df76c07b7217.mp3",
+      "url": "/audio/characters/student/e0e3f67bb780492e7db7df76c07b7217.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "extra_feedback.mp3",
+      "url": "/audio/characters/student/extra_feedback.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_chips_20_exact.mp3",
+      "url": "/audio/characters/student/order_chips_20_exact.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_chocolate_50.mp3",
+      "url": "/audio/characters/student/order_chocolate_50.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_chocolate_50_exact.mp3",
+      "url": "/audio/characters/student/order_chocolate_50_exact.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_icecream_50.mp3",
+      "url": "/audio/characters/student/order_icecream_50.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_notebook_50.mp3",
+      "url": "/audio/characters/student/order_notebook_50.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_pen_20.mp3",
+      "url": "/audio/characters/student/order_pen_20.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "order_pen_20_exact.mp3",
+      "url": "/audio/characters/student/order_pen_20_exact.mp3"
+    },
+    {
+      "folder": "student",
+      "file": "short_feedback.mp3",
+      "url": "/audio/characters/student/short_feedback.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "0623f7cbc9a1ae5a317b446facc0e87a.mp3",
+      "url": "/audio/characters/uncle/0623f7cbc9a1ae5a317b446facc0e87a.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "1711f437a9e9f302b4cb8f2ccb4c16af.mp3",
+      "url": "/audio/characters/uncle/1711f437a9e9f302b4cb8f2ccb4c16af.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "2607bd29c06922f152b5f3f02ca3e8aa.mp3",
+      "url": "/audio/characters/uncle/2607bd29c06922f152b5f3f02ca3e8aa.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "3_questions.mp3",
+      "url": "/audio/characters/uncle/3_questions.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "7a7447887a0606bd7c1e9f0191ebc594.mp3",
+      "url": "/audio/characters/uncle/7a7447887a0606bd7c1e9f0191ebc594.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "c2170b6f6a00da0029d714b8f54ed3b2.mp3",
+      "url": "/audio/characters/uncle/c2170b6f6a00da0029d714b8f54ed3b2.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "extra_feedback.mp3",
+      "url": "/audio/characters/uncle/extra_feedback.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "order_bread_50.mp3",
+      "url": "/audio/characters/uncle/order_bread_50.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "order_milk_50.mp3",
+      "url": "/audio/characters/uncle/order_milk_50.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "order_soap_100.mp3",
+      "url": "/audio/characters/uncle/order_soap_100.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "order_tea_100.mp3",
+      "url": "/audio/characters/uncle/order_tea_100.mp3"
+    },
+    {
+      "folder": "uncle",
+      "file": "short_feedback.mp3",
+      "url": "/audio/characters/uncle/short_feedback.mp3"
+    }
+  ]
+}

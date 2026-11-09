@@ -1,7 +1,7 @@
 /**
- * Kirana Shop Ambience & Sound Effects Engine
+ * Corner Store Ambience & Sound Effects Engine
  * Pure Web Audio API: Zero external network latency, zero download failures, 100% reliable.
- * - Soft kirana shop room tone
+ * - Soft store room tone
  * - Welcoming brass door chime when customer arrives
  * - Gentle coin / cash transaction chimes
  */

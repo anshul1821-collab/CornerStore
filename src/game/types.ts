@@ -63,11 +63,17 @@ export type SubmissionResult =
 
 export type TotalState = "empty" | "below" | "exact" | "above";
 
+export type DifficultyTier = "Easy" | "Medium" | "Hard" | "Expert";
+
 export interface LevelDef {
   number: number;
   icon: string;
   title: Localized;
   customers: number;
+  description: Localized;
+  concept: Localized;
+  difficulty: DifficultyTier;
+  timeLimit?: number | null;
 }
 
 export interface Progress {

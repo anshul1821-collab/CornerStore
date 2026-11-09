@@ -199,7 +199,7 @@ export function getBiscuitPacketTexture(): THREE.CanvasTexture {
 
       ctx.fillStyle = "#ffe082";
       ctx.font = "bold 32px 'Baloo 2', sans-serif";
-      ctx.fillText("BISCUITS • ₹10", size * 0.5, size * 0.46);
+      ctx.fillText("BISCUITS • $10.00", size * 0.5, size * 0.46);
 
       // Golden biscuit illustration
       ctx.fillStyle = "#e67e22";

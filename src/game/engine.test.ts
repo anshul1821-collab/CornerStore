@@ -39,11 +39,11 @@ describe("engine", () => {
         expect(Number.isInteger(s.payable)).toBe(true);
       }
   });
-  it("level 2 unlocks only after level 1 has stars", () => {
+  it("all levels are immediately unlocked and accessible", () => {
     const p = emptyProgress();
-    expect(isUnlocked(p, 1)).toBe(false);
-    p.stars[0] = 1;
-    expect(isUnlocked(p, 1)).toBe(true);
+    for (let i = 0; i < 10; i++) {
+      expect(isUnlocked(p, i)).toBe(true);
+    }
   });
 
   it("all levels, scenarios, and products are strictly English without Devanagari", () => {

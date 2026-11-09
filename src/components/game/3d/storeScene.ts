@@ -26,6 +26,7 @@ export interface CharacterPositions {
 export interface StoreSceneManager {
   setCustomer: (customer: Customer) => void;
   setMood: (mood: CharacterMood) => void;
+  setSpeaking: (target: "shopkeeper" | "customer" | "none") => void;
   setTray: (tray: Tray) => void;
   setPaidAmount: (paid: number, pieces: DenomId[]) => void;
   celebrate: () => void;
@@ -35,16 +36,16 @@ export interface StoreSceneManager {
 }
 
 const DENOM_COLORS: Record<string, { color: number; label: string; isNote: boolean }> = {
-  c1: { color: 0xc8c8c8, label: "₹1", isNote: false },
-  c2: { color: 0xb4b4b4, label: "₹2", isNote: false },
-  c5: { color: 0xd4af37, label: "₹5", isNote: false },
-  c10: { color: 0xc5832b, label: "₹10", isNote: false },
-  n10: { color: 0xb57c48, label: "₹10", isNote: true },
-  n20: { color: 0x9bc53d, label: "₹20", isNote: true },
-  n50: { color: 0x4aa3df, label: "₹50", isNote: true },
-  n100: { color: 0xaa78c7, label: "₹100", isNote: true },
-  n200: { color: 0xf39c12, label: "₹200", isNote: true },
-  n500: { color: 0x6e8b74, label: "₹500", isNote: true },
+  c1: { color: 0xd4af37, label: "$1.00", isNote: false },
+  c2: { color: 0xb4b4b4, label: "$2.00", isNote: false },
+  c5: { color: 0xcd7f32, label: "$5.00", isNote: false },
+  c10: { color: 0xe5e4e2, label: "$10.00", isNote: false },
+  n10: { color: 0xd4a373, label: "$10.00", isNote: true },
+  n20: { color: 0x2a9d8f, label: "$20.00", isNote: true },
+  n50: { color: 0xe76f51, label: "$50.00", isNote: true },
+  n100: { color: 0x457b9d, label: "$100.00", isNote: true },
+  n200: { color: 0xf4a261, label: "$200.00", isNote: true },
+  n500: { color: 0x8338ec, label: "$500.00", isNote: true },
 };
 
 export function setupKiranaStoreScene(
@@ -284,12 +285,12 @@ export function setupKiranaStoreScene(
     signCtx.font = "bold 64px 'Baloo 2', 'Nunito', sans-serif";
     signCtx.textAlign = "center";
     signCtx.textBaseline = "middle";
-    signCtx.fillText("🏪 CORNER GROCERY STORE 🏪", 512, 80);
+    signCtx.fillText("🏪 CORNER STORE SIMULATOR 🏪", 512, 80);
 
     // Signboard subtitle
     signCtx.fillStyle = "#ffffff";
     signCtx.font = "bold 38px 'Baloo 2', 'Nunito', sans-serif";
-    signCtx.fillText("NEIGHBORHOOD GROCERY • EVERY RUPEE COUNTS", 512, 156);
+    signCtx.fillText("NEIGHBORHOOD STORE • EVERY DOLLAR COUNTS", 512, 156);
   }
   const signTexture = new THREE.CanvasTexture(signCanvas);
   signTexture.needsUpdate = true;
@@ -640,7 +641,7 @@ export function setupKiranaStoreScene(
   panMesh.position.set(0, 0.085, 0);
   scaleGroup.add(panMesh);
 
-  // Glowing Green LED Readout ("₹0.00")
+  // Glowing Green LED Readout ("$0.00")
   const screenMesh = new THREE.Mesh(
     new THREE.BoxGeometry(0.18, 0.035, 0.02),
     new THREE.MeshBasicMaterial({ color: 0x00e676 }),
@@ -928,6 +929,10 @@ export function setupKiranaStoreScene(
     setMood: (mood: CharacterMood) => {
       customerCtrl.setMood(mood);
       shopkeeperCtrl.setMood(mood);
+    },
+    setSpeaking: (target: "shopkeeper" | "customer" | "none") => {
+      shopkeeperCtrl.setSpeaking?.(target === "shopkeeper");
+      customerCtrl.setSpeaking?.(target === "customer");
     },
     setTray: (tray: Tray) => {
       updateTray3D(tray);

@@ -34,26 +34,121 @@ export const LEVELS: LevelDef[] = [
     icon: "🏪",
     title: { en: "First Day at the Shop" },
     customers: 4,
+    description: {
+      en: "Welcome to your first shift! Learn the basics of cash registers by handling single-item purchases and giving simple change.",
+    },
+    concept: { en: "Single-item sales & round change" },
+    difficulty: "Easy",
+    timeLimit: null,
   },
   {
     number: 2,
-    icon: "🛍️",
-    title: { en: "Busy Little Shop" },
-    customers: 5,
+    icon: "🎯",
+    title: { en: "Exact Change & Quick Cash" },
+    customers: 4,
+    description: {
+      en: "Customers now sometimes pay with exact money! Check carefully: if change is $0, press the green NO CHANGE button.",
+    },
+    concept: { en: "Exact payment ($0 change) vs small change" },
+    difficulty: "Easy",
+    timeLimit: null,
   },
-  { number: 3, icon: "🧮", title: { en: "Tricky Prices" }, customers: 5 },
-  { number: 4, icon: "📝", title: { en: "Shopping List" }, customers: 5 },
+  {
+    number: 3,
+    icon: "🪙",
+    title: { en: "Tricky Prices & Coins" },
+    customers: 4,
+    description: {
+      en: "Items now have uneven prices! Master breaking dollar amounts using $1, $2, and $5 coins alongside bills.",
+    },
+    concept: { en: "Coin arithmetic & non-round prices" },
+    difficulty: "Medium",
+    timeLimit: null,
+  },
+  {
+    number: 4,
+    icon: "📝",
+    title: { en: "Shopping List Basket" },
+    customers: 5,
+    description: {
+      en: "Customers arrive with multiple grocery items! Sum up the bill across 2-3 items before calculating their change.",
+    },
+    concept: { en: "Multi-item addition & bill subtotals" },
+    difficulty: "Medium",
+    timeLimit: null,
+  },
   {
     number: 5,
     icon: "📦",
     title: { en: "Buy More, Save More" },
     customers: 5,
+    description: {
+      en: "Volume discounts are active! Customers buying in bulk (3+ items) get special savings. Calculate subtotal minus volume discount.",
+    },
+    concept: { en: "Multiplication & quantity discounts" },
+    difficulty: "Medium",
+    timeLimit: 75,
   },
-  { number: 6, icon: "🏷️", title: { en: "Special Discounts" }, customers: 5 },
-  { number: 7, icon: "🎁", title: { en: "Combo Offers" }, customers: 5 },
-  { number: 8, icon: "💯", title: { en: "Percentage Discounts" }, customers: 5 },
-  { number: 9, icon: "🛒", title: { en: "Big Shopping Day" }, customers: 5 },
-  { number: 10, icon: "⏱️", title: { en: "Rush Hour" }, customers: 6 },
+  {
+    number: 6,
+    icon: "🏷️",
+    title: { en: "Special Coupons & Promo Codes" },
+    customers: 5,
+    description: {
+      en: "Promotional season! Customers present flat store coupons ($10 to $25 off). Apply the deduction to find the final payable.",
+    },
+    concept: { en: "Flat promotional coupon deductions" },
+    difficulty: "Hard",
+    timeLimit: 65,
+  },
+  {
+    number: 7,
+    icon: "🎁",
+    title: { en: "Combo Deals & Percentage Off" },
+    customers: 5,
+    description: {
+      en: "Flash sale day! Calculate 10%, 20%, or 50% discount deals on selected items, plus combo pairings.",
+    },
+    concept: { en: "Percentage discounts & combo savings" },
+    difficulty: "Hard",
+    timeLimit: 55,
+  },
+  {
+    number: 8,
+    icon: "🛒",
+    title: { en: "Big Shopping Day" },
+    customers: 5,
+    description: {
+      en: "High-value grocery carts! Customers pay with $200 and $500 bills for large baskets totaling over $100.",
+    },
+    concept: { en: "Large bills ($200/$500) & high-value change" },
+    difficulty: "Hard",
+    timeLimit: 50,
+  },
+  {
+    number: 9,
+    icon: "🧠",
+    title: { en: "The Smart Cashier" },
+    customers: 5,
+    description: {
+      en: "Test your mastery! Handle mixed baskets combining quantities, tricky coin prices, and coupon discounts with steady speed.",
+    },
+    concept: { en: "Multi-concept mastery & mixed transactions" },
+    difficulty: "Expert",
+    timeLimit: 45,
+  },
+  {
+    number: 10,
+    icon: "⚡",
+    title: { en: "Rush Hour Challenge" },
+    customers: 6,
+    description: {
+      en: "Peak evening rush! The line is long and customers are in a hurry. Rapid calculation across 4-6 items under strict 35s timer.",
+    },
+    concept: { en: "Rapid multi-item calculation under rush pressure" },
+    difficulty: "Expert",
+    timeLimit: 35,
+  },
 ];
 
 const PRODUCTS: { id: string; emoji: string; name: { en: string }; price: number }[] = [
@@ -118,12 +213,18 @@ export const CUSTOMERS: Customer[] = [
     id: "delivery",
     emoji: "🧑🏽‍🔧",
     name: { en: "Raju" },
-    greeting: { en: "Hello!" },
+    greeting: { en: "Hey there!" },
   },
   {
     id: "dadi",
     emoji: "👵🏽",
     name: { en: "Grandma" },
+    greeting: { en: "Hello, dear!" },
+  },
+  {
+    id: "girl",
+    emoji: "👧🏽",
+    name: { en: "Jessica" },
     greeting: { en: "Hello, dear!" },
   },
 ];
@@ -170,138 +271,198 @@ export function choosePayment(
     const note = (options.length > 1 && rng() < 0.25 ? options[1] : options[0])!;
     return { paid: note, pieces: [`n${note}` as DenomId] };
   }
-  // larger than 500: pay with multiple ₹500 notes
+  // larger than 500: pay with multiple $500 notes
   const count = Math.ceil((payable + 1) / 500);
   return { paid: count * 500, pieces: Array(count).fill("n500") };
 }
 
+export const STUDIO_ORDERS_BY_CUSTOMER: Record<
+  string,
+  Array<{
+    items: Array<{ productId: string; qty: number; unitPrice?: number }>;
+    paid: number;
+    discount?: Discount;
+  }>
+> = {
+  aunty: [
+    { items: [{ productId: "chocolate", qty: 2 }], paid: 200 },
+    { items: [{ productId: "juice", qty: 1 }], paid: 50 },
+    { items: [{ productId: "milk", qty: 1 }], paid: 100 },
+    { items: [{ productId: "pen", qty: 2 }], paid: 50 },
+    { items: [{ productId: "potato", qty: 2 }], paid: 100 },
+    { items: [{ productId: "pencil", qty: 2 }], paid: 20 },
+    { items: [{ productId: "biscuits", qty: 1 }], paid: 20 },
+    { items: [{ productId: "battery", qty: 2 }], paid: 100 },
+  ],
+  uncle: [
+    { items: [{ productId: "chocolate", qty: 2 }], paid: 200 },
+    { items: [{ productId: "soap", qty: 1, unitPrice: 10 }], paid: 10 },
+    { items: [{ productId: "bread", qty: 1 }], paid: 50 },
+    { items: [{ productId: "tea", qty: 1 }], paid: 100 },
+    { items: [{ productId: "soap", qty: 2 }], paid: 100 },
+    { items: [{ productId: "milk", qty: 1 }], paid: 50 },
+  ],
+  student: [
+    { items: [{ productId: "chips", qty: 1 }], paid: 20 },
+    { items: [{ productId: "pencil", qty: 2 }, { productId: "eraser", qty: 1 }], paid: 20 },
+    { items: [{ productId: "notebook", qty: 1 }], paid: 50 },
+    { items: [{ productId: "chocolate", qty: 2 }], paid: 50 },
+    { items: [{ productId: "pen", qty: 2 }], paid: 20 },
+    { items: [{ productId: "icecream", qty: 1 }], paid: 50 },
+  ],
+  parent: [
+    { items: [{ productId: "milk", qty: 1 }], paid: 50 },
+    { items: [{ productId: "chocolate", qty: 2 }, { productId: "bread", qty: 1 }], paid: 100 },
+    { items: [{ productId: "bread", qty: 1 }], paid: 50 },
+    { items: [{ productId: "juice", qty: 2 }], paid: 50 },
+    { items: [{ productId: "bananas", qty: 1 }], paid: 50 },
+    { items: [{ productId: "eggs", qty: 1 }], paid: 50 },
+  ],
+  delivery: [
+    { items: [{ productId: "colddrink", qty: 1 }], paid: 50 },
+    { items: [{ productId: "battery", qty: 2 }], paid: 50 },
+    { items: [{ productId: "colddrink", qty: 2 }], paid: 100 },
+    { items: [{ productId: "chips", qty: 1 }], paid: 50 },
+    { items: [{ productId: "oil", qty: 1 }], paid: 200 },
+    { items: [{ productId: "matchbox", qty: 1 }], paid: 10 },
+  ],
+  dadi: [
+    { items: [{ productId: "bread", qty: 1 }], paid: 100 },
+    { items: [{ productId: "milk", qty: 1 }], paid: 50 },
+    { items: [{ productId: "tea", qty: 1 }], paid: 100 },
+    { items: [{ productId: "biscuits", qty: 1 }], paid: 50 },
+    { items: [{ productId: "sugar", qty: 1 }], paid: 50 },
+    { items: [{ productId: "bread", qty: 2 }], paid: 100 },
+    { items: [{ productId: "dal", qty: 1 }], paid: 100 },
+  ],
+  girl: [
+    { items: [{ productId: "juice", qty: 1 }], paid: 50 },
+    { items: [{ productId: "toffee", qty: 1 }], paid: 5 },
+    { items: [{ productId: "chocolate", qty: 1 }], paid: 50 },
+    { items: [{ productId: "icecream", qty: 2 }], paid: 50 },
+    { items: [{ productId: "pen", qty: 2 }], paid: 20 },
+    { items: [{ productId: "chips", qty: 1 }], paid: 20 },
+  ],
+};
+
+export interface ScenarioPlan {
+  customerId: string;
+  items: Array<{ productId: string; qty: number; unitPrice?: number }>;
+  paid: number;
+  discount?: Discount;
+}
+
+export const LEVEL_SCENARIO_TEMPLATES: Record<number, ScenarioPlan[]> = {
+  1: [
+    // Level 1: First Day at the Shop (Single-item sales & round change)
+    { customerId: "aunty", items: [{ productId: "chocolate", qty: 2 }], paid: 200 },
+    { customerId: "uncle", items: [{ productId: "bread", qty: 1 }], paid: 50 },
+    { customerId: "parent", items: [{ productId: "milk", qty: 1 }], paid: 50 },
+    { customerId: "delivery", items: [{ productId: "matchbox", qty: 1 }], paid: 10 },
+  ],
+  2: [
+    // Level 2: Exact Change & Quick Cash (Exact payment $0 change vs small change)
+    { customerId: "student", items: [{ productId: "chips", qty: 1 }], paid: 20 },
+    { customerId: "uncle", items: [{ productId: "soap", qty: 1, unitPrice: 10 }], paid: 10 },
+    { customerId: "girl", items: [{ productId: "pen", qty: 2 }], paid: 20 },
+    { customerId: "student", items: [{ productId: "chocolate", qty: 2 }], paid: 50 },
+  ],
+  3: [
+    // Level 3: Tricky Prices & Coins (Coin arithmetic & non-round prices $1, $2, $5)
+    { customerId: "parent", items: [{ productId: "milk", qty: 1 }], paid: 50 },
+    { customerId: "delivery", items: [{ productId: "matchbox", qty: 1 }], paid: 10 },
+    { customerId: "girl", items: [{ productId: "toffee", qty: 1 }], paid: 5 },
+    { customerId: "uncle", items: [{ productId: "tea", qty: 1 }], paid: 100 },
+  ],
+  4: [
+    // Level 4: Shopping List Basket (Multi-item addition & bill subtotals 2-3 items)
+    { customerId: "delivery", items: [{ productId: "matchbox", qty: 1 }], paid: 10 },
+    { customerId: "student", items: [{ productId: "pencil", qty: 2 }, { productId: "eraser", qty: 1 }], paid: 20 },
+    { customerId: "parent", items: [{ productId: "chocolate", qty: 2 }, { productId: "bread", qty: 1 }], paid: 100 },
+    { customerId: "student", items: [{ productId: "pencil", qty: 2 }, { productId: "eraser", qty: 1 }], paid: 20 },
+    { customerId: "parent", items: [{ productId: "chocolate", qty: 2 }, { productId: "bread", qty: 1 }], paid: 100 },
+  ],
+  5: [
+    // Level 5: Buy More, Save More (Multiplication & quantity discounts)
+    { customerId: "dadi", items: [{ productId: "bread", qty: 1 }], paid: 100 },
+    { customerId: "delivery", items: [{ productId: "colddrink", qty: 2 }], paid: 100, discount: { label: { en: "Buy 2, save $10" }, amount: 10 } },
+    { customerId: "aunty", items: [{ productId: "potato", qty: 2 }], paid: 100, discount: { label: { en: "Buy 2, save $10" }, amount: 10 } },
+    { customerId: "parent", items: [{ productId: "juice", qty: 2 }], paid: 50, discount: { label: { en: "Buy 2, save $5" }, amount: 5 } },
+    { customerId: "uncle", items: [{ productId: "soap", qty: 2 }], paid: 100, discount: { label: { en: "Buy 2, save $6" }, amount: 6 } },
+  ],
+  6: [
+    // Level 6: Special Coupons & Promo Codes (Flat promotional coupon deductions)
+    { customerId: "girl", items: [{ productId: "juice", qty: 1 }], paid: 50 },
+    { customerId: "student", items: [{ productId: "notebook", qty: 1 }], paid: 50, discount: { label: { en: "Store coupon: $10 off" }, amount: 10 } },
+    { customerId: "dadi", items: [{ productId: "dal", qty: 1 }], paid: 100, discount: { label: { en: "Store coupon: $15 off" }, amount: 15 } },
+    { customerId: "uncle", items: [{ productId: "chocolate", qty: 2 }], paid: 200, discount: { label: { en: "Store coupon: $10 off" }, amount: 10 } },
+    { customerId: "aunty", items: [{ productId: "battery", qty: 2 }], paid: 100, discount: { label: { en: "Store coupon: $5 off" }, amount: 5 } },
+  ],
+  7: [
+    // Level 7: Combo Deals & Percentage Off (Percentage discounts & combo savings)
+    { customerId: "uncle", items: [{ productId: "bread", qty: 1 }], paid: 50, discount: { label: { en: "Combo deal: 20% off" }, amount: 7 } },
+    { customerId: "parent", items: [{ productId: "bananas", qty: 1 }], paid: 50, discount: { label: { en: "20% off on Bananas" }, amount: 8 } },
+    { customerId: "delivery", items: [{ productId: "chips", qty: 1 }], paid: 50, discount: { label: { en: "50% off on Snack Deal" }, amount: 10 } },
+    { customerId: "student", items: [{ productId: "icecream", qty: 1 }], paid: 50, discount: { label: { en: "20% off on Ice Cream" }, amount: 5 } },
+    { customerId: "dadi", items: [{ productId: "tea", qty: 1 }], paid: 100, discount: { label: { en: "10% off on Tea" }, amount: 10 } },
+  ],
+  8: [
+    // Level 8: Big Shopping Day (Large bills $200/$500 & high-value purchases)
+    { customerId: "aunty", items: [{ productId: "juice", qty: 1 }], paid: 50 },
+    { customerId: "delivery", items: [{ productId: "oil", qty: 1 }], paid: 200 },
+    { customerId: "uncle", items: [{ productId: "chocolate", qty: 2 }], paid: 200 },
+    { customerId: "aunty", items: [{ productId: "chocolate", qty: 2 }], paid: 200 },
+    { customerId: "delivery", items: [{ productId: "oil", qty: 1 }], paid: 200, discount: { label: { en: "Big Shopper Coupon: $20 off" }, amount: 20 } },
+  ],
+  9: [
+    // Level 9: The Smart Cashier (Multi-concept mastery & mixed transactions)
+    { customerId: "student", items: [{ productId: "notebook", qty: 1 }], paid: 50 },
+    { customerId: "parent", items: [{ productId: "chocolate", qty: 2 }, { productId: "bread", qty: 1 }], paid: 100, discount: { label: { en: "Member reward: $15 off" }, amount: 15 } },
+    { customerId: "girl", items: [{ productId: "icecream", qty: 2 }], paid: 50 },
+    { customerId: "dadi", items: [{ productId: "dal", qty: 1 }], paid: 100, discount: { label: { en: "Store coupon: $15 off" }, amount: 15 } },
+    { customerId: "delivery", items: [{ productId: "oil", qty: 1 }], paid: 200, discount: { label: { en: "Member reward: $20 off" }, amount: 20 } },
+  ],
+  10: [
+    // Level 10: Rush Hour Challenge (Rapid multi-item calculation under rush pressure)
+    { customerId: "parent", items: [{ productId: "milk", qty: 1 }], paid: 50 },
+    { customerId: "delivery", items: [{ productId: "colddrink", qty: 2 }], paid: 100 },
+    { customerId: "student", items: [{ productId: "chips", qty: 1 }], paid: 20 },
+    { customerId: "girl", items: [{ productId: "pen", qty: 2 }], paid: 20 },
+    { customerId: "uncle", items: [{ productId: "bread", qty: 1 }], paid: 50 },
+    { customerId: "delivery", items: [{ productId: "matchbox", qty: 1 }], paid: 10 },
+  ],
+};
+
 export function generateScenario(level: number, index: number, rng: Rng = Math.random): Scenario {
-  let items: LineItem[] = [];
-  let discount: Discount | null = null;
+  const levelDef = LEVELS.find((l) => l.number === level) ?? LEVELS[0]!;
+  const timeLimit = levelDef.timeLimit ?? null;
 
-  switch (level) {
-    case 1: {
-      // First Coins (Simple multiples of 5, small)
-      const ps = pickProducts(rng, 1, (p) => p.price <= 30 && p.price % 5 === 0);
-      items = [item(ps[0]!, ps[0]!.price, randInt(rng, 1, 2))];
-      break;
-    }
-    case 2: {
-      // Shop Basics (Slightly larger, multiples of 5)
-      const ps = pickProducts(rng, 2, (p) => p.price >= 10 && p.price <= 60 && p.price % 5 === 0);
-      items = ps.map((p) => item(p, p.price));
-      break;
-    }
-    case 3: {
-      // Tricky Prices (Non-multiples of 5)
-      const n = randInt(rng, 2, 3);
-      const ps = pickProducts(rng, n, (p) => p.price <= 45); // Mix of tricky and normal
-      items = ps.map((p) => item(p, p.price));
-      break;
-    }
-    case 4: {
-      // Shopping Basket (3-4 items)
-      const n = randInt(rng, 3, 4);
-      const ps = pickProducts(rng, n, (p) => p.price <= 45);
-      items = ps.map((p) => item(p, p.price));
-      break;
-    }
-    case 5: {
-      // Buy More Save More (Qty 3-5 on one item, plus another item)
-      const ps1 = pickProducts(rng, 1, (p) => p.price >= 5 && p.price <= 30);
-      const ps2 = pickProducts(rng, 1, (p) => p.price >= 10 && p.price <= 40);
-      const qty = randInt(rng, 3, 5);
-      items = [item(ps1[0]!, ps1[0]!.price, qty), item(ps2[0]!, ps2[0]!.price, 1)];
-      const off = qty >= 4 ? 10 : 5;
-      discount = { label: { en: `Buy 3+, save ₹${off}` }, amount: off };
-      break;
-    }
-    case 6: {
-      // Special Offers (3 items, flat discount)
-      const n = 3;
-      const ps = pickProducts(rng, n, (p) => p.price >= 15 && p.price <= 60);
-      items = ps.map((p) => item(p, p.price));
-      const off = pick(rng, [15, 20, 25]);
-      discount = {
-        label: { en: `Special offer: ₹${off} off` },
-        amount: off,
-      };
-      break;
-    }
-    case 7: {
-      // Combo Offers (3-4 items)
-      const n = randInt(rng, 3, 4);
-      const ps = pickProducts(rng, n, (p) => p.price >= 15 && p.price <= 70);
-      items = ps.map((p) => item(p, p.price));
-      const off = pick(rng, [10, 15, 20]);
-      discount = {
-        label: { en: `Combo deal: save ₹${off}` },
-        amount: off,
-      };
-      break;
-    }
-    case 8: {
-      // Percentage Discounts (2-3 items)
-      const n = randInt(rng, 2, 3);
-      const qty = randInt(rng, 1, 3);
-      const pct = pick(rng, [10, 20, 50]);
-      const ps = pickProducts(rng, n, (p) => p.price >= 15);
+  const templates = LEVEL_SCENARIO_TEMPLATES[level] ?? LEVEL_SCENARIO_TEMPLATES[1]!;
+  const template = templates[index % templates.length]!;
+  const customer = CUSTOMERS.find((c) => c.id === template.customerId) ?? CUSTOMERS[0]!;
 
-      const discountP = pickProducts(
-        rng,
-        1,
-        (p) => p.price >= 20 && (p.price * qty * pct) % 100 === 0,
-      )[0]!;
-
-      items = [item(discountP, discountP.price, qty)];
-      for (let i = 1; i < n; i++) items.push(item(ps[i]!, ps[i]!.price, 1));
-
-      const sub = discountP.price * qty;
-      discount = {
-        label: {
-          en: `${pct}% off on ${discountP.name.en}`,
-        },
-        amount: (sub * pct) / 100,
-      };
-      break;
-    }
-    case 9: {
-      // Big Shopping Day (4-5 items, qty 1-3)
-      const n = randInt(rng, 4, 5);
-      const ps = pickProducts(rng, n, (p) => p.price >= 10);
-      items = ps.map((p) => item(p, p.price, randInt(rng, 1, 3)));
-      break;
-    }
-    default: {
-      // Rush Hour (4-6 items, random)
-      const n = randInt(rng, 4, 6);
-      const ps = pickProducts(rng, n, (p) => p.price >= 5 && p.price <= 60);
-      items = ps.map((p) => item(p, p.price, randInt(rng, 1, 2)));
-      if (rng() < 0.5) {
-        const off = pick(rng, [10, 15, 20]);
-        discount = {
-          label: { en: `Rush deal: ₹${off} off` },
-          amount: off,
-        };
-      }
-    }
-  }
+  const items: LineItem[] = template.items.map((it) => {
+    const p = PRODUCTS.find((prod) => prod.id === it.productId)!;
+    return item(p, it.unitPrice ?? p.price, it.qty);
+  });
 
   const subtotal = items.reduce((s, i) => s + i.unitPrice * i.qty, 0);
+  const discount = template.discount ? { ...template.discount } : null;
   const payable = Math.max(1, subtotal - (discount?.amount ?? 0));
-  const { paid, pieces } = choosePayment(rng, payable, level >= 2);
+  const paid = template.paid;
+  const pieces: DenomId[] = paid === 5 ? ["c5"] : [`n${paid}` as DenomId];
 
   return {
     id: `L${level}-${index}-${Math.floor(rng() * 1e6)}`,
     level,
-    customer: CUSTOMERS[(index + level) % CUSTOMERS.length]!,
+    customer,
     items,
     subtotal,
     discount,
     payable,
     paid,
     paidPieces: pieces,
-    timeLimit: level === 10 ? 45 : null,
+    timeLimit,
   };
 }
 
@@ -331,11 +492,16 @@ export function evaluate(
   const diff = trayTotal(tray) - requiredChange(scenario);
   if (diff < 0) return { kind: "too-little", difference: -diff };
   if (diff > 0) return { kind: "too-much", difference: diff };
-  return { kind: "correct", stars: customerStars(mistakes, hintsUsed) };
+  return { kind: "correct", stars: customerStars(mistakes, hintsUsed, scenario.level) };
 }
 
-export const customerStars = (mistakes: number, hintsUsed: number) =>
-  mistakes === 0 && hintsUsed === 0 ? 3 : mistakes + hintsUsed <= 2 ? 2 : 1;
+export const customerStars = (mistakes: number, hintsUsed: number, level: number = 1) => {
+  if (level >= 8) {
+    // Advanced levels (8-10): Higher precision required - 0 mistakes/hints for 3 stars, 1 for 2 stars, otherwise 1
+    return mistakes === 0 && hintsUsed === 0 ? 3 : mistakes + hintsUsed === 1 ? 2 : 1;
+  }
+  return mistakes === 0 && hintsUsed === 0 ? 3 : mistakes + hintsUsed <= 2 ? 2 : 1;
+};
 
 /** Level stars = rounded average of customer stars. */
 export const levelStars = (customerStarList: number[]) =>
@@ -372,7 +538,6 @@ export function stepsToTray(steps: HintStep[]): Tray {
   return t;
 }
 
-export const isUnlocked = (progress: Progress, levelIndex: number) =>
-  levelIndex === 0 || (progress.stars[levelIndex - 1] ?? 0) > 0;
+export const isUnlocked = (_progress: Progress, _levelIndex: number) => true;
 
 export const emptyProgress = (): Progress => ({ stars: Array(LEVELS.length).fill(0) });

@@ -1,101 +1,90 @@
 import type { Lang, Scenario, SubmissionResult } from "@/game/types";
-import { formatItemForSpeech } from "@/lib/voice/sanitize";
+import { formatUSD } from "@/lib/currency";
+import { t } from "@/game/i18n";
+import {
+  getCustomerVoiceType,
+  type CharacterVoice,
+  type SpeakerRole,
+} from "@/lib/voice/characters";
 
 export interface DialogueContent {
-  speaker: "shopkeeper" | "customer";
+  speaker: SpeakerRole;
   speakerName: string;
   avatarEmoji: string;
   text: string;
-  dialogueType?: "fixed" | "dynamic";
+  characterVoice: CharacterVoice;
+  customerId?: string;
 }
 
 /**
- * Welcome dialogue from the Shopkeeper when the shop opens
+ * Builds the exact displayed text for a customer's order.
+ * This function is the SINGLE SOURCE OF TRUTH for customer dialogue.
+ * Both CustomerBubble and speech generation retrieve text from here.
  */
-export function getShopkeeperWelcome(_lang?: Lang): DialogueContent {
+export function formatCustomerOrderText(scenario: Scenario, lang: Lang = "en"): string {
+  const names = scenario.items.map((i) => (i.qty > 1 ? `${i.qty} ${i.name[lang]}` : i.name[lang]));
+  const list =
+    names.length > 1
+      ? `${names.slice(0, -1).join(", ")} ${t(lang, "and")} ${names[names.length - 1]}`
+      : (names[0] ?? "");
+  const exact = scenario.paid === scenario.payable;
+  return `${scenario.customer.greeting[lang]} ${t(lang, exact ? "wantsExact" : "wants", {
+    items: list,
+    total: formatUSD(scenario.payable),
+    paid: formatUSD(scenario.paid),
+  })}`;
+}
+
+/**
+ * Welcome dialogue from the Shopkeeper when the store opens
+ */
+export function getShopkeeperWelcome(_lang: Lang = "en"): DialogueContent {
   return {
     speaker: "shopkeeper",
     speakerName: "Shopkeeper",
     avatarEmoji: "👨🏽‍🦳",
     text: "Welcome to the shop! Great to see you today. What can I get for you?",
-    dialogueType: "fixed",
+    characterVoice: "shopkeeper",
   };
 }
 
 /**
  * Shopkeeper celebration on correct change
  */
-export function getShopkeeperPraise(_lang?: Lang): DialogueContent {
+export function getShopkeeperPraise(_lang: Lang = "en"): DialogueContent {
   return {
     speaker: "shopkeeper",
     speakerName: "Shopkeeper",
     avatarEmoji: "👨🏽‍🦳",
     text: "Spot on! That's the exact change. Brilliant calculation!",
-    dialogueType: "fixed",
+    characterVoice: "shopkeeper",
   };
 }
 
 /**
- * Customer arrival and order request with natural conversational phrasing
- * Strictly assigned to Boy Voice (male customers) and Girl Voice (female customers).
+ * Shopkeeper instruction to check bill before counting change
+ */
+export function getShopkeeperCheckBillInstruction(lang: Lang = "en"): DialogueContent {
+  return {
+    speaker: "shopkeeper",
+    speakerName: "Shopkeeper",
+    avatarEmoji: "👨🏽‍🦳",
+    text: t(lang, "checkBillInstruction"),
+    characterVoice: "shopkeeper",
+  };
+}
+
+/**
+ * Customer arrival and order request
  */
 export function getCustomerOrderDialogue(scenario: Scenario, lang: Lang = "en"): DialogueContent {
-  const itemNames = scenario.items.map((i) => {
-    const rawName = i.name[lang] || i.name.en;
-    return formatItemForSpeech(rawName, i.qty);
-  });
-
-  const itemsText =
-    itemNames.length > 1
-      ? `${itemNames.slice(0, -1).join(", ")}, and ${itemNames[itemNames.length - 1]}`
-      : (itemNames[0] ?? "groceries");
-
-  const cid = scenario.customer.id;
-  const exact = scenario.paid === scenario.payable;
-
-  let text = "";
-  if (cid === "uncle") {
-    // Mr. Sharma (Male -> Boy Voice)
-    text = exact
-      ? `Hello! Could I please get ${itemsText}? Here's exact ₹${scenario.paid}, thank you!`
-      : `Hello! Could I please get ${itemsText}? Here's ₹${scenario.paid}, change please!`;
-  } else if (cid === "aunty") {
-    // Mrs. Priya (Female -> Girl Voice)
-    text = exact
-      ? `Hi! Just need ${itemsText}, please. Here's exact ₹${scenario.paid}!`
-      : `Hi! Just need ${itemsText}, please. Here's ₹${scenario.paid}, thank you!`;
-  } else if (cid === "student") {
-    // Rohan (Male -> Boy Voice)
-    text = exact
-      ? `Hey! Can I grab ${itemsText}? Here's exact ₹${scenario.paid}!`
-      : `Hey! Can I grab ${itemsText}? Here's ₹${scenario.paid}, could I get the change please?`;
-  } else if (cid === "parent") {
-    // Meera & Anu (Female -> Girl Voice)
-    text = exact
-      ? `Good morning! We'd like to get ${itemsText}, please. Here's exact ₹${scenario.paid}!`
-      : `Good morning! We'd like to get ${itemsText}, please. Here's ₹${scenario.paid}, thank you!`;
-  } else if (cid === "delivery") {
-    // Raju (Male -> Boy Voice)
-    text = exact
-      ? `Hey there! Need ${itemsText} quickly. Here's exact ₹${scenario.paid}!`
-      : `Hey there! Need ${itemsText} quickly. Here's ₹${scenario.paid}, change please!`;
-  } else if (cid === "dadi") {
-    // Grandma (Female -> Girl Voice)
-    text = exact
-      ? `Hello, dear! Could you give me ${itemsText}? Here's exact ₹${scenario.paid}.`
-      : `Hello, dear! Could you give me ${itemsText}? Here's ₹${scenario.paid}, thank you.`;
-  } else {
-    text = exact
-      ? `Hello! I'd like ${itemsText}, please. Here's exact ₹${scenario.paid}!`
-      : `Hello! I'd like ${itemsText}, please. Here's ₹${scenario.paid}, change please!`;
-  }
-
   return {
     speaker: "customer",
     speakerName: scenario.customer.name[lang] || scenario.customer.name.en,
     avatarEmoji: scenario.customer.emoji,
-    text,
-    dialogueType: "dynamic",
+    text: formatCustomerOrderText(scenario, lang),
+    characterVoice: getCustomerVoiceType(scenario.customer.id),
+    customerId: scenario.customer.id,
   };
 }
 
@@ -105,20 +94,21 @@ export function getCustomerOrderDialogue(scenario: Scenario, lang: Lang = "en"):
 export function getFeedbackDialogue(
   scenario: Scenario,
   result: SubmissionResult,
-  _lang?: Lang,
+  lang: Lang = "en",
 ): DialogueContent {
-  const customerName = scenario.customer.name.en;
+  const customerName = scenario.customer.name[lang] || scenario.customer.name.en;
   const emoji = scenario.customer.emoji;
   const cid = scenario.customer.id;
+  const voice = getCustomerVoiceType(cid);
 
   if (result.kind === "correct") {
-    let thankYou = "Thank you so much! That's the exact change. Have a wonderful day! 😊";
+    let thankYou = "Thank you so much! That's the exact change. Have a wonderful day!";
     if (cid === "dadi") {
-      thankYou = "Thank you so much, dear. You counted that beautifully! 😊";
-    } else if (cid === "student") {
-      thankYou = "Awesome, perfect change! Thanks a lot! 👍";
+      thankYou = "Thank you so much, dear. You counted that beautifully!";
+    } else if (cid === "student" || cid === "delivery") {
+      thankYou = "Awesome, perfect change! Thanks a lot!";
     } else if (cid === "uncle") {
-      thankYou = "Wonderful! That is spot on. Thank you! 😊";
+      thankYou = "Wonderful! That is spot on. Thank you!";
     }
 
     return {
@@ -126,27 +116,46 @@ export function getFeedbackDialogue(
       speakerName: customerName,
       avatarEmoji: emoji,
       text: thankYou,
-      dialogueType: "fixed",
+      characterVoice: voice,
+      customerId: cid,
     };
   }
 
   if (result.kind === "too-little") {
+    let msg = "Hmm, wait a second... looks like this is a bit short. Could you please check?";
+    if (cid === "dadi") {
+      msg = "No rush at all, dear! Take your time to count the notes, you're doing wonderfully.";
+    } else if (cid === "uncle" && Math.abs(result.difference - 5) < 0.01) {
+      msg = "Hmm, wait a second... looks like this is $5.00 short. Could you please check?";
+    } else if (cid === "delivery") {
+      msg = "Hey, wait a second... looks like this is a bit short. Could you please check?";
+    }
     return {
       speaker: "customer",
       speakerName: customerName,
       avatarEmoji: emoji,
-      text: `Hmm, wait a second... looks like this is ₹${result.difference} short. Could you please check? 🤔`,
-      dialogueType: "dynamic",
+      text: msg,
+      characterVoice: voice,
+      customerId: cid,
     };
   }
 
   if (result.kind === "too-much") {
+    let msg = "Oh, hold on — you gave me a bit too much extra! Take a quick look.";
+    if (cid === "student" && Math.abs(result.difference - 10.5) < 0.01) {
+      msg = "Oh, hold on — you gave me $10.50 extra! Take a quick look.";
+    } else if (cid === "dadi") {
+      msg = "No rush at all, dear! Take your time to count the notes, you're doing wonderfully.";
+    } else if (cid === "delivery") {
+      msg = "Hey, hold on — you gave me a bit too much extra! Take a quick look.";
+    }
     return {
       speaker: "customer",
       speakerName: customerName,
       avatarEmoji: emoji,
-      text: `Oh, hold on — you gave me ₹${result.difference} extra! Take a quick look. 😊`,
-      dialogueType: "dynamic",
+      text: msg,
+      characterVoice: voice,
+      customerId: cid,
     };
   }
 
@@ -156,6 +165,7 @@ export function getFeedbackDialogue(
     speakerName: customerName,
     avatarEmoji: emoji,
     text: "No rush at all! Take your time to count the notes.",
-    dialogueType: "fixed",
+    characterVoice: voice,
+    customerId: cid,
   };
 }

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import type { DenomId, LevelDef, SubmissionResult, Tray } from "@/game/types";
 import {
@@ -19,7 +20,9 @@ import { HintPanel } from "./HintPanel";
 import { ShoppingBill } from "./ShoppingBill";
 import { SettingsBar, useSettings } from "./settings";
 import { KiranaStore3D } from "./3d/KiranaStore3D";
-import { voiceManager } from "@/lib/voice/voiceManager";
+import { getCustomerOrderDialogue, type DialogueContent } from "./3d/dialogue";
+import { formatUSD } from "@/lib/currency";
+import { dialogueAudio } from "@/lib/dialogueAudio";
 
 export interface LevelStats {
   stars: number[];
@@ -34,7 +37,7 @@ interface Props {
 }
 
 export function GameScreen({ level, onExit, onComplete }: Props) {
-  const { tr, lang, play } = useSettings();
+  const { tr, lang, play, hintsEnabled, setHintsEnabled } = useSettings();
   const [index, setIndex] = useState(0);
   const scenario = useMemo(() => generateScenario(level.number, index), [level.number, index]);
   const [tray, setTray] = useState<Tray>({});
@@ -45,6 +48,9 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   const [stats, setStats] = useState<LevelStats>({ stars: [], mistakes: 0, hints: 0 });
   const [timeLeft, setTimeLeft] = useState<number | null>(scenario.timeLimit);
   const [calculatedTotal, setCalculatedTotal] = useState<number | "">("");
+  const [activeDialogue, setActiveDialogue] = useState<DialogueContent | null>(() =>
+    getCustomerOrderDialogue(scenario, lang),
+  );
 
   const required = requiredChange(scenario);
   const total = trayTotal(tray);
@@ -52,7 +58,7 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
 
   useEffect(() => {
     return () => {
-      voiceManager.stop();
+      dialogueAudio.stop();
     };
   }, []);
 
@@ -118,6 +124,47 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
 
   const busy = result !== null;
 
+  // Helpful contextual guidance message for children
+  const getContextualHint = () => {
+    if (result) {
+      if (result.kind === "correct") {
+        return "Awesome! That's the correct amount!";
+      }
+      if (result.kind === "too-little") {
+        return "Try adding a little more money to reach the exact change!";
+      }
+      if (result.kind === "too-much") {
+        return "That's a bit too much change! Tap a piece in the tray to remove it.";
+      }
+      return "Take your time! Tap 💡 Hint if you need help.";
+    }
+
+    if (calculatedTotal !== scenario.payable) {
+      return `Check items on receipt and enter the Total to Pay (${formatUSD(scenario.payable)})!`;
+    }
+
+    if (total === 0) {
+      if (required === 0) {
+        return "The customer paid exact money! Tap the green NO CHANGE button.";
+      }
+      return `Customer gave ${formatUSD(scenario.paid)}. Tap the money in the drawer to get started!`;
+    }
+
+    if (total < required) {
+      return `You have ${formatUSD(total)} in the tray. Try adding a little more money (${formatUSD(required - total)} needed)!`;
+    }
+
+    if (total === required) {
+      return `Awesome! That's the correct amount (${formatUSD(total)})! Tap GIVE CHANGE!`;
+    }
+
+    if (total > required) {
+      return `A bit too much change (${formatUSD(total - required)} extra). Tap a piece in the tray to remove it!`;
+    }
+
+    return "Can you figure out how much change is needed?";
+  };
+
   return (
     <div className="min-h-screen lg:h-screen lg:max-h-screen flex flex-col justify-start overflow-x-hidden">
       <div className="bg-awning h-3 sm:h-4 shrink-0" aria-hidden />
@@ -133,12 +180,32 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
         </button>
 
         <div className="flex-1 min-w-40 px-2 flex flex-col items-center">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
             <p className="text-center font-display font-extrabold text-xs sm:text-sm leading-tight text-wood-dark">
               {level.icon} {tr("level")} {level.number}: {level.title[lang]}
             </p>
+            {level.difficulty && (
+              <span
+                className={`rounded-full px-1.5 py-0.2 text-[9px] sm:text-[10px] font-black uppercase tracking-wider border ${
+                  level.difficulty === "Easy"
+                    ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+                    : level.difficulty === "Medium"
+                      ? "bg-amber-100 text-amber-800 border-amber-300"
+                      : level.difficulty === "Hard"
+                        ? "bg-orange-100 text-orange-800 border-orange-300"
+                        : "bg-purple-100 text-purple-800 border-purple-300"
+                }`}
+              >
+                {level.difficulty}
+              </span>
+            )}
+            {level.concept && (
+              <span className="hidden md:inline-block rounded-full bg-sun/30 border border-sun px-2 py-0.2 text-[10px] font-bold text-wood-dark">
+                {level.concept[lang]}
+              </span>
+            )}
             {timeLeft !== null && (
-              <span className="rounded-full bg-paper px-2 py-0.2 text-[11px] font-extrabold border border-orange text-orange">
+              <span className="rounded-full bg-paper px-2 py-0.2 text-[11px] font-extrabold border border-orange text-orange animate-pulse">
                 ⏱️ {timeLeft}s
               </span>
             )}
@@ -163,8 +230,8 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
       <main className="mx-auto flex flex-1 flex-col justify-start lg:justify-center w-full max-w-6xl px-3 py-1 sm:py-2 gap-2 sm:gap-2.5">
         {/* Upper Main Section: 3D Shop & Dialogue on Left, Bill & Tray on Right */}
         <section className="grid grid-cols-1 lg:grid-cols-[1fr_1.25fr] gap-2 sm:gap-2.5 items-stretch">
-          {/* Left Column: 3D Store View + Customer Bubble */}
-          <div className="flex flex-col justify-between gap-2">
+          {/* Left Column: 3D Store View + Customer Bubble (tightly fitted with zero awkward gap) */}
+          <div className="flex flex-col gap-2 h-full min-h-0">
             <KiranaStore3D
               scenario={scenario}
               tray={tray}
@@ -172,10 +239,12 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
               isCorrect={result?.kind === "correct"}
               result={result}
               roundIndex={index}
+              onActiveDialogueChange={setActiveDialogue}
             />
             <CustomerBubble
               scenario={scenario}
               mood={result?.kind === "correct" ? "happy" : result ? "thinking" : "speaking"}
+              activeDialogue={activeDialogue}
             />
           </div>
 
@@ -203,14 +272,18 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
                   <button
                     onClick={submit}
                     disabled={busy || calculatedTotal !== scenario.payable}
-                    className="btn-press rounded-xl bg-leaf py-2 px-3 font-display text-base sm:text-lg font-extrabold text-primary-foreground shadow-chunky disabled:opacity-50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sun text-center cursor-pointer flex items-center justify-center min-h-[44px]"
+                    className={`btn-press rounded-xl py-2 px-3 font-display text-base sm:text-lg font-black text-primary-foreground shadow-chunky disabled:opacity-50 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-sun text-center cursor-pointer flex items-center justify-center min-h-[46px] transition-all ${
+                      trayState(tray, required) === "exact" && calculatedTotal === scenario.payable
+                        ? "bg-emerald-600 hover:bg-emerald-500 ring-4 ring-emerald-300"
+                        : "bg-leaf hover:bg-leaf-dark"
+                    }`}
                   >
-                    {total === 0 ? tr("noChange") : tr("give")}
+                    {total === 0 ? tr("noChange") : `${tr("give")} (${formatUSD(total)})`}
                   </button>
                   <button
                     onClick={openHint}
                     disabled={busy}
-                    className="rounded-xl border-2 border-sky bg-paper py-2 px-3.5 font-extrabold text-xs sm:text-sm text-teal hover:bg-mint cursor-pointer transition-colors text-center flex items-center justify-center gap-1.5 shadow-soft min-h-[44px]"
+                    className="rounded-xl border-2 border-sky bg-paper py-2 px-3.5 font-extrabold text-xs sm:text-sm text-teal hover:bg-mint cursor-pointer transition-colors text-center flex items-center justify-center gap-1.5 shadow-soft min-h-[46px]"
                   >
                     <span>💡</span>
                     <span>{tr("hint")}</span>
@@ -221,23 +294,52 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
           </div>
         </section>
 
+        {/* Helpful Contextual Guidance Strip for Children (can be toggled on/off) */}
+        <div className="flex items-center justify-between gap-2 px-3 py-1.5 rounded-2xl bg-amber-50/90 border-2 border-sun/60 text-wood-dark shadow-xs shrink-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-base sm:text-lg shrink-0" aria-hidden>
+              💡
+            </span>
+            {hintsEnabled ? (
+              <p className="text-xs sm:text-sm font-extrabold truncate text-wood-dark">
+                {getContextualHint()}
+              </p>
+            ) : (
+              <p className="text-xs font-semibold text-muted-foreground italic">
+                Helpful hints are turned off.
+              </p>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setHintsEnabled(!hintsEnabled)}
+            className="text-[10px] sm:text-[11px] font-black text-amber-900 hover:text-black uppercase tracking-wider px-2 py-0.5 rounded-lg bg-amber-200/80 hover:bg-amber-300 border border-amber-400 shrink-0 cursor-pointer transition-colors"
+          >
+            {hintsEnabled ? "Hide Tips" : "Show Tips"}
+          </button>
+        </div>
+
         {/* Lower Section: Cash Drawer (positioned directly beneath the counter with cohesive spacing) */}
-        <CashDrawer denominations={DENOMINATIONS} onAdd={add} disabled={busy} />
+        <CashDrawer denominations={DENOMINATIONS} onAdd={add} disabled={busy} tray={tray} />
       </main>
 
       {/* Modal Dialogs */}
-      {showHint && (
-        <HintPanel
-          key={scenario.id}
-          price={scenario.payable}
-          paid={scenario.paid}
-          steps={steps}
-          onShowPieces={() => setTray(stepsToTray(steps))}
-          onClose={() => setShowHint(false)}
-        />
-      )}
+      <AnimatePresence>
+        {showHint && (
+          <HintPanel
+            key={scenario.id}
+            price={scenario.payable}
+            paid={scenario.paid}
+            steps={steps}
+            onShowPieces={() => setTray(stepsToTray(steps))}
+            onClose={() => setShowHint(false)}
+          />
+        )}
+      </AnimatePresence>
 
-      {result && <Feedback result={result} onContinue={next} onRetry={retry} />}
+      <AnimatePresence>
+        {result && <Feedback result={result} onContinue={next} onRetry={retry} />}
+      </AnimatePresence>
     </div>
   );
 }

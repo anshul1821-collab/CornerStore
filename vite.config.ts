@@ -7,14 +7,13 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import type { Plugin } from "vite";
 
-const isVercel = Boolean(process.env.VERCEL || process.env.NITRO_PRESET === "vercel");
+const isVercel = Boolean(process.env["VERCEL"] || process.env["NITRO_PRESET"] === "vercel");
 
 function ttsDevServerPlugin(): Plugin {
   return {
     name: "tts-dev-server",
     configureServer(server) {
       server.middlewares.use("/api/tts", async (req, res) => {
-        // CORS headers
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         res.setHeader("Access-Control-Allow-Headers", "Content-Type, xi-api-key");
@@ -59,7 +58,7 @@ function ttsDevServerPlugin(): Plugin {
                 JSON.stringify({
                   success: false,
                   reason: "DEV_SERVER_ERROR",
-                  fallback: "browser-tts",
+                  fallback: "none",
                   error: (err as Error)?.message,
                 }),
               );
@@ -83,5 +82,5 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
-  nitro: isVercel ? { preset: "vercel" } : undefined,
+  ...(isVercel ? { nitro: { preset: "vercel" } } : {}),
 });

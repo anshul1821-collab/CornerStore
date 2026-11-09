@@ -1,35 +1,21 @@
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { synthesizeSpeech, getDiagnosticStatus, type TTSRequest } from "../src/server/ttsService";
 
-export interface UniversalRequest {
-  method?: string;
-  body?: unknown;
-  on?: (event: string, listener: (chunk: unknown) => void) => void;
-  json?: () => Promise<unknown>;
-}
-
-export interface UniversalResponse {
-  statusCode?: number;
-  setHeader: (name: string, value: string) => void;
-  end: (data?: string) => void;
-}
-
 // Vercel Serverless Function: handles /api/tts
+// Supports both Web Standard Request/Response and Node.js req/res
 export default async function handler(
-  req: Request | UniversalRequest,
-  res?: UniversalResponse,
-): Promise<Response | void> {
-  const isWebReq =
-    req instanceof Request || (req?.method && typeof req.json === "function" && !res);
+  req: Request | (IncomingMessage & { body?: unknown; method?: string }),
+  res?: ServerResponse,
+) {
+  const corsHeaders = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, xi-api-key",
+  };
 
-  // 1. Web Standard Request/Response (Vercel Edge/Web Runtime)
-  if (isWebReq) {
+  // 1. Web Standard Request/Response
+  if (req instanceof Request || (req?.method && "json" in req && !res)) {
     const webReq = req as Request;
-    const corsHeaders = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, xi-api-key",
-    };
-
     if (webReq.method === "OPTIONS") {
       return new Response(null, { status: 204, headers: corsHeaders });
     }
@@ -58,7 +44,7 @@ export default async function handler(
           JSON.stringify({
             success: false,
             reason: "INVALID_REQUEST",
-            fallback: "browser-tts",
+            fallback: "none",
             error: (err as Error)?.message,
           }),
           { status: 400, headers: { "Content-Type": "application/json", ...corsHeaders } },
@@ -69,57 +55,53 @@ export default async function handler(
     return new Response("Method Not Allowed", { status: 405, headers: corsHeaders });
   }
 
-  // 2. Node.js IncomingMessage / ServerResponse (Vercel Node.js Serverless Function)
+  // 2. Node.js IncomingMessage / ServerResponse
   if (!res) {
     return;
   }
 
-  const nodeReq = req as UniversalRequest;
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, xi-api-key");
 
-  if (nodeReq.method === "OPTIONS") {
+  if (req.method === "OPTIONS") {
     res.statusCode = 204;
     res.end();
     return;
   }
 
-  if (nodeReq.method === "GET") {
+  if (req.method === "GET") {
     res.statusCode = 200;
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(getDiagnosticStatus()));
     return;
   }
 
-  if (nodeReq.method === "POST") {
+  if (req.method === "POST") {
     try {
-      let body = nodeReq.body;
+      let body = (req as { body?: unknown }).body;
       if (typeof body === "string") {
         try {
           body = JSON.parse(body);
         } catch {
           body = {};
         }
-      } else if (!body && typeof nodeReq.on === "function") {
-        // Read stream body if not pre-parsed
+      } else if (!body) {
         body = await new Promise((resolve, reject) => {
           let str = "";
-          nodeReq.on?.("data", (chunk: unknown) => {
-            str += String(chunk);
-          });
-          nodeReq.on?.("end", () => {
+          (req as IncomingMessage).on("data", (chunk: Buffer | string) => (str += chunk));
+          (req as IncomingMessage).on("end", () => {
             try {
               resolve(str ? JSON.parse(str) : {});
             } catch (e) {
               reject(e);
             }
           });
-          nodeReq.on?.("error", reject);
+          (req as IncomingMessage).on("error", reject);
         });
       }
 
-      const result = await synthesizeSpeech((body as TTSRequest) || {});
+      const result = await synthesizeSpeech(body as TTSRequest);
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
       if (result.success) {
@@ -133,7 +115,7 @@ export default async function handler(
         JSON.stringify({
           success: false,
           reason: "INVALID_REQUEST",
-          fallback: "browser-tts",
+          fallback: "none",
           error: (err as Error)?.message,
         }),
       );

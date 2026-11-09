@@ -1,0 +1,576 @@
+{
+  "9756face6b3ff410afb733eef033cc62": {
+    "cacheKey": "9756face6b3ff410afb733eef033cc62",
+    "originalText": "Welcome to the shop! Great to see you today. What can I get for you?",
+    "sanitizedText": "Welcome to the shop! Great to see you today. What can I get for you?",
+    "character": "shopkeeper",
+    "voiceId": "cjVigY5qzO86Huf0OWal",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/shopkeeper/9756face6b3ff410afb733eef033cc62.mp3",
+    "settings": {
+      "stability": 0.4,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:25:11.682Z"
+  },
+  "3a8be5f7c5284849218c6ccd2ded7a7b": {
+    "cacheKey": "3a8be5f7c5284849218c6ccd2ded7a7b",
+    "originalText": "Spot on! That's the exact change. Brilliant calculation!",
+    "sanitizedText": "Spot on! That's the exact change. Brilliant calculation!",
+    "character": "shopkeeper",
+    "voiceId": "cjVigY5qzO86Huf0OWal",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/shopkeeper/3a8be5f7c5284849218c6ccd2ded7a7b.mp3",
+    "settings": {
+      "stability": 0.4,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:25:11.685Z"
+  },
+  "77781fa32d38bdbe1960271800d0bdb7": {
+    "cacheKey": "77781fa32d38bdbe1960271800d0bdb7",
+    "originalText": "Hello, dear! I'd like Juice Box. Here's $50.00!",
+    "sanitizedText": "Hello, dear! I'd like Juice Box. Here's 50 dollars and 0 cents!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/77781fa32d38bdbe1960271800d0bdb7.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:25:11.687Z"
+  },
+  "0623f7cbc9a1ae5a317b446facc0e87a": {
+    "cacheKey": "0623f7cbc9a1ae5a317b446facc0e87a",
+    "originalText": "Hmm, wait a second... looks like this is $5.00 short. Could you please check?",
+    "sanitizedText": "Hmm, wait a second... looks like this is 5 dollars and 0 cents short. Could you please check?",
+    "character": "boy",
+    "customerId": "uncle",
+    "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/uncle/0623f7cbc9a1ae5a317b446facc0e87a.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.35,
+      "speed": 0.96
+    },
+    "createdAt": "2026-11-06T16:25:11.690Z"
+  },
+  "29e5f23d2143f55b01f41bc9d1f75d1c": {
+    "cacheKey": "29e5f23d2143f55b01f41bc9d1f75d1c",
+    "originalText": "Thank you so much! That's the exact change. Have a wonderful day!",
+    "sanitizedText": "Thank you so much! That's the exact change. Have a wonderful day!",
+    "character": "girl",
+    "voiceId": "cgSgspJ2msm6clMCkdW9",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/girl/29e5f23d2143f55b01f41bc9d1f75d1c.mp3",
+    "settings": {
+      "stability": 0.4,
+      "similarity_boost": 0.75,
+      "style": 0.45,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:25:11.693Z"
+  },
+  "08b9c67dffeca45549399a28960bc1b8": {
+    "cacheKey": "08b9c67dffeca45549399a28960bc1b8",
+    "originalText": "No rush at all, dear! Take your time to count the notes, you're doing wonderfully.",
+    "sanitizedText": "No rush at all, dear! Take your time to count the notes, you're doing wonderfully.",
+    "character": "girl",
+    "customerId": "dadi",
+    "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/dadi/08b9c67dffeca45549399a28960bc1b8.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.8,
+      "style": 0.35,
+      "speed": 0.94
+    },
+    "createdAt": "2026-11-06T16:25:11.694Z"
+  },
+  "e0e3f67bb780492e7db7df76c07b7217": {
+    "cacheKey": "e0e3f67bb780492e7db7df76c07b7217",
+    "originalText": "Oh, hold on — you gave me $10.50 extra! Take a quick look.",
+    "sanitizedText": "Oh, hold on — you gave me 10 dollars and 50 cents extra! Take a quick look.",
+    "character": "boy",
+    "customerId": "student",
+    "voiceId": "bIHbv24MWmeRgasZH58o",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/student/e0e3f67bb780492e7db7df76c07b7217.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.45,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:25:11.698Z"
+  },
+  "e7c6c0618854e7f4fd1db3e15b46f650": {
+    "cacheKey": "e7c6c0618854e7f4fd1db3e15b46f650",
+    "originalText": "Thank you so much, dear. You counted that beautifully!",
+    "sanitizedText": "Thank you so much, dear. You counted that beautifully!",
+    "character": "girl",
+    "customerId": "dadi",
+    "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/dadi/e7c6c0618854e7f4fd1db3e15b46f650.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.8,
+      "style": 0.35,
+      "speed": 0.94
+    },
+    "createdAt": "2026-11-06T16:25:22.483Z"
+  },
+  "7c49ff4e495a109e08aa694ca6f350c7": {
+    "cacheKey": "7c49ff4e495a109e08aa694ca6f350c7",
+    "originalText": "Awesome, perfect change! Thanks a lot!",
+    "sanitizedText": "Awesome, perfect change! Thanks a lot!",
+    "character": "boy",
+    "customerId": "student",
+    "voiceId": "bIHbv24MWmeRgasZH58o",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/student/7c49ff4e495a109e08aa694ca6f350c7.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.45,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:25:23.221Z"
+  },
+  "c2170b6f6a00da0029d714b8f54ed3b2": {
+    "cacheKey": "c2170b6f6a00da0029d714b8f54ed3b2",
+    "originalText": "Wonderful! That is spot on. Thank you!",
+    "sanitizedText": "Wonderful! That is spot on. Thank you!",
+    "character": "boy",
+    "customerId": "uncle",
+    "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/uncle/c2170b6f6a00da0029d714b8f54ed3b2.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.35,
+      "speed": 0.96
+    },
+    "createdAt": "2026-11-06T16:25:23.726Z"
+  },
+  "acce0ef7231f0b9706ae61d1334e8e82": {
+    "cacheKey": "acce0ef7231f0b9706ae61d1334e8e82",
+    "originalText": "Welcome to the shop! Great to see you today. What can I get for you?",
+    "sanitizedText": "Welcome to the shop! Great to see you today. What can I get for you?",
+    "character": "shopkeeper",
+    "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+    "modelId": "eleven_turbo_v2_5",
+    "audioUrl": "/audio/characters/shopkeeper/acce0ef7231f0b9706ae61d1334e8e82.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.15,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:33:43.289Z"
+  },
+  "8f3356b89e7a6b2a7c7ab8f13bdb1f3f": {
+    "cacheKey": "8f3356b89e7a6b2a7c7ab8f13bdb1f3f",
+    "originalText": "Hello, dear! I'd like 2 Pencil. Here's $20.00!",
+    "sanitizedText": "Hello, dear! I'd like two Pencil. Here's twenty dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_turbo_v2_5",
+    "audioUrl": "/audio/characters/aunty/8f3356b89e7a6b2a7c7ab8f13bdb1f3f.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.15,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:33:43.683Z"
+  },
+  "b447fcb93f0238ededc196be094685e5": {
+    "cacheKey": "b447fcb93f0238ededc196be094685e5",
+    "originalText": "Good morning! We'd like 2 Chocolate and Bread. Here's $100.00!",
+    "sanitizedText": "Good morning! We'd like two Chocolate and Bread. Here's one hundred dollars!",
+    "character": "girl",
+    "customerId": "parent",
+    "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+    "modelId": "eleven_turbo_v2_5",
+    "audioUrl": "/audio/characters/parent/b447fcb93f0238ededc196be094685e5.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.15,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:36:39.254Z"
+  },
+  "cb8c65bf4d37cd4420b64ababc4235a5": {
+    "cacheKey": "cb8c65bf4d37cd4420b64ababc4235a5",
+    "originalText": "Hey there! Need these items quickly. Here's $50.00!",
+    "sanitizedText": "Hey there! Need these items quickly. Here's fifty dollars!",
+    "character": "boy",
+    "customerId": "delivery",
+    "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+    "modelId": "eleven_turbo_v2_5",
+    "audioUrl": "/audio/characters/delivery/cb8c65bf4d37cd4420b64ababc4235a5.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.15,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:36:43.410Z"
+  },
+  "d6148f383aa1981822337bb0a007b0e4": {
+    "cacheKey": "d6148f383aa1981822337bb0a007b0e4",
+    "originalText": "Hello, dear! I'd like Juice Box. Here's $50.00!",
+    "sanitizedText": "Hello, dear! I'd like Juice Box. Here's fifty dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/d6148f383aa1981822337bb0a007b0e4.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:45:29.228Z"
+  },
+  "2607bd29c06922f152b5f3f02ca3e8aa": {
+    "cacheKey": "2607bd29c06922f152b5f3f02ca3e8aa",
+    "originalText": "Hmm, wait a second... looks like this is $5.00 short. Could you please check?",
+    "sanitizedText": "Hmm, wait a second... looks like this is five dollars short. Could you please check?",
+    "character": "boy",
+    "customerId": "uncle",
+    "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/uncle/2607bd29c06922f152b5f3f02ca3e8aa.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.35,
+      "speed": 0.96
+    },
+    "createdAt": "2026-11-06T16:45:29.231Z"
+  },
+  "1711f437a9e9f302b4cb8f2ccb4c16af": {
+    "cacheKey": "1711f437a9e9f302b4cb8f2ccb4c16af",
+    "originalText": "Hello there! I'd like Soap. Here's exactly $10.00!",
+    "sanitizedText": "Hello there! I'd like Soap. Here's exactly ten dollars!",
+    "character": "boy",
+    "customerId": "uncle",
+    "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/uncle/1711f437a9e9f302b4cb8f2ccb4c16af.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.35,
+      "speed": 0.96
+    },
+    "createdAt": "2026-11-06T16:45:30.085Z"
+  },
+  "7a7447887a0606bd7c1e9f0191ebc594": {
+    "cacheKey": "7a7447887a0606bd7c1e9f0191ebc594",
+    "originalText": "Hello there! I'd like 2 Chocolate. Here's $200.00!",
+    "sanitizedText": "Hello there! I'd like two Chocolate. Here's two hundred dollars!",
+    "character": "boy",
+    "customerId": "uncle",
+    "voiceId": "CwhRBWXzGAHq8TQ4Fs17",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/uncle/7a7447887a0606bd7c1e9f0191ebc594.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.35,
+      "speed": 0.96
+    },
+    "createdAt": "2026-11-06T16:45:30.906Z"
+  },
+  "0b9e110b10b86fa2b20770a536f63ecf": {
+    "cacheKey": "0b9e110b10b86fa2b20770a536f63ecf",
+    "originalText": "No rush at all! Take your time to count the notes.",
+    "sanitizedText": "No rush at all! Take your time to count the notes.",
+    "character": "girl",
+    "customerId": "dadi",
+    "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/dadi/0b9e110b10b86fa2b20770a536f63ecf.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.8,
+      "style": 0.35,
+      "speed": 0.94
+    },
+    "createdAt": "2026-11-06T16:45:30.910Z"
+  },
+  "ab713783d86d08cb1024d03be596f96e": {
+    "cacheKey": "ab713783d86d08cb1024d03be596f96e",
+    "originalText": "Hello, dear! I'd like Bread. Here's $100.00!",
+    "sanitizedText": "Hello, dear! I'd like Bread. Here's one hundred dollars!",
+    "character": "girl",
+    "customerId": "dadi",
+    "voiceId": "Xb7hH8MSUJpSbSDYk0k2",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/dadi/ab713783d86d08cb1024d03be596f96e.mp3",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.8,
+      "style": 0.35,
+      "speed": 0.94
+    },
+    "createdAt": "2026-11-06T16:45:31.417Z"
+  },
+  "a6a5e56400ddfc4cb8deded6aba66574": {
+    "cacheKey": "a6a5e56400ddfc4cb8deded6aba66574",
+    "originalText": "Oh, hold on — you gave me $10.50 extra! Take a quick look.",
+    "sanitizedText": "Oh, hold on — you gave me ten dollars and fifty cents extra! Take a quick look.",
+    "character": "boy",
+    "customerId": "student",
+    "voiceId": "bIHbv24MWmeRgasZH58o",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/student/a6a5e56400ddfc4cb8deded6aba66574.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.45,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:45:31.419Z"
+  },
+  "6c478cb6ccbe77b53065432e1265e59d": {
+    "cacheKey": "6c478cb6ccbe77b53065432e1265e59d",
+    "originalText": "Hi there! I'd like 2 Pencil and Eraser. Here's $20.00!",
+    "sanitizedText": "Hi there! I'd like two Pencil and Eraser. Here's twenty dollars!",
+    "character": "boy",
+    "customerId": "student",
+    "voiceId": "bIHbv24MWmeRgasZH58o",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/student/6c478cb6ccbe77b53065432e1265e59d.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.45,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:45:31.939Z"
+  },
+  "54cd930f008d7f60c45bacfe78d38c11": {
+    "cacheKey": "54cd930f008d7f60c45bacfe78d38c11",
+    "originalText": "Hi there! I'd like Chips. Here's $20.00!",
+    "sanitizedText": "Hi there! I'd like Chips. Here's twenty dollars!",
+    "character": "boy",
+    "customerId": "student",
+    "voiceId": "bIHbv24MWmeRgasZH58o",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/student/54cd930f008d7f60c45bacfe78d38c11.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.45,
+      "speed": 1
+    },
+    "createdAt": "2026-11-06T16:45:32.521Z"
+  },
+  "40de7834c058f5b6363688d3a95c272f": {
+    "cacheKey": "40de7834c058f5b6363688d3a95c272f",
+    "originalText": "Good morning! I'd like 2 Chocolate and Bread. Here's $100.00!",
+    "sanitizedText": "Good morning! I'd like two Chocolate and Bread. Here's one hundred dollars!",
+    "character": "girl",
+    "customerId": "parent",
+    "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/parent/40de7834c058f5b6363688d3a95c272f.mp3",
+    "settings": {
+      "stability": 0.4,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:45:33.034Z"
+  },
+  "d35801d023442bc0fef0187e603c7836": {
+    "cacheKey": "d35801d023442bc0fef0187e603c7836",
+    "originalText": "Good morning! I'd like Milk Packet. Here's $50.00!",
+    "sanitizedText": "Good morning! I'd like Milk Packet. Here's fifty dollars!",
+    "character": "girl",
+    "customerId": "parent",
+    "voiceId": "FGY2WhTYpPnrIDTdsKH5",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/parent/d35801d023442bc0fef0187e603c7836.mp3",
+    "settings": {
+      "stability": 0.4,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:45:33.508Z"
+  },
+  "fd977d9e003712f9d84dc6eb2098fb5d": {
+    "cacheKey": "fd977d9e003712f9d84dc6eb2098fb5d",
+    "originalText": "Hey there! I'd like Cold Drink. Here's $50.00!",
+    "sanitizedText": "Hey there! I'd like Cold Drink. Here's fifty dollars!",
+    "character": "boy",
+    "customerId": "delivery",
+    "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/delivery/fd977d9e003712f9d84dc6eb2098fb5d.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.42,
+      "speed": 1.02
+    },
+    "createdAt": "2026-11-06T16:45:33.966Z"
+  },
+  "6c67efe4f0d7c79836c1bf050d5902da": {
+    "cacheKey": "6c67efe4f0d7c79836c1bf050d5902da",
+    "originalText": "Hey there! I'd like 2 Battery. Here's $50.00!",
+    "sanitizedText": "Hey there! I'd like two Battery. Here's fifty dollars!",
+    "character": "boy",
+    "customerId": "delivery",
+    "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/delivery/6c67efe4f0d7c79836c1bf050d5902da.mp3",
+    "settings": {
+      "stability": 0.38,
+      "similarity_boost": 0.75,
+      "style": 0.42,
+      "speed": 1.02
+    },
+    "createdAt": "2026-11-06T16:45:34.449Z"
+  },
+  "bae6e7182ca1814ce900f9e3cde58af2": {
+    "cacheKey": "bae6e7182ca1814ce900f9e3cde58af2",
+    "originalText": "Hello, dear! I'd like Biscuits. Here's $20.00!",
+    "sanitizedText": "Hello, dear! I'd like Biscuits. Here's twenty dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/bae6e7182ca1814ce900f9e3cde58af2.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:51:04.693Z"
+  },
+  "8d280d7bc70e9e5f6f53a40b88780aa6": {
+    "cacheKey": "8d280d7bc70e9e5f6f53a40b88780aa6",
+    "originalText": "Hello, dear! I'd like 2 Potato (1 kg). Here's $100.00!",
+    "sanitizedText": "Hello, dear! I'd like two Potato (one kg). Here's one hundred dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/8d280d7bc70e9e5f6f53a40b88780aa6.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:51:17.265Z"
+  },
+  "2619064bbe7c4ff06b12e912a37daf55": {
+    "cacheKey": "2619064bbe7c4ff06b12e912a37daf55",
+    "originalText": "Hello, dear! I'd like 2 Pen. Here's $50.00!",
+    "sanitizedText": "Hello, dear! I'd like two Pen. Here's fifty dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/2619064bbe7c4ff06b12e912a37daf55.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T16:51:47.164Z"
+  },
+  "9a9f5c4af144162f96ef1411b05d928c": {
+    "cacheKey": "9a9f5c4af144162f96ef1411b05d928c",
+    "originalText": "Hello, dear! I'd like 2 Battery. Here's $100.00!",
+    "sanitizedText": "Hello, dear! I'd like two Battery. Here's one hundred dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/9a9f5c4af144162f96ef1411b05d928c.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T17:11:34.851Z"
+  },
+  "228c93d3aabb9891ec64bcb4d787e7bd": {
+    "cacheKey": "228c93d3aabb9891ec64bcb4d787e7bd",
+    "originalText": "Hello, dear! I'd like Milk Packet. Here's $100.00!",
+    "sanitizedText": "Hello, dear! I'd like Milk Packet. Here's one hundred dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/228c93d3aabb9891ec64bcb4d787e7bd.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T17:11:42.363Z"
+  },
+  "004e9c8faf553351ab558f58883c5c29": {
+    "cacheKey": "004e9c8faf553351ab558f58883c5c29",
+    "originalText": "Hello, dear! I'd like 2 Chocolate. Here's $200.00!",
+    "sanitizedText": "Hello, dear! I'd like two Chocolate. Here's two hundred dollars!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/004e9c8faf553351ab558f58883c5c29.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T17:12:49.578Z"
+  },
+  "d421208a67bf66b53565b495a3527d06": {
+    "cacheKey": "d421208a67bf66b53565b495a3527d06",
+    "originalText": "Thank you so much! That's the exact change. Have a wonderful day!",
+    "sanitizedText": "Thank you so much! That's the exact change. Have a wonderful day!",
+    "character": "girl",
+    "customerId": "aunty",
+    "voiceId": "EXAVITQu4vr4xnSDxMaL",
+    "modelId": "eleven_multilingual_v2",
+    "audioUrl": "/audio/characters/aunty/d421208a67bf66b53565b495a3527d06.mp3",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.75,
+      "style": 0.4,
+      "speed": 0.98
+    },
+    "createdAt": "2026-11-06T17:12:50.185Z"
+  }
+}

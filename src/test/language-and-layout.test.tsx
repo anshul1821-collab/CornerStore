@@ -113,6 +113,8 @@ describe("English-only compliance & Layout", () => {
       "sound",
       "speak",
       "timeLeft",
+      "howToPlay",
+      "guide",
       "wants",
       "wantsExact",
       "and",
@@ -174,8 +176,8 @@ describe("English-only compliance & Layout", () => {
     );
 
     // Title & tagline
-    expect(screen.getByText("KIRANA CHANGE")).toBeInTheDocument();
-    expect(screen.getByText("Every Rupee Counts!")).toBeInTheDocument();
+    expect(screen.getByText("CORNER STORE SIMULATOR")).toBeInTheDocument();
+    expect(screen.getByText("Every Dollar Counts!")).toBeInTheDocument();
 
     // Play button
     expect(screen.getByText(/LET'S PLAY!/)).toBeInTheDocument();
@@ -200,7 +202,7 @@ describe("English-only compliance & Layout", () => {
     );
 
     // Verify main components render
-    expect(screen.getByText(/BILL/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/BILL/i)[0]).toBeInTheDocument();
     expect(screen.getByText(/CHANGE FOR THE CUSTOMER/i)).toBeInTheDocument();
     expect(screen.getByText(/Cash Drawer/i)).toBeInTheDocument();
 

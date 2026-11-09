@@ -18,3 +18,10 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+if (typeof window !== "undefined") {
+  window.HTMLMediaElement.prototype.play = async () => {};
+  window.HTMLMediaElement.prototype.pause = () => {};
+  window.HTMLMediaElement.prototype.load = () => {};
+}
+

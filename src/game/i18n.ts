@@ -1,8 +1,8 @@
 import type { Lang } from "./types";
 
 const STRINGS = {
-  title: { en: "KIRANA CHANGE" },
-  tagline: { en: "Every Rupee Counts!" },
+  title: { en: "CORNER STORE SIMULATOR" },
+  tagline: { en: "Every Dollar Counts!" },
   intro: {
     en: "Run your own little shop, help customers, and become a money master!",
   },
@@ -47,10 +47,10 @@ const STRINGS = {
   },
   correctSub: { en: "The customer is happy!" },
   tooLittle: {
-    en: "Almost there! The customer needs ₹{x} more.",
+    en: "Almost there! The customer needs ${x} more.",
   },
   tooMuch: {
-    en: "Oops! That's ₹{x} too much. Let's make it fair.",
+    en: "Oops! That's ${x} too much. Let's make it fair.",
   },
   timeout: {
     en: "Time's up! Let's try this customer again.",
@@ -69,11 +69,16 @@ const STRINGS = {
   sound: { en: "Sound" },
   speak: { en: "Read aloud" },
   timeLeft: { en: "seconds left" },
+  howToPlay: { en: "How to Play" },
+  guide: { en: "Game Guide" },
   wants: {
-    en: "I'd like {items}. Here's ₹{paid}!",
+    en: "I'd like {items}. Here's {paid}!",
   },
   wantsExact: {
-    en: "I'd like {items}. Here's exactly ₹{paid}!",
+    en: "I'd like {items}. Here's exactly {paid}!",
+  },
+  checkBillInstruction: {
+    en: "Please check the price on the bill before you count the change!",
   },
   and: { en: "and" },
 } as const;

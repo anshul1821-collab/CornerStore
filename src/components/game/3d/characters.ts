@@ -7,6 +7,7 @@ export interface CharacterController {
   root: THREE.Group;
   update: (time: number, delta: number) => void;
   setMood: (mood: CharacterMood) => void;
+  setSpeaking?: (speaking: boolean) => void;
 }
 
 /** Standard stylized PBR material helper */
@@ -299,17 +300,54 @@ export function createShopkeeper(): CharacterController {
   root.add(body);
 
   let currentMood: CharacterMood = "speaking";
+  let isSpeaking = false;
+  let nextBlinkTime = 2.0 + Math.random() * 2.0;
+  let isBlinking = false;
+  let blinkStartTime = 0;
+  const blinkDuration = 0.14;
 
   return {
     root,
     setMood: (mood: CharacterMood) => {
       currentMood = mood;
     },
+    setSpeaking: (speaking: boolean) => {
+      isSpeaking = speaking;
+    },
     update: (time: number, _delta: number) => {
+      // Natural periodic blinking
+      if (time > nextBlinkTime && !isBlinking) {
+        isBlinking = true;
+        blinkStartTime = time;
+      }
+      if (isBlinking) {
+        const p = (time - blinkStartTime) / blinkDuration;
+        if (p >= 1) {
+          isBlinking = false;
+          leftEye.scale.y = 1;
+          rightEye.scale.y = 1;
+          nextBlinkTime = time + 2.8 + Math.random() * 3.2;
+        } else {
+          const eyeY = 1.0 - Math.sin(p * Math.PI) * 0.92;
+          leftEye.scale.y = Math.max(0.08, eyeY);
+          rightEye.scale.y = Math.max(0.08, eyeY);
+        }
+      }
+
       // Natural gentle breathing idle
       const breath = Math.sin(time * 2.2) * 0.016;
       body.position.y = breath;
       headGroup.rotation.y = Math.sin(time * 1.2) * 0.05;
+
+      // Speaking animations: mouth moving & subtle animated head bobbing
+      if (isSpeaking) {
+        const mouthOpen = 1.0 + Math.abs(Math.sin(time * 15) * Math.cos(time * 7.5)) * 0.7;
+        mouth.scale.set(1.0 + Math.sin(time * 11) * 0.12, mouthOpen, 1.0);
+        headGroup.rotation.x = Math.sin(time * 7) * 0.035;
+      } else {
+        mouth.scale.set(1, 1, 1);
+        headGroup.rotation.x = 0;
+      }
 
       if (currentMood === "happy") {
         // Joyful wave with right hand
@@ -323,7 +361,7 @@ export function createShopkeeper(): CharacterController {
       } else {
         rightArmGroup.rotation.x = Math.sin(time * 1.5) * 0.04;
         rightArmGroup.rotation.z = 0;
-        headGroup.rotation.z = 0;
+        headGroup.rotation.z = isSpeaking ? Math.sin(time * 5) * 0.025 : 0;
       }
     },
   };
@@ -592,6 +630,11 @@ export function createCustomer(customer: Customer): CharacterController {
   root.add(char);
 
   let currentMood: CharacterMood = "speaking";
+  let isSpeaking = false;
+  let nextBlinkTime = 2.0 + Math.random() * 2.5;
+  let isBlinking = false;
+  let blinkStartTime = 0;
+  const blinkDuration = 0.14;
   let currentX = -2.2;
   const targetX = 0;
 
@@ -600,7 +643,29 @@ export function createCustomer(customer: Customer): CharacterController {
     setMood: (mood: CharacterMood) => {
       currentMood = mood;
     },
+    setSpeaking: (speaking: boolean) => {
+      isSpeaking = speaking;
+    },
     update: (time: number, delta: number) => {
+      // Natural periodic blinking
+      if (time > nextBlinkTime && !isBlinking) {
+        isBlinking = true;
+        blinkStartTime = time;
+      }
+      if (isBlinking) {
+        const p = (time - blinkStartTime) / blinkDuration;
+        if (p >= 1) {
+          isBlinking = false;
+          leftEye.scale.y = 1;
+          rightEye.scale.y = 1;
+          nextBlinkTime = time + 2.8 + Math.random() * 3.2;
+        } else {
+          const eyeY = 1.0 - Math.sin(p * Math.PI) * 0.92;
+          leftEye.scale.y = Math.max(0.08, eyeY);
+          rightEye.scale.y = Math.max(0.08, eyeY);
+        }
+      }
+
       // Smooth slide-in upon arrival
       if (Math.abs(currentX - targetX) > 0.01) {
         currentX += (targetX - currentX) * Math.min(1, delta * 7);
@@ -611,6 +676,16 @@ export function createCustomer(customer: Customer): CharacterController {
       const bob = Math.sin(time * 2.2) * 0.016;
       char.position.y = bob;
 
+      // Speaking animations: mouth moving & subtle head bobbing
+      if (isSpeaking) {
+        const mouthOpen = 1.0 + Math.abs(Math.sin(time * 15) * Math.cos(time * 7.5)) * 0.7;
+        smile.scale.set(1.0 + Math.sin(time * 11) * 0.12, mouthOpen, 1.0);
+        headGroup.rotation.x = Math.sin(time * 7) * 0.035;
+      } else {
+        smile.scale.set(1, 1, 1);
+        headGroup.rotation.x = 0;
+      }
+
       if (currentMood === "happy") {
         // Joyful jump & head nod
         char.position.y = Math.abs(Math.sin(time * 6.5)) * 0.22;
@@ -618,7 +693,7 @@ export function createCustomer(customer: Customer): CharacterController {
       } else if (currentMood === "thinking") {
         headGroup.rotation.z = -0.14;
       } else {
-        headGroup.rotation.z = 0;
+        headGroup.rotation.z = isSpeaking ? Math.sin(time * 5) * 0.025 : 0;
       }
     },
   };
