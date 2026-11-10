@@ -10,6 +10,7 @@ import type {
   Scenario,
   SubmissionResult,
   TotalState,
+  TransactionRecord,
   Tray,
 } from "./types";
 
@@ -493,6 +494,180 @@ export function evaluate(
   if (diff < 0) return { kind: "too-little", difference: -diff };
   if (diff > 0) return { kind: "too-much", difference: diff };
   return { kind: "correct", stars: customerStars(mistakes, hintsUsed, scenario.level) };
+}
+
+export interface StarEvaluationParams {
+  billMistakes: number;
+  changeMistakes: number;
+  hintsUsed: number;
+  timeTaken: number;
+  timeLimit?: number | null;
+  level?: number;
+  timedOut?: boolean;
+}
+
+/**
+ * Evaluates performance stars for a single transaction across Stage 1 (Bill) and Stage 2 (Change).
+ * 3 Stars: Both calculations correct on 1st attempt, 0 hints, within time.
+ * 2 Stars: Completed with 1-2 mistakes or some hints.
+ * 1 Star: Completed with multiple mistakes, substantial hints, or timed out.
+ */
+export function calculateTransactionStars(params: StarEvaluationParams): number {
+  const totalMistakes = params.billMistakes + params.changeMistakes;
+  const { hintsUsed, timedOut, level = 1 } = params;
+
+  // On timed levels, if timer expired, cap stars at 1 (or 2 if 0 mistakes made)
+  if (timedOut) {
+    return totalMistakes === 0 ? 2 : 1;
+  }
+
+  // Advanced levels (8-10): Higher precision required
+  if (level >= 8) {
+    if (totalMistakes === 0 && hintsUsed === 0) return 3;
+    if (totalMistakes <= 1 && hintsUsed <= 1) return 2;
+    return 1;
+  }
+
+  // Standard levels (1-7):
+  if (totalMistakes === 0 && hintsUsed === 0) return 3;
+  if (totalMistakes <= 2 && hintsUsed <= 2) return 2;
+  return 1;
+}
+
+/**
+ * Returns progressive, pedagogical hints for Stage 1 (Bill Calculation) without leaking the answer.
+ * Attempt 1: Identify which part needs checking.
+ * Attempt 2: Explain the arithmetic operation.
+ * Attempt 3+: Step-by-step worked approach using the customer's actual transaction values.
+ */
+export function getBillHint(
+  attempt: number,
+  scenario: Scenario,
+  enteredTotal?: number | ""
+): string {
+  const { items, discount, subtotal } = scenario;
+  const entered = typeof enteredTotal === "number" ? enteredTotal : null;
+
+  // Specific check: user forgot discount
+  if (discount && entered === subtotal) {
+    return `Almost! You found the subtotal ($${subtotal.toFixed(2)}), but remember to subtract the $${discount.amount.toFixed(2)} discount!`;
+  }
+
+  // Attempt 1: Identify which part needs checking
+  if (attempt <= 1) {
+    if (items.length === 1) {
+      return `Multiply quantity (${items[0]!.qty}) by unit price ($${items[0]!.unitPrice.toFixed(2)}).`;
+    }
+    if (discount) {
+      return "Check both your item multiplications and the coupon deduction.";
+    }
+    return "Check your addition across all items in the shopping basket.";
+  }
+
+  // Attempt 2: Explain the arithmetic operation
+  if (attempt === 2) {
+    if (items.length === 1) {
+      return `Multiply quantity (${items[0]!.qty}) by unit price ($${items[0]!.unitPrice.toFixed(2)}) to find the total to pay.`;
+    }
+    if (discount) {
+      return `First multiply Quantity × Unit Price for each product, add them together, then subtract the $${discount.amount.toFixed(2)} discount.`;
+    }
+    return "First multiply Quantity × Unit Price for each product, then add all item subtotals together.";
+  }
+
+  // Attempt 3+: Worked approach using player's actual values without giving the final answer
+  if (items.length === 1) {
+    return `Worked step: Multiply ${items[0]!.qty} by $${items[0]!.unitPrice.toFixed(2)}.${discount ? ` Then subtract $${discount.amount.toFixed(2)}.` : " Enter that amount into Total to Pay."}`;
+  }
+
+  const itemsFormula = items
+    .map((i) => `${i.qty} × $${i.unitPrice.toFixed(2)}`)
+    .join(" + ");
+  if (discount) {
+    return `Worked steps: Calculate (${itemsFormula}), then subtract $${discount.amount.toFixed(2)} discount.`;
+  }
+  return `Worked steps: Calculate each item (${itemsFormula}), then add them all together.`;
+}
+
+/**
+ * Returns progressive hints for Stage 2 (Change Counting).
+ * Attempt 1: Explain difference (too much vs too little).
+ * Attempt 2: Explain mathematical subtraction.
+ * Attempt 3+: Count-up step guidance.
+ */
+export function getChangeHint(
+  attempt: number,
+  scenario: Scenario,
+  traySum: number
+): string {
+  const required = scenario.paid - scenario.payable;
+  const diff = traySum - required;
+
+  if (required === 0) {
+    return "The customer paid exact money! Tap the green NO CHANGE button.";
+  }
+
+  if (attempt <= 1) {
+    if (diff < 0) {
+      return `Customer needs $${(-diff).toFixed(2)} more change. Try adding more coins or bills from the drawer!`;
+    }
+    return `That's $${diff.toFixed(2)} too much change. Tap a piece in the tray to take it back!`;
+  }
+
+  if (attempt === 2) {
+    return `Customer paid $${scenario.paid.toFixed(2)} for a $${scenario.payable.toFixed(2)} bill: $${scenario.paid.toFixed(2)} − $${scenario.payable.toFixed(2)} = $${required.toFixed(2)} change needed.`;
+  }
+
+  // Attempt 3+: Count-up steps
+  const steps = countUpSteps(scenario.payable, scenario.paid);
+  if (steps.length > 0) {
+    const firstStep = steps[0]!;
+    const denom = denomById(firstStep.denom);
+    return `Count-up hint: Start at $${scenario.payable.toFixed(2)}, add a $${denom.value.toFixed(2)} ${denom.kind} to reach $${firstStep.to.toFixed(2)}.`;
+  }
+  return `Target change is $${required.toFixed(2)}. Select bills and coins that add up to this exact amount.`;
+}
+
+/**
+ * Encouraging feedback message based on performance stars.
+ */
+export function getEncouragingFeedback(stars: number): string {
+  switch (stars) {
+    case 3:
+      return "Excellent! Perfect calculation!";
+    case 2:
+      return "Great job! You handled that transaction.";
+    default:
+      return "Good effort! Keep practising your calculations.";
+  }
+}
+
+/**
+ * Aggregates all transaction records into an overall level performance summary.
+ */
+export function calculateLevelSummary(transactions: TransactionRecord[]) {
+  const totalCustomers = transactions.length;
+  const totalMistakes = transactions.reduce((acc, t) => acc + t.billMistakes + t.changeMistakes, 0);
+  const totalHints = transactions.reduce((acc, t) => acc + t.hintsUsed, 0);
+  const totalStars = transactions.reduce((acc, t) => acc + t.stars, 0);
+  const correctBillFirstTry = transactions.filter((t) => t.billFirstTry).length;
+  const correctChangeFirstTry = transactions.filter((t) => t.changeFirstTry).length;
+  const totalTime = transactions.reduce((acc, t) => acc + t.timeTaken, 0);
+  const avgTime = totalCustomers > 0 ? Math.round(totalTime / totalCustomers) : 0;
+  const starsList = transactions.map((t) => t.stars);
+  const finalLevelStars = levelStars(starsList);
+
+  return {
+    totalCustomers,
+    totalMistakes,
+    totalHints,
+    totalStars,
+    correctBillFirstTry,
+    correctChangeFirstTry,
+    totalTime,
+    avgTime,
+    finalLevelStars,
+  };
 }
 
 export const customerStars = (mistakes: number, hintsUsed: number, level: number = 1) => {

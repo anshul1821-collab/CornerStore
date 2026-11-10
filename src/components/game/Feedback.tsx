@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import type { SubmissionResult } from "@/game/types";
+import type { SubmissionResult, TransactionRecord } from "@/game/types";
+import { getEncouragingFeedback } from "@/game/engine";
 import { useSettings } from "./settings";
 import { formatUSD } from "@/lib/currency";
 
@@ -60,13 +61,14 @@ function Confetti() {
   );
 }
 
-interface Props {
+interface FeedbackProps {
   result: SubmissionResult;
+  hint?: string | null;
   onContinue: () => void;
   onRetry: () => void;
 }
 
-export function Feedback({ result, onContinue, onRetry }: Props) {
+export function Feedback({ result, hint, onContinue, onRetry }: FeedbackProps) {
   const { tr } = useSettings();
   const correct = result.kind === "correct";
 
@@ -170,10 +172,19 @@ export function Feedback({ result, onContinue, onRetry }: Props) {
                   ? "Tap the extra money in the tray to take it back."
                   : "Let's try serving this customer again!"}
             </p>
+
+            {/* Progressive Change Hint */}
+            {hint && (
+              <div className="my-3 rounded-2xl border border-amber-300 bg-amber-50 p-2.5 text-xs font-bold text-amber-950 text-left flex items-start gap-2 shadow-xs">
+                <span className="text-base shrink-0">💡</span>
+                <span className="flex-1 leading-snug">{hint}</span>
+              </div>
+            )}
+
             <button
               autoFocus
               onClick={onRetry}
-              className="btn-press mt-5 w-full rounded-2xl bg-sun hover:bg-amber-300 active:bg-amber-500 py-3.5 font-display text-xl sm:text-2xl font-black text-wood-dark shadow-wood transition-transform cursor-pointer"
+              className="btn-press mt-4 w-full rounded-2xl bg-sun hover:bg-amber-300 active:bg-amber-500 py-3.5 font-display text-xl sm:text-2xl font-black text-wood-dark shadow-wood transition-transform cursor-pointer"
             >
               🔄 {tr("tryAgain")}
             </button>
@@ -182,6 +193,169 @@ export function Feedback({ result, onContinue, onRetry }: Props) {
             </p>
           </>
         )}
+      </motion.div>
+    </motion.div>
+  );
+
+  if (typeof document !== "undefined") {
+    return createPortal(content, document.body);
+  }
+  return content;
+}
+
+export interface TransactionSummaryProps {
+  record: TransactionRecord;
+  customerIndex: number;
+  totalCustomers: number;
+  onNext: () => void;
+}
+
+/**
+ * STAGE 4 — Performance Feedback Component
+ * Compact summary shown after the customer completes checkout and leaves.
+ */
+export function TransactionSummary({
+  record,
+  customerIndex,
+  totalCustomers,
+  onNext,
+}: TransactionSummaryProps) {
+  const { tr } = useSettings();
+  const isFinalCustomer = customerIndex + 1 >= totalCustomers;
+  const feedbackMessage = getEncouragingFeedback(record.stars);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        onNext();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onNext]);
+
+  const content = (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] grid place-items-center bg-black/60 p-4 backdrop-blur-xs select-none"
+      role="dialog"
+      aria-modal="true"
+    >
+      <motion.div
+        initial={{ scale: 0.88, opacity: 0, y: 15 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 10 }}
+        transition={{ type: "spring", stiffness: 420, damping: 26 }}
+        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[2.5rem] border-4 border-emerald-500 bg-gradient-to-b from-white via-emerald-50/50 to-emerald-100/70 p-5 sm:p-6 text-center shadow-wood"
+      >
+        {record.stars === 3 && <Confetti />}
+
+        <div className="flex items-center justify-between border-b border-wood-dark/15 pb-2">
+          <span className="text-[11px] sm:text-xs font-black text-wood-dark uppercase tracking-wider">
+            Stage 4: Transaction Summary
+          </span>
+          <span className="rounded-full bg-sun/40 border border-sun px-2 py-0.5 text-[11px] font-black text-wood-dark">
+            Customer {customerIndex + 1} of {totalCustomers}
+          </span>
+        </div>
+
+        <div className="mt-3">
+          <div className="text-4xl sm:text-5xl" aria-hidden>
+            {record.stars === 3 ? "🏆" : record.stars === 2 ? "🎉" : "👍"}
+          </div>
+          <h2 className="mt-1 font-display text-2xl sm:text-3xl font-black text-emerald-800">
+            {feedbackMessage}
+          </h2>
+          <p className="font-bold text-sm sm:text-base text-emerald-700 mt-0.5">
+            {tr("correct")}
+          </p>
+          <p className="text-xs sm:text-sm font-semibold text-wood-dark/70 mt-0.5">
+            🛍️ {record.customerName} received their items & exact change!
+          </p>
+
+          <div className="my-3">
+            <Stars count={record.stars} size="text-4xl sm:text-5xl" />
+          </div>
+        </div>
+
+        {/* 4 Performance Metric Cards */}
+        <div className="grid grid-cols-2 gap-2 text-left my-3">
+          {/* Bill Calculation */}
+          <div className="rounded-2xl border border-wood-dark/15 bg-white/90 p-2.5 shadow-xs">
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-xs font-black text-wood-dark">🧾 Bill Total</span>
+              {record.billFirstTry ? (
+                <span className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-1.5 py-0.2 shrink-0">
+                  ✓ 1st Try
+                </span>
+              ) : (
+                <span className="rounded-full bg-amber-100 text-amber-800 text-[10px] font-black px-1.5 py-0.2 shrink-0">
+                  {record.billMistakes} retry
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-[11px] text-muted-foreground font-semibold leading-tight">
+              {record.billFirstTry
+                ? "Perfect first-time math!"
+                : `Resolved after ${record.billMistakes + 1} attempts.`}
+            </p>
+          </div>
+
+          {/* Change Calculation */}
+          <div className="rounded-2xl border border-wood-dark/15 bg-white/90 p-2.5 shadow-xs">
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-xs font-black text-wood-dark">💰 Change</span>
+              {record.changeFirstTry ? (
+                <span className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black px-1.5 py-0.2 shrink-0">
+                  ✓ 1st Try
+                </span>
+              ) : (
+                <span className="rounded-full bg-amber-100 text-amber-800 text-[10px] font-black px-1.5 py-0.2 shrink-0">
+                  {record.changeMistakes} retry
+                </span>
+              )}
+            </div>
+            <p className="mt-1 text-[11px] text-muted-foreground font-semibold leading-tight">
+              {record.changeFirstTry
+                ? "Exact change returned!"
+                : `Adjusted after ${record.changeMistakes + 1} counts.`}
+            </p>
+          </div>
+
+          {/* Time Taken */}
+          <div className="rounded-2xl border border-wood-dark/15 bg-white/90 p-2.5 shadow-xs">
+            <span className="text-xs font-black text-wood-dark">⏱️ Time Taken</span>
+            <p className="mt-0.5 font-display text-lg font-black text-wood-dark">
+              {record.timeTaken}s
+              {record.timedOut && (
+                <span className="ml-1 text-[10px] font-bold text-orange">(Over time)</span>
+              )}
+            </p>
+          </div>
+
+          {/* Mistakes & Hints */}
+          <div className="rounded-2xl border border-wood-dark/15 bg-white/90 p-2.5 shadow-xs">
+            <span className="text-xs font-black text-wood-dark">🔁 Mistakes / Hints</span>
+            <p className="mt-0.5 font-display text-lg font-black text-wood-dark">
+              {record.billMistakes + record.changeMistakes} / {record.hintsUsed}
+            </p>
+          </div>
+        </div>
+
+        {/* Continue Action Button */}
+        <button
+          autoFocus
+          onClick={onNext}
+          className="btn-press mt-2 w-full rounded-2xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 py-3.5 font-display text-xl sm:text-2xl font-black text-white shadow-chunky transition-transform cursor-pointer"
+        >
+          {isFinalCustomer ? "View Level Results 🏆" : `${tr("continue")} ▶`}
+        </button>
+        <p className="mt-2 text-[11px] font-bold text-emerald-800/70">
+          💡 Press Enter or Space to continue
+        </p>
       </motion.div>
     </motion.div>
   );

@@ -80,3 +80,27 @@ export interface Progress {
   /** stars per level index (0 = not completed) */
   stars: number[];
 }
+
+export interface TransactionRecord {
+  customerIndex: number;
+  customerName: string;
+  billMistakes: number;
+  changeMistakes: number;
+  hintsUsed: number;
+  timeTaken: number;
+  billFirstTry: boolean;
+  changeFirstTry: boolean;
+  stars: number;
+  timedOut?: boolean;
+}
+
+export interface LevelStats {
+  stars: number[];
+  mistakes: number;
+  hints: number;
+  transactions?: TransactionRecord[];
+  totalTime?: number;
+  correctBillFirstTry?: number;
+  correctChangeFirstTry?: number;
+}
+

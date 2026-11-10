@@ -97,6 +97,7 @@ function App() {
           served={screen.stats.stars.length}
           mistakes={screen.stats.mistakes}
           hints={screen.stats.hints}
+          stats={screen.stats}
           hasNext={screen.level + 1 < LEVELS.length}
           onReplay={() => start(screen.level)}
           onNext={() => {

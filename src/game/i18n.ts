@@ -86,6 +86,19 @@ const STRINGS = {
   confirmBillFirst: { en: "Check Bill First" },
   billHintTitle: { en: "How to Calculate the Bill" },
   and: { en: "and" },
+  stage1: { en: "1. Calculate Bill" },
+  stage2: { en: "2. Count Change" },
+  stage3: { en: "3. Complete Sale" },
+  stage4: { en: "4. Summary" },
+  transactionSummary: { en: "Transaction Summary" },
+  billCalculation: { en: "Bill Calculation" },
+  changeCalculation: { en: "Change Calculation" },
+  firstAttempt: { en: "First Attempt" },
+  nextCustomer: { en: "Next Customer" },
+  completeLevel: { en: "Finish Level" },
+  timeTaken: { en: "Time taken" },
+  packagingItems: { en: "Packing items and handing change..." },
+  saleCompleted: { en: "Sale Completed!" },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;
