@@ -86,6 +86,8 @@ export interface TransactionRecord {
   customerName: string;
   billMistakes: number;
   changeMistakes: number;
+  multiplicationMistakes?: number;
+  multiplicationsCompleted?: number;
   hintsUsed: number;
   timeTaken: number;
   billFirstTry: boolean;
@@ -102,5 +104,7 @@ export interface LevelStats {
   totalTime?: number;
   correctBillFirstTry?: number;
   correctChangeFirstTry?: number;
+  totalMultiplicationsCompleted?: number;
+  totalMultiplicationMistakes?: number;
 }
 

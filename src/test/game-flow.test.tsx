@@ -28,6 +28,15 @@ describe("GameScreen user submission flow", () => {
     // Verify error hint appears and bill is NOT verified yet
     expect(screen.getAllByText(/Multiply quantity/i).length).toBeGreaterThanOrEqual(1);
 
+    // Solve item multiplication via interactive [ ? ] button
+    const calcItemBtn = screen.getByRole("button", { name: /Calculate 2 × \$25\.00/i });
+    fireEvent.click(calcItemBtn);
+
+    const itemInput = screen.getByLabelText(/Enter answer for 2 × \$25\.00/i);
+    fireEvent.change(itemInput, { target: { value: "50" } });
+    const itemCheckBtn = screen.getByRole("button", { name: /Check subtotal/i });
+    fireEvent.click(itemCheckBtn);
+
     // Now enter the correct calculated payable: $50.00
     fireEvent.change(input, { target: { value: "50" } });
     fireEvent.click(screen.getByRole("button", { name: /Check Bill Total/i }));

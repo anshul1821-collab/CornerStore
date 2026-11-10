@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import type { DenomId, LevelDef, LevelStats, SubmissionResult, TransactionRecord, Tray } from "@/game/types";
 import {
   DENOMINATIONS,
+  areAllItemsMultiplied,
   calculateTransactionStars,
   countUpSteps,
   evaluate,
@@ -65,10 +66,12 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [timedOut, setTimedOut] = useState(false);
 
-  // Bill Calculation State
+  // Bill Calculation & Item Multiplication State
   const [calculatedTotal, setCalculatedTotal] = useState<number | "">("");
   const [isBillVerified, setIsBillVerified] = useState(false);
   const [billError, setBillError] = useState<string | null>(null);
+  const [solvedItemIds, setSolvedItemIds] = useState<Record<string, boolean>>({});
+  const [multiplicationMistakes, setMultiplicationMistakes] = useState(0);
 
   const [activeDialogue, setActiveDialogue] = useState<DialogueContent | null>(() =>
     getCustomerOrderDialogue(scenario, lang),
@@ -93,6 +96,8 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
     setBillError(null);
     setBillMistakes(0);
     setChangeMistakes(0);
+    setSolvedItemIds({});
+    setMultiplicationMistakes(0);
     setHintsUsed(0);
     setCalculatedTotal("");
     setTray({});
@@ -150,8 +155,30 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
     if (billError) setBillError(null);
   };
 
+  const handleSolveItem = (productId: string) => {
+    setSolvedItemIds((prev) => ({ ...prev, [productId]: true }));
+    if (billError) setBillError(null);
+  };
+
+  const handleMultiplicationMistake = (_productId: string) => {
+    setMultiplicationMistakes((m) => m + 1);
+  };
+
   // STAGE 1: Check Bill Calculation
   const handleCheckBillTotal = () => {
+    // 1. Validate that all individual items have their multiplication solved
+    const allItemsSolved = areAllItemsMultiplied(scenario, solvedItemIds);
+    if (!allItemsSolved) {
+      play("oops");
+      const unsolved = scenario.items.filter((i) => !solvedItemIds[i.productId]);
+      setBillError(
+        scenario.items.length === 1
+          ? `Multiply quantity (${scenario.items[0]!.qty}) by unit price (${formatUSD(scenario.items[0]!.unitPrice)}). Click [ ? ] to calculate!`
+          : `Please calculate each item's subtotal by clicking [ ? ] first (${unsolved.length} remaining)!`,
+      );
+      return;
+    }
+
     if (calculatedTotal === "") {
       setBillError("Please enter your calculated Total to Pay first!");
       return;
@@ -174,7 +201,7 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
   // STAGE 2: Submit Change
   const submit = () => {
     if (!isBillVerified || stage !== "change") return;
-    const totalMistakesSoFar = billMistakes + changeMistakes;
+    const totalMistakesSoFar = billMistakes + changeMistakes + multiplicationMistakes;
     const r = evaluate(tray, scenario, totalMistakesSoFar, hintsUsed);
 
     if (r.kind !== "correct") {
@@ -188,6 +215,7 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
       const earnedStars = calculateTransactionStars({
         billMistakes,
         changeMistakes,
+        multiplicationMistakes,
         hintsUsed,
         timeTaken,
         timeLimit: scenario.timeLimit,
@@ -195,14 +223,18 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
         timedOut,
       });
 
+      const solvedCount = Object.keys(solvedItemIds).filter((k) => solvedItemIds[k]).length;
+
       const record: TransactionRecord = {
         customerIndex: index,
         customerName: scenario.customer.name[lang] || scenario.customer.name.en,
         billMistakes,
         changeMistakes,
+        multiplicationMistakes,
+        multiplicationsCompleted: solvedCount,
         hintsUsed,
         timeTaken,
-        billFirstTry: billMistakes === 0,
+        billFirstTry: billMistakes === 0 && multiplicationMistakes === 0,
         changeFirstTry: changeMistakes === 0,
         stars: earnedStars,
         timedOut,
@@ -223,12 +255,22 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
 
     const updatedStats: LevelStats = {
       stars: [...stats.stars, currentTransaction.stars],
-      mistakes: stats.mistakes + currentTransaction.billMistakes + currentTransaction.changeMistakes,
+      mistakes:
+        stats.mistakes +
+        currentTransaction.billMistakes +
+        currentTransaction.changeMistakes +
+        (currentTransaction.multiplicationMistakes ?? 0),
       hints: stats.hints + currentTransaction.hintsUsed,
       transactions: updatedTransactions,
       totalTime: (stats.totalTime ?? 0) + currentTransaction.timeTaken,
       correctBillFirstTry: (stats.correctBillFirstTry ?? 0) + (currentTransaction.billFirstTry ? 1 : 0),
       correctChangeFirstTry: (stats.correctChangeFirstTry ?? 0) + (currentTransaction.changeFirstTry ? 1 : 0),
+      totalMultiplicationsCompleted:
+        (stats.totalMultiplicationsCompleted ?? 0) +
+        (currentTransaction.multiplicationsCompleted ?? 0),
+      totalMultiplicationMistakes:
+        (stats.totalMultiplicationMistakes ?? 0) +
+        (currentTransaction.multiplicationMistakes ?? 0),
     };
 
     setChangeResult(null);
@@ -239,6 +281,8 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
     setBillError(null);
     setBillMistakes(0);
     setChangeMistakes(0);
+    setSolvedItemIds({});
+    setMultiplicationMistakes(0);
     setHintsUsed(0);
     setElapsedSeconds(0);
     setTimedOut(false);
@@ -275,13 +319,14 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
 
     if (!isBillVerified) {
       if (billError) return billError;
-      if (scenario.items.length === 1) {
-        return "Step 1: Calculate the item total (Quantity × Unit Price) and enter Total to Pay!";
+      const allSolved = areAllItemsMultiplied(scenario, solvedItemIds);
+      if (!allSolved) {
+        return "Step 1: Click the [ ? ] button on each item to calculate their subtotals!";
       }
       if (scenario.discount) {
-        return "Step 1: Multiply items, subtract the discount, and enter the Total to Pay!";
+        return "Step 1: All items multiplied! Subtract the discount and enter Total to Pay!";
       }
-      return "Step 1: Multiply item quantities, add them together, and enter the Total to Pay!";
+      return "Step 1: All items multiplied! Add them together and enter Total to Pay!";
     }
 
     if (total === 0) {
@@ -486,6 +531,9 @@ export function GameScreen({ level, onExit, onComplete }: Props) {
                 isTotalVerified={isBillVerified}
                 totalError={billError}
                 disabled={busy}
+                solvedItemIds={solvedItemIds}
+                onSolveItem={handleSolveItem}
+                onMultiplicationMistake={handleMultiplicationMistake}
               />
 
               {/* Stage 3 (Checkout State Card) or Stage 1 & 2 Change Tray */}

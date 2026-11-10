@@ -99,6 +99,9 @@ const STRINGS = {
   timeTaken: { en: "Time taken" },
   packagingItems: { en: "Packing items and handing change..." },
   saleCompleted: { en: "Sale Completed!" },
+  solveItemMultiplicationFirst: { en: "Please calculate each item by clicking [ ? ] first!" },
+  calculateItem: { en: "Calculate" },
+  tryAgainItem: { en: "Not quite! Try again." },
 } as const;
 
 export type StringKey = keyof typeof STRINGS;

@@ -499,6 +499,7 @@ export function evaluate(
 export interface StarEvaluationParams {
   billMistakes: number;
   changeMistakes: number;
+  multiplicationMistakes?: number;
   hintsUsed: number;
   timeTaken: number;
   timeLimit?: number | null;
@@ -507,13 +508,17 @@ export interface StarEvaluationParams {
 }
 
 /**
- * Evaluates performance stars for a single transaction across Stage 1 (Bill) and Stage 2 (Change).
- * 3 Stars: Both calculations correct on 1st attempt, 0 hints, within time.
+ * Evaluates performance stars for a single transaction across:
+ * - Line Item Multiplications
+ * - Stage 1 (Bill Calculation)
+ * - Stage 2 (Change Counting)
+ * 3 Stars: All calculations correct on 1st attempt, 0 hints, within time.
  * 2 Stars: Completed with 1-2 mistakes or some hints.
  * 1 Star: Completed with multiple mistakes, substantial hints, or timed out.
  */
 export function calculateTransactionStars(params: StarEvaluationParams): number {
-  const totalMistakes = params.billMistakes + params.changeMistakes;
+  const totalMistakes =
+    params.billMistakes + params.changeMistakes + (params.multiplicationMistakes ?? 0);
   const { hintsUsed, timedOut, level = 1 } = params;
 
   // On timed levels, if timer expired, cap stars at 1 (or 2 if 0 mistakes made)
@@ -532,6 +537,36 @@ export function calculateTransactionStars(params: StarEvaluationParams): number 
   if (totalMistakes === 0 && hintsUsed === 0) return 3;
   if (totalMistakes <= 2 && hintsUsed <= 2) return 2;
   return 1;
+}
+
+/**
+ * Returns child-friendly multiplication hints for individual shopping basket items.
+ */
+export function getItemMultiplicationHint(
+  qty: number,
+  unitPrice: number,
+  attempt: number = 1
+): string {
+  if (qty === 1) {
+    return `1 item costs its exact unit price: $${unitPrice.toFixed(2)}.`;
+  }
+  if (qty === 2) {
+    return `2 × $${unitPrice.toFixed(2)} is the same as $${unitPrice.toFixed(2)} + $${unitPrice.toFixed(2)}.`;
+  }
+  if (attempt <= 1) {
+    return `Multiply quantity (${qty}) by unit price ($${unitPrice.toFixed(2)}).`;
+  }
+  return `Try repeated addition: add $${unitPrice.toFixed(2)} a total of ${qty} times.`;
+}
+
+/**
+ * Checks whether all shopping basket items have been multiplied and solved by the player.
+ */
+export function areAllItemsMultiplied(
+  scenario: Scenario,
+  solvedItemIds: Record<string, boolean>
+): boolean {
+  return scenario.items.every((item) => Boolean(solvedItemIds[item.productId]));
 }
 
 /**
@@ -647,7 +682,10 @@ export function getEncouragingFeedback(stars: number): string {
  */
 export function calculateLevelSummary(transactions: TransactionRecord[]) {
   const totalCustomers = transactions.length;
-  const totalMistakes = transactions.reduce((acc, t) => acc + t.billMistakes + t.changeMistakes, 0);
+  const totalMistakes = transactions.reduce(
+    (acc, t) => acc + t.billMistakes + t.changeMistakes + (t.multiplicationMistakes ?? 0),
+    0
+  );
   const totalHints = transactions.reduce((acc, t) => acc + t.hintsUsed, 0);
   const totalStars = transactions.reduce((acc, t) => acc + t.stars, 0);
   const correctBillFirstTry = transactions.filter((t) => t.billFirstTry).length;
@@ -656,6 +694,14 @@ export function calculateLevelSummary(transactions: TransactionRecord[]) {
   const avgTime = totalCustomers > 0 ? Math.round(totalTime / totalCustomers) : 0;
   const starsList = transactions.map((t) => t.stars);
   const finalLevelStars = levelStars(starsList);
+  const totalMultiplicationsCompleted = transactions.reduce(
+    (acc, t) => acc + (t.multiplicationsCompleted ?? 0),
+    0
+  );
+  const totalMultiplicationMistakes = transactions.reduce(
+    (acc, t) => acc + (t.multiplicationMistakes ?? 0),
+    0
+  );
 
   return {
     totalCustomers,
@@ -667,6 +713,8 @@ export function calculateLevelSummary(transactions: TransactionRecord[]) {
     totalTime,
     avgTime,
     finalLevelStars,
+    totalMultiplicationsCompleted,
+    totalMultiplicationMistakes,
   };
 }
 

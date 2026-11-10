@@ -115,11 +115,10 @@ export function Feedback({ result, hint, onContinue, onRetry }: FeedbackProps) {
         exit={{ scale: 0.9, opacity: 0, y: 10 }}
         transition={{ type: "spring", stiffness: 420, damping: 26 }}
         onClick={(e) => e.stopPropagation()}
-        className={`relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[2.5rem] border-4 p-6 sm:p-7 text-center shadow-wood cursor-default ${
-          correct
+        className={`relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-[2.5rem] border-4 p-6 sm:p-7 text-center shadow-wood cursor-default ${correct
             ? "border-emerald-500 bg-gradient-to-b from-emerald-50 to-emerald-100"
             : "border-orange bg-gradient-to-b from-amber-50 to-orange-100"
-        }`}
+          }`}
       >
         {correct && <Confetti />}
 
@@ -340,7 +339,7 @@ export function TransactionSummary({
           <div className="rounded-2xl border border-wood-dark/15 bg-white/90 p-2.5 shadow-xs">
             <span className="text-xs font-black text-wood-dark">🔁 Mistakes / Hints</span>
             <p className="mt-0.5 font-display text-lg font-black text-wood-dark">
-              {record.billMistakes + record.changeMistakes} / {record.hintsUsed}
+              {record.billMistakes + record.changeMistakes + (record.multiplicationMistakes ?? 0)} / {record.hintsUsed}
             </p>
           </div>
         </div>

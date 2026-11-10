@@ -248,9 +248,24 @@ describe("Cashier Transaction Experience & Performance Architecture", () => {
       // Verify retry opportunity with math hint
       expect(screen.getAllByText(/Multiply quantity/i).length).toBeGreaterThanOrEqual(1);
 
-      // Enter correct payable
-      // Level 2 Customer 0: generateScenario(2, 0).payable
+      // Solve the line item multiplication first via interactive [ ? ] button
       const sc = generateScenario(2, 0);
+      const firstItem = sc.items[0]!;
+      const calcItemBtn = screen.getByRole("button", {
+        name: new RegExp(`Calculate ${firstItem.qty} × \\$${firstItem.unitPrice.toFixed(2)}`, "i"),
+      });
+      fireEvent.click(calcItemBtn);
+
+      const itemInput = screen.getByLabelText(
+        new RegExp(`Enter answer for ${firstItem.qty} × \\$${firstItem.unitPrice.toFixed(2)}`, "i"),
+      );
+      fireEvent.change(itemInput, { target: { value: String(firstItem.qty * firstItem.unitPrice) } });
+      const itemCheckBtn = screen.getByRole("button", {
+        name: new RegExp(`Check subtotal for ${firstItem.name.en}`, "i"),
+      });
+      fireEvent.click(itemCheckBtn);
+
+      // Enter correct payable
       fireEvent.change(input, { target: { value: String(sc.payable) } });
       fireEvent.click(checkBtn);
 

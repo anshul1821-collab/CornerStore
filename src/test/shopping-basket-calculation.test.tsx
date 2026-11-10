@@ -117,6 +117,15 @@ describe("Shopping Basket & Calculation Mechanics", () => {
       expect(screen.getAllByText(/Multiply quantity/i).length).toBeGreaterThanOrEqual(1);
       expect(giveBtn.disabled).toBe(true);
 
+      // Solve the line item multiplication first via interactive [ ? ] button
+      const calcItemBtn = screen.getByRole("button", { name: /Calculate 2 × \$25\.00/i });
+      fireEvent.click(calcItemBtn);
+
+      const itemInput = screen.getByLabelText(/Enter answer for 2 × \$25\.00/i);
+      fireEvent.change(itemInput, { target: { value: "50" } });
+      const itemCheckBtn = screen.getByRole("button", { name: /Check subtotal/i });
+      fireEvent.click(itemCheckBtn);
+
       // Entering correct calculation: 50
       fireEvent.change(input, { target: { value: "50" } });
       fireEvent.click(checkBtn);
@@ -153,6 +162,102 @@ describe("Shopping Basket & Calculation Mechanics", () => {
 
       // Does NOT reveal the payable answer
       expect(screen.queryByText(`Price: $${scenario.payable.toFixed(2)}`)).not.toBeInTheDocument();
+    });
+  });
+
+  describe("3. Interactive Multiplication Calculator in Shopping Basket", () => {
+    it("expands inline calculator on clicking [ ? ], validates input, and displays green check on success", () => {
+      const scenario = generateScenario(1, 0); // 2 Chocolate @ $25.00
+      const onSolveItem = vi.fn();
+      const onMultiplicationMistake = vi.fn();
+
+      render(
+        <SettingsProvider>
+          <ShoppingBill
+            scenario={scenario}
+            calculatedTotal=""
+            onChangeTotal={vi.fn()}
+            onCheckTotal={vi.fn()}
+            isTotalVerified={false}
+            onSolveItem={onSolveItem}
+            onMultiplicationMistake={onMultiplicationMistake}
+          />
+        </SettingsProvider>,
+      );
+
+      // 1. Initial state: [ ? ] button present, item subtotal hidden
+      const calcBtn = screen.getByRole("button", { name: /Calculate 2 × \$25\.00/i });
+      expect(calcBtn).toBeInTheDocument();
+      expect(screen.queryByLabelText(/Enter answer for 2 × \$25\.00/i)).not.toBeInTheDocument();
+
+      // 2. Click [ ? ]: expands inline calculator
+      fireEvent.click(calcBtn);
+      const input = screen.getByLabelText(/Enter answer for 2 × \$25\.00/i);
+      const checkBtn = screen.getByRole("button", { name: /Check subtotal for Chocolate/i });
+      expect(input).toBeInTheDocument();
+      expect(checkBtn).toBeInTheDocument();
+
+      // 3. Enter incorrect answer (e.g. 45)
+      fireEvent.change(input, { target: { value: "45" } });
+      fireEvent.click(checkBtn);
+
+      // Friendly hint shown, mistakes tracked, answer NOT revealed
+      expect(screen.getByText(/Not quite!/i)).toBeInTheDocument();
+      expect(onMultiplicationMistake).toHaveBeenCalledWith("chocolate");
+      expect(onSolveItem).not.toHaveBeenCalled();
+
+      // 4. Enter correct answer (50)
+      fireEvent.change(input, { target: { value: "50" } });
+      fireEvent.click(checkBtn);
+
+      // Verified checkmark shown, onSolveItem called
+      expect(onSolveItem).toHaveBeenCalledWith("chocolate");
+      expect(screen.getByText("✓")).toBeInTheDocument();
+      expect(screen.getByText("$50.00")).toBeInTheDocument();
+    });
+
+    it("requires each item in multi-item orders to be multiplied independently", () => {
+      const scenario = generateScenario(4, 1); // 2 items in Level 4 (Customer 1)
+      expect(scenario.items.length).toBeGreaterThanOrEqual(2);
+
+      const item1 = scenario.items[0]!;
+      const item2 = scenario.items[1]!;
+
+      render(
+        <SettingsProvider>
+          <ShoppingBill
+            scenario={scenario}
+            calculatedTotal=""
+            onChangeTotal={vi.fn()}
+            onCheckTotal={vi.fn()}
+            isTotalVerified={false}
+          />
+        </SettingsProvider>,
+      );
+
+      // Both items have their own [ ? ] button
+      const btn1 = screen.getByRole("button", {
+        name: new RegExp(`Calculate ${item1.qty} × \\$${item1.unitPrice.toFixed(2)}`, "i"),
+      });
+      const btn2 = screen.getByRole("button", {
+        name: new RegExp(`Calculate ${item2.qty} × \\$${item2.unitPrice.toFixed(2)}`, "i"),
+      });
+
+      expect(btn1).toBeInTheDocument();
+      expect(btn2).toBeInTheDocument();
+
+      // Solve item 1
+      fireEvent.click(btn1);
+      const input1 = screen.getByLabelText(
+        new RegExp(`Enter answer for ${item1.qty} × \\$${item1.unitPrice.toFixed(2)}`, "i"),
+      );
+      fireEvent.change(input1, { target: { value: String(item1.qty * item1.unitPrice) } });
+      fireEvent.click(screen.getByRole("button", { name: new RegExp(`Check subtotal for ${item1.name.en}`, "i") }));
+
+      // Item 1 is solved (shows check), but Item 2 still has [ ? ] button
+      expect(screen.getByRole("button", {
+        name: new RegExp(`Calculate ${item2.qty} × \\$${item2.unitPrice.toFixed(2)}`, "i"),
+      })).toBeInTheDocument();
     });
   });
 });

@@ -1,4 +1,6 @@
-import type { Scenario } from "@/game/types";
+import { useState } from "react";
+import type { LineItem, Scenario } from "@/game/types";
+import { getItemMultiplicationHint } from "@/game/engine";
 import { useSettings } from "./settings";
 import { formatUSD } from "@/lib/currency";
 
@@ -10,6 +12,9 @@ export function ShoppingBill({
   isTotalVerified = false,
   totalError = null,
   disabled = false,
+  solvedItemIds: propSolvedItemIds,
+  onSolveItem,
+  onMultiplicationMistake,
 }: {
   scenario: Scenario;
   calculatedTotal: number | "";
@@ -18,15 +23,87 @@ export function ShoppingBill({
   isTotalVerified?: boolean;
   totalError?: string | null;
   disabled?: boolean;
+  solvedItemIds?: Record<string, boolean>;
+  onSolveItem?: (productId: string) => void;
+  onMultiplicationMistake?: (productId: string) => void;
 }) {
-  const { lang, tr } = useSettings();
+  const { lang, tr, play } = useSettings();
+  const [activeCalcId, setActiveCalcId] = useState<string | null>(null);
+  const [itemInputs, setItemInputs] = useState<Record<string, string>>({});
+  const [itemErrors, setItemErrors] = useState<Record<string, string>>({});
+  const [itemAttempts, setItemAttempts] = useState<Record<string, number>>({});
+  const [lastSubmittedValues, setLastSubmittedValues] = useState<Record<string, string>>({});
+  const [localSolved, setLocalSolved] = useState<Record<string, boolean>>({});
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const isItemSolved = (productId: string) => {
+    if (isTotalVerified) return true;
+    if (propSolvedItemIds) return Boolean(propSolvedItemIds[productId]);
+    return Boolean(localSolved[productId]);
+  };
+
+  const handleToggleCalc = (productId: string) => {
+    if (disabled || isTotalVerified) return;
+    setActiveCalcId((prev) => (prev === productId ? null : productId));
+  };
+
+  const handleInputChange = (productId: string, val: string) => {
+    setItemInputs((prev) => ({ ...prev, [productId]: val }));
+    if (itemErrors[productId]) {
+      setItemErrors((prev) => ({ ...prev, [productId]: "" }));
+    }
+  };
+
+  const handleSubmitItem = (item: LineItem) => {
+    const rawVal = itemInputs[item.productId];
+    if (rawVal === undefined || rawVal === "") return;
+
+    const entered = Number(rawVal);
+    const expected = item.unitPrice * item.qty;
+
+    if (Math.abs(entered - expected) < 0.005) {
+      // Correct!
+      play("success");
+      setLocalSolved((prev) => ({ ...prev, [item.productId]: true }));
+      onSolveItem?.(item.productId);
+      setActiveCalcId(null);
+      setItemErrors((prev) => ({ ...prev, [item.productId]: "" }));
+    } else {
+      // Incorrect attempt
+      play("oops");
+      const prevSub = lastSubmittedValues[item.productId];
+      if (prevSub !== rawVal) {
+        onMultiplicationMistake?.(item.productId);
+        setLastSubmittedValues((prev) => ({ ...prev, [item.productId]: rawVal }));
+      }
+
+      const nextAttempt = (itemAttempts[item.productId] ?? 0) + 1;
+      setItemAttempts((prev) => ({ ...prev, [item.productId]: nextAttempt }));
+      const hint = getItemMultiplicationHint(item.qty, item.unitPrice, nextAttempt);
+      setItemErrors((prev) => ({
+        ...prev,
+        [item.productId]: `Not quite! ${hint}`,
+      }));
+    }
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, item: LineItem) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmitItem(item);
+    } else if (e.key === "Escape") {
+      setActiveCalcId(null);
+    }
+  };
+
+  const handleTotalKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && onCheckTotal && !isTotalVerified && calculatedTotal !== "") {
       e.preventDefault();
       onCheckTotal();
     }
   };
+
+  const solvedCount = scenario.items.filter((i) => isItemSolved(i.productId)).length;
+  const allSolved = solvedCount === scenario.items.length;
 
   return (
     <div className="paper-receipt relative rounded-2xl border-2 border-border p-2.5 sm:p-3 shadow-soft flex flex-col justify-between h-full bg-paper">
@@ -42,46 +119,126 @@ export function ShoppingBill({
               </span>
             ) : (
               <span className="rounded-full bg-amber-100 border border-amber-300 px-2 py-0.2 text-[10px] font-extrabold text-amber-800 uppercase tracking-wider animate-pulse">
-                Step 1: Calculate
+                {allSolved ? "Step 1: Total to Pay" : "Step 1: Multiply Items"}
               </span>
             )}
           </div>
 
           <div className="my-1 sm:my-1.5 border-t-2 border-dashed border-border" />
 
-          {/* Shopping basket items with product name, quantity, and unit price */}
-          <ul className="space-y-1.5 max-h-[105px] lg:max-h-[125px] overflow-y-auto pr-1">
-            {scenario.items.map((i) => (
-              <li
-                key={i.productId}
-                className="flex items-center justify-between gap-2 text-xs sm:text-sm"
-              >
-                <div className="min-w-0 font-bold truncate flex items-center gap-1">
-                  <span>{i.emoji}</span>
-                  <span className="truncate">{i.name[lang]}</span>
-                  <span className="text-[11px] sm:text-xs font-semibold text-muted-foreground shrink-0">
-                    ({i.qty} × {formatUSD(i.unitPrice)})
-                  </span>
-                </div>
+          {/* Child-Friendly Progress Banner */}
+          {!isTotalVerified && (
+            <div
+              className={`my-1 px-2 py-0.5 rounded-lg text-[10px] font-extrabold flex items-center justify-between border transition-all ${
+                allSolved
+                  ? "bg-emerald-50 border-emerald-300 text-emerald-900"
+                  : "bg-amber-50/90 border-amber-300 text-amber-900"
+              }`}
+            >
+              <span>{allSolved ? "✓ All items multiplied!" : "Click [ ? ] to solve each item:"}</span>
+              <span className="font-black tabular-nums">
+                {allSolved ? "Now enter Total to Pay" : `${solvedCount} / ${scenario.items.length} solved`}
+              </span>
+            </div>
+          )}
 
-                {/* Subtotal is NEVER shown before the player submits and verifies the bill */}
-                <div className="shrink-0">
-                  {isTotalVerified ? (
-                    <span className="font-extrabold tabular-nums text-emerald-800 flex items-center gap-0.5">
-                      {formatUSD(i.unitPrice * i.qty)}
-                      <span className="text-emerald-600 text-[10px] font-black">✓</span>
-                    </span>
-                  ) : (
-                    <span
-                      className="inline-block rounded border border-dashed border-wood-dark/30 bg-wood-light/10 px-1.5 py-0.2 text-[11px] font-extrabold text-wood-dark/50 tabular-nums"
-                      title="Calculate item total"
+          {/* Shopping basket items with product name, quantity, unit price, and interactive calculator */}
+          <ul className="space-y-1.5 max-h-[140px] lg:max-h-[165px] overflow-y-auto pr-1">
+            {scenario.items.map((i) => {
+              const solved = isItemSolved(i.productId);
+              const isActive = activeCalcId === i.productId && !solved && !isTotalVerified;
+
+              return (
+                <li key={i.productId} className="flex flex-col gap-1 text-xs sm:text-sm">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="min-w-0 font-bold truncate flex items-center gap-1">
+                      <span>{i.emoji}</span>
+                      <span className="truncate">{i.name[lang]}</span>
+                      <span className="text-[11px] sm:text-xs font-semibold text-muted-foreground shrink-0">
+                        ({i.qty} × {formatUSD(i.unitPrice)})
+                      </span>
+                    </div>
+
+                    {/* Subtotal State: Solved badge OR interactive [ ? ] button */}
+                    <div className="shrink-0 flex items-center">
+                      {solved ? (
+                        <span className="font-extrabold tabular-nums text-emerald-800 flex items-center gap-1 animate-scale-in">
+                          <span className="rounded-full bg-emerald-100 text-emerald-700 px-1 text-[10px] font-black border border-emerald-300">
+                            ✓
+                          </span>
+                          <span>{formatUSD(i.unitPrice * i.qty)}</span>
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleToggleCalc(i.productId)}
+                          disabled={disabled || isTotalVerified}
+                          className={`rounded-lg px-2 py-0.5 text-xs font-display font-black border-2 transition-all cursor-pointer flex items-center justify-center gap-0.5 shadow-xs ${
+                            isActive
+                              ? "border-orange bg-orange text-white ring-2 ring-orange/30 scale-105"
+                              : "border-sun/90 bg-amber-100/90 hover:bg-amber-200 text-wood-dark hover:scale-105 active:scale-95"
+                          } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
+                          title="Click to calculate item subtotal"
+                          aria-label={`Calculate ${i.qty} × ${formatUSD(i.unitPrice)}`}
+                        >
+                          <span>?</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Compact Inline Multiplication Calculator */}
+                  {isActive && (
+                    <div
+                      className="mt-0.5 mb-1 rounded-xl bg-amber-50/95 border-2 border-sun p-2 flex flex-col gap-1.5 shadow-xs"
+                      data-testid={`calc-${i.productId}`}
                     >
-                      ?
-                    </span>
+                      <div className="flex items-center justify-between gap-1.5 flex-wrap">
+                        <span className="font-display font-extrabold text-xs sm:text-sm text-wood-dark">
+                          {i.qty} × {formatUSD(i.unitPrice)} =
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <span className="font-display font-bold text-xs sm:text-sm text-wood-dark">$</span>
+                          <input
+                            type="number"
+                            step="any"
+                            value={itemInputs[i.productId] ?? ""}
+                            onChange={(e) => handleInputChange(i.productId, e.target.value)}
+                            onKeyDown={(e) => handleInputKeyDown(e, i)}
+                            disabled={disabled || isTotalVerified}
+                            placeholder="?"
+                            autoFocus
+                            className="w-16 sm:w-20 rounded-lg border-2 border-wood-dark/40 bg-white px-1.5 py-0.5 text-right font-display text-sm sm:text-base font-extrabold tabular-nums outline-none focus:border-orange focus:ring-2 focus:ring-orange/20"
+                            aria-label={`Enter answer for ${i.qty} × ${formatUSD(i.unitPrice)}`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleSubmitItem(i)}
+                            disabled={
+                              disabled ||
+                              itemInputs[i.productId] === undefined ||
+                              itemInputs[i.productId] === ""
+                            }
+                            aria-label={`Check subtotal for ${i.name[lang]}`}
+                            className="btn-press rounded-lg bg-orange hover:bg-orange-dark active:scale-95 text-white text-xs font-black px-2.5 py-1 shadow-xs transition-all cursor-pointer disabled:opacity-40 shrink-0"
+                          >
+                            Check
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Friendly Hint / Message on Incorrect Attempt */}
+                      {itemErrors[i.productId] && (
+                        <div className="rounded-lg bg-rose-50 border border-rose-300 px-2 py-1 text-[11px] font-bold text-rose-900 flex items-start gap-1">
+                          <span className="text-xs shrink-0">💡</span>
+                          <span className="flex-1 leading-tight">{itemErrors[i.productId]}</span>
+                        </div>
+                      )}
+                    </div>
                   )}
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -130,7 +287,7 @@ export function ShoppingBill({
             </span>
             {!isTotalVerified && (
               <span className="text-[9px] sm:text-[10px] font-bold text-wood-dark/70">
-                Multiply & add items
+                {allSolved ? "Add items and enter total" : "Multiply each item first"}
               </span>
             )}
           </div>
@@ -141,7 +298,7 @@ export function ShoppingBill({
               type="number"
               value={calculatedTotal}
               onChange={(e) => onChangeTotal(e.target.value ? Number(e.target.value) : "")}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleTotalKeyDown}
               disabled={disabled || isTotalVerified}
               className={`w-16 sm:w-20 rounded-lg border-2 px-1 text-right font-display text-lg sm:text-xl font-extrabold tabular-nums outline-none transition-all ${
                 isTotalVerified
@@ -184,3 +341,4 @@ export function ShoppingBill({
     </div>
   );
 }
+
